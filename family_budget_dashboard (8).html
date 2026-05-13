@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Budget + $1M Investing Dashboard</title>
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --border: #e2ddd6;
+    --border-strong: #c8c3bb;
+    --text: #1c1a17;
+    --text-muted: #6b6760;
+    --text-hint: #9b9790;
+    --accent: #2d6a4f;
+    --accent-light: #e8f4ef;
+    --accent-mid: #4d9c73;
+    --amber: #b45309;
+    --amber-light: #fef3c7;
+    --red: #c0392b;
+    --red-light: #fde8e8;
+    --blue: #1d4ed8;
+    --blue-light: #eff6ff;
+    --purple: #6d28d9;
+    --purple-light: #f5f3ff;
+    --font: 'Georgia', 'Times New Roman', serif;
+    --font-sans: system-ui, -apple-system, sans-serif;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-brand {
+    font-family: var(--font);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    padding: 1rem 2rem 1rem 0;
+    border-right: 1px solid var(--border);
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .tab {
+    padding: 0.9rem 1.1rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    user-select: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* CONTENT */
+  .page { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* CARDS & LAYOUT */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+
+  .card-sm { padding: 1rem 1.25rem; }
+
+  h2 {
+    font-family: var(--font);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h3 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  /* METRIC TILES */
+  .metric-tile {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .metric-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+  }
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    font-family: var(--font-sans);
+  }
+  .metric-value.green { color: var(--accent); }
+  .metric-value.amber { color: var(--amber); }
+  .metric-value.red { color: var(--red); }
+
+  /* BUDGET TABLE */
+  .budget-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  .budget-table th {
+    font-size: 0.73rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2);
+  }
+  .budget-table th:not(:first-child) { text-align: right; }
+  .budget-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .budget-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+  .budget-table tr:last-child td { border-bottom: none; }
+  .budget-table tr:hover td { background: var(--surface2); }
+  .budget-table .section-row td {
+    background: var(--surface2);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    padding: 0.35rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .budget-table .total-row td {
+    font-weight: 700;
+    border-top: 2px solid var(--border-strong);
+    background: var(--surface2);
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge-income { background: var(--accent-light); color: var(--accent); }
+  .badge-fixed { background: var(--blue-light); color: var(--blue); }
+  .badge-variable { background: var(--amber-light); color: var(--amber); }
+  .badge-savings { background: var(--purple-light); color: var(--purple); }
+  .badge-invest { background: var(--accent-light); color: var(--accent); }
+  .badge-debt { background: var(--red-light); color: var(--red); }
+
+  /* INPUT CELLS */
+  input[type="number"] {
+    background: var(--blue-light);
+    border: 1px solid #bbd0f5;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    width: 90px;
+    text-align: right;
+    color: var(--blue);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  input[type="number"]:focus { outline: 2px solid var(--blue); border-color: var(--blue); }
+
+  /* STEPS / GUIDE */
+  .step-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .step-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.1rem; }
+  .step-desc { font-size: 0.82rem; color: var(--text-muted); }
+
+  /* ACCOUNT TABLE */
+  .acct-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .acct-table th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2);
+  }
+  .acct-table td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .acct-table tr:last-child td { border-bottom: none; }
+  .acct-table tr:hover td { background: var(--surface2); }
+  .acct-name { font-weight: 600; font-size: 0.85rem; }
+  .acct-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+  /* INVESTING TRACKER */
+  .tracker-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .tracker-table th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    text-align: right;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2);
+  }
+  .tracker-table th:first-child { text-align: left; }
+  .tracker-table td {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .tracker-table td:first-child { text-align: left; font-weight: 500; }
+  .tracker-table input[type="number"] { width: 80px; }
+  .tracker-table tr:last-child td { border-bottom: none; font-weight: 700; background: var(--surface2); }
+  .on-track { color: var(--accent); font-weight: 600; }
+  .off-track { color: var(--red); font-weight: 600; }
+
+  /* PROJECTION TABLE */
+  .proj-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .proj-table th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    text-align: right;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2);
+  }
+  .proj-table th:first-child, .proj-table th:nth-child(2) { text-align: left; }
+  .proj-table td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .proj-table td:first-child, .proj-table td:nth-child(2) { text-align: left; }
+  .proj-table tr:nth-child(5) td { background: var(--accent-light); font-weight: 600; }
+  .proj-table tr:nth-child(10) td { background: var(--amber-light); font-weight: 600; }
+  .proj-table tr:last-child td { background: var(--purple-light); font-weight: 700; }
+  .milestone { display: inline-block; font-size: 0.68rem; background: var(--accent); color: white; padding: 1px 6px; border-radius: 20px; margin-left: 6px; }
+
+  /* PAGE HEADER */
+  .page-header {
+    margin-bottom: 1.75rem;
+  }
+  .page-header h1 {
+    font-family: var(--font);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+  .page-header p {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .mb1 { margin-bottom: 1rem; }
+  .mb2 { margin-bottom: 1.5rem; }
+  .mb3 { margin-bottom: 2rem; }
+
+  .note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding: 0.75rem 1rem;
+    background: var(--surface2);
+    border-left: 3px solid var(--border-strong);
+    border-radius: 0 6px 6px 0;
+    margin-top: 1rem;
+  }
+
+  .surplus { color: var(--accent); }
+  .deficit { color: var(--red); }
+
+  .paycheck-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .paycheck-table th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2);
+  }
+  .paycheck-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .paycheck-table tr:last-child td { border-bottom: none; }
+
+  .debt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .debt-table th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2);
+  }
+  .debt-table th:not(:first-child) { text-align: right; }
+  .debt-table td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .debt-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+  .debt-table tr:last-child td { border-bottom: none; font-weight: 700; border-top: 2px solid var(--border-strong); background: var(--surface2); }
+  .priority-high { color: var(--red); font-weight: 600; font-size: 0.8rem; }
+  .priority-med { color: var(--amber); font-weight: 600; font-size: 0.8rem; }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .page { padding: 1rem; }
+    .nav { padding: 0 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">Budget Dashboard</div>
+  <div class="tab active" onclick="showPage('dashboard', this)">Dashboard</div>
+  <div class="tab" onclick="showPage('budget', this)">Monthly Budget</div>
+  <div class="tab" onclick="showPage('accounts', this)">Accounts</div>
+  <div class="tab" onclick="showPage('tracker', this)">Investing Tracker</div>
+  <div class="tab" onclick="showPage('guide', this)">How to Use</div>
+  <div style="margin-left:auto; display:flex; align-items:center; gap:0.75rem; padding:0 1rem;">
+    <input type="month" id="budget-month" value="2026-05" oninput="updateMonth(); saveAll();" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
+    <span id="save-indicator" style="font-size:0.75rem; color:var(--accent); opacity:0; transition:opacity 0.5s;">✓ Saved</span>
+    <button onclick="clearSave()" style="font-size:0.72rem; padding:0.3rem 0.75rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text-muted); cursor:pointer;">Reset All</button>
+  </div>
+</nav>
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page active">
+  <div class="page-header">
+    <h1>Budget + Investing Dashboard</h1>
+    <p><span id="date-display-1">May 2026</span> · Key inputs &amp; results — edit blue numbers to update calculations</p>
+  </div>
+
+  <div class="grid-2 mb2">
+    <div class="card">
+      <h2>Key Inputs</h2>
+      <table class="budget-table">
+        <tbody>
+          <tr><td>Current Invested Balance</td><td><input type="number" id="inv-balance" value="85000" oninput="recalc()"> </td></tr>
+          <tr><td>Goal Balance ($)</td><td><input type="number" id="goal-balance" value="1000000" oninput="recalc()"></td></tr>
+          <tr><td>Monthly Income <span style="font-size:0.72rem;color:var(--text-muted)">(from Budget tab)</span></td><td style="text-align:right;font-weight:600" id="monthly-income-display">$7,500</td></tr>
+          <tr><td>Monthly Expenses/Savings</td><td><input type="number" id="monthly-exp" value="6800" oninput="recalc()"></td></tr>
+          <tr><td>Monthly Investing</td><td><input type="number" id="monthly-invest" value="1200" oninput="recalc()"></td></tr>
+          <tr><td>Expected Annual Return (%)</td><td><input type="number" id="annual-return" value="8" step="0.5" oninput="recalc()"></td></tr>
+          <tr><td>Annual Roth IRA Limit ($)</td><td><input type="number" id="roth-limit" value="7500" oninput="recalc()"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Results</h2>
+      <div class="grid-2 mb2" style="gap:0.75rem">
+        <div class="metric-tile">
+          <div class="metric-label">Years to Goal</div>
+          <div class="metric-value green" id="years-to-goal">—</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-label">Monthly Roth Target</div>
+          <div class="metric-value" id="roth-target">—</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-label">Roth Remaining (annual)</div>
+          <div class="metric-value" id="roth-remaining">—</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-label">Monthly Investing Target</div>
+          <div class="metric-value green" id="invest-target">—</div>
+        </div>
+        <div class="metric-tile" style="grid-column: 1 / -1">
+          <div class="metric-label">Projected Balance at Goal Age</div>
+          <div class="metric-value green" id="proj-balance">—</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-label">Gap / Surplus vs Goal</div>
+          <div class="metric-value" id="gap-surplus">—</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-label">Budgeted Monthly Investing</div>
+          <div class="metric-value" id="budgeted-invest">$1,200</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb2">
+    <h2>Budget Snapshot (<span id="date-display-2">May 2026</span>)</h2>
+    <div class="grid-4" style="gap:0.75rem">
+      <div class="metric-tile">
+        <div class="metric-label">Total Income</div>
+        <div class="metric-value" id="snap-income">—</div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-label">Total Expenses + Savings</div>
+        <div class="metric-value" id="snap-exp">—</div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-label">Total Investing</div>
+        <div class="metric-value" id="snap-invest">—</div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-label">Remaining After Budget</div>
+        <div class="metric-value green" id="snap-remaining">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Decision Guide</h2>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Max Roth IRA first</div>
+          <div class="step-desc">Monthly target shows in results above. First investing priority.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Brokerage second</div>
+          <div class="step-desc">Use money left after bills + Roth. Flexible investing account.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Keep Microsoft as a smaller slice</div>
+          <div class="step-desc">Growth kicker, not the whole plan. Hold after selling part of position.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Review WF 1 payment</div>
+          <div class="step-desc">This is your biggest flexible payment lever. Range: $1,000–$1,500/month.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MONTHLY BUDGET -->
+<div id="page-budget" class="page">
+  <div class="page-header">
+    <h1>Monthly Budget Breakdown</h1>
+    <p><span id="date-display-3">May 2026</span> · Edit blue "Actual" columns as the month happens</p>
+  </div>
+
+  <div class="card">
+    <h2>Budget target: invest without making life miserable</h2>
+    <table class="budget-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Type</th>
+          <th>Budgeted ($)</th>
+          <th>Actual ($)</th>
+          <th>Variance ($)</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="budget-tbody">
+      </tbody>
+    </table>
+
+    <div class="note">
+      💡 Both the <strong>Budgeted</strong> and <strong>Actual</strong> columns are editable — type directly into any cell and totals update instantly. Variance turns red when over budget and green when under.
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNTS -->
+<div id="page-accounts" class="page">
+  <div class="page-header">
+    <h1>Account Snapshot</h1>
+    <p>Current balances, priorities, and account notes</p>
+  </div>
+
+  <div class="card mb2">
+    <h2>Investment &amp; Savings Accounts</h2>
+    <table class="acct-table">
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Provider</th>
+          <th>Type</th>
+          <th>Tax Bucket</th>
+          <th>Balance</th>
+          <th>Priority</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="acct-name">Rollover IRA Fidelity Go</div></td>
+          <td>Fidelity</td>
+          <td>Rollover IRA</td>
+          <td>Tax-deferred retirement</td>
+          <td><input type="number" id="acct-rollover" value="45138" style="width:90px" oninput="updateTotalBalance()"></td>
+          <td><span class="badge badge-fixed">Maintain</span></td>
+          <td style="font-size:0.75rem; color:var(--text-muted)">Already retirement money; usually don't add new taxable money here.</td>
+        </tr>
+        <tr>
+          <td><div class="acct-name">Individual Fidelity Go</div></td>
+          <td>Fidelity</td>
+          <td>Taxable brokerage</td>
+          <td>Taxable</td>
+          <td><input type="number" id="acct-fidelity-ind" value="2390" style="width:90px" oninput="updateTotalBalance()"></td>
+          <td><span class="badge badge-debt">Low priority</span></td>
+          <td style="font-size:0.75rem; color:var(--text-muted)">Flexible, but taxable. Can keep or simplify later.</td>
+        </tr>
+        <tr>
+          <td><div class="acct-name">Vanguard Roth IRA</div></td>
+          <td>Vanguard</td>
+          <td>Roth IRA</td>
+          <td>Tax-free retirement</td>
+          <td><input type="number" id="acct-roth1" value="15217" style="width:90px" oninput="updateTotalBalance()"></td>
+          <td><span class="badge badge-invest">First priority</span></td>
+          <td style="font-size:0.75rem; color:var(--text-muted)">Max this first each year.</td>
+        </tr>
+        <tr>
+          <td><div class="acct-name">Vanguard Brokerage</div></td>
+          <td>Vanguard</td>
+          <td>Taxable brokerage</td>
+          <td>Taxable</td>
+          <td><input type="number" id="acct-vanguard-broker" value="5009" style="width:90px" oninput="updateTotalBalance()"></td>
+          <td><span class="badge badge-variable">Hold / grow</span></td>
+          <td style="font-size:0.75rem; color:var(--text-muted)">Flexible taxable account.</td>
+        </tr>
+        <tr>
+          <td><div class="acct-name">Vanguard Brokerage (MSFT)</div></td>
+          <td>Vanguard</td>
+          <td>Stock plan / brokerage</td>
+          <td>Taxable</td>
+          <td><input type="number" id="acct-msft" value="31623" style="width:90px" oninput="updateTotalBalance()"></td>
+          <td><span class="badge badge-variable">Hold as kicker</span></td>
+          <td style="font-size:0.75rem; color:var(--text-muted)">Editable estimate after selling part of position.</td>
+        </tr>
+        <tr>
+          <td><div class="acct-name">Microsoft 401(k)</div></td>
+          <td>Microsoft</td>
+          <td>401(k)</td>
+          <td>Tax-deferred</td>
+          <td><input type="number" id="acct-msft-401k" value="33066" style="width:90px" oninput="updateTotalBalance()"></td>
+          <td><span class="badge badge-income">Keep growing</span></td>
+          <td style="font-size:0.75rem; color:var(--text-muted)">Microsoft employer contributions.</td>
+        </tr>
+        <tr>
+          <td><div class="acct-name">STACK 401(k)</div></td>
+          <td>STACK</td>
+          <td>401(k)</td>
+          <td>Tax-deferred</td>
+          <td><input type="number" id="acct-stack-401k" value="46955" style="width:90px" oninput="updateTotalBalance()"></td>
+          <td><span class="badge badge-income">Keep growing</span></td>
+          <td style="font-size:0.75rem; color:var(--text-muted)">STACK employer contributions.</td>
+        </tr>
+        <tr>
+          <td><strong>Total Current Invested Balance</strong></td>
+          <td colspan="3"></td>
+          <td><strong id="total-invested-balance">$85,000</strong></td>
+          <td colspan="2"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      Optional simplification: You can keep accounts where they are, but going forward the simplest system is: Roth IRA first, then one brokerage account for extra investing.
+    </div>
+  </div>
+</div>
+
+  <div class="card mb2">
+    <h2>Paycheck Inputs</h2>
+    <table class="paycheck-table">
+      <thead>
+        <tr>
+          <th>Paycheck Source</th>
+          <th>Usual Amount</th>
+          <th>Frequency / Date</th>
+          <th>Suggested Job</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>David paycheck</strong></td>
+          <td><input type="number" id="paycheck-david" value="4500" style="width:90px" oninput="syncIncomeFromPaychecks()"></td>
+          <td>Every 2 weeks</td>
+          <td>Big fixed bills / rent / investing</td>
+          <td style="font-size:0.78rem; color:var(--text-muted)">Use this as the main engine. Months with 3 checks = bonus opportunity.</td>
+        </tr>
+        <tr>
+          <td><strong>Your paycheck #1</strong></td>
+          <td><input type="number" value="1500" style="width:90px"></td>
+          <td>1st of month</td>
+          <td>Groceries / gas / current bills</td>
+          <td style="font-size:0.78rem; color:var(--text-muted)">Approx. $1,500 on the 1st and 15th.</td>
+        </tr>
+        <tr>
+          <td><strong>Your paycheck #2</strong></td>
+          <td><input type="number" value="1500" style="width:90px"></td>
+          <td>15th of month</td>
+          <td>Groceries / variable spending / buffer</td>
+          <td style="font-size:0.78rem; color:var(--text-muted)">Use for variable spending, eating out, kids activities.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Suggested Monthly Cash Flow</h2>
+    <table class="paycheck-table">
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>What to do</th>
+          <th>Monthly Amount</th>
+          <th>Formula / Source</th>
+          <th>Done?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Cover fixed expenses + debt minimums</td>
+          <td>~$4,200</td>
+          <td>Rent + car insurance + AT&T + loans + cards</td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Cover groceries / eating out / misc</td>
+          <td>~$900</td>
+          <td>Groceries + eating out + household + kids</td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>Fund emergency / sinking fund</td>
+          <td>~$200</td>
+          <td>For irregular bills, repairs, gifts, travel</td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Invest Roth first</td>
+          <td>~$625</td>
+          <td>$7,500/year ÷ 12</td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td>Invest brokerage second</td>
+          <td>Whatever's left</td>
+          <td>Extra after Roth. Adjust up/down based on real month.</td>
+          <td><input type="checkbox"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- INVESTING TRACKER -->
+<div id="page-tracker" class="page">
+  <div class="page-header">
+    <h1>Investing Tracker</h1>
+    <p>2026 · Track Roth IRA, brokerage, and 401(k) contributions each month</p>
+  </div>
+
+  <div class="card mb2">
+    <table class="tracker-table" id="tracker-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Month</th>
+          <th>Roth IRA ($)</th>
+          <th>Brokerage ($)</th>
+          <th>401(k) / Other ($)</th>
+          <th>Total Invested ($)</th>
+          <th>Roth Goal Remaining ($)</th>
+          <th>Running Total ($)</th>
+          <th>On Track?</th>
+        </tr>
+      </thead>
+      <tbody id="tracker-tbody">
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>Annual Total</td>
+          <td id="tr-annual-roth">—</td>
+          <td id="tr-annual-broker">—</td>
+          <td id="tr-annual-401k">—</td>
+          <td id="tr-annual-total">—</td>
+          <td>—</td>
+          <td id="tr-annual-running">—</td>
+          <td>—</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="note">Enter your actual contributions each month. Roth Goal Remaining shows how much more you need to contribute to max out the annual Roth IRA limit.</div>
+</div>
+
+  <div class="card mb2">
+    <h2>Projection Assumptions</h2>
+    <div class="grid-3" style="gap:0.75rem; margin-bottom:1rem">
+      <div class="metric-tile">
+        <div class="metric-label">Starting Balance</div>
+        <div class="metric-value" id="proj-start">$85,000</div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-label">Monthly Contribution</div>
+        <div class="metric-value">$1,200</div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-label">Target</div>
+        <div class="metric-value">$1,000,000</div>
+      </div>
+    </div>
+    <div class="note">These are estimates. Real markets do not move in smooth straight lines.</div>
+  </div>
+
+  <div class="card">
+    <h2>Year-by-Year Projections</h2>
+    <table class="proj-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Year</th>
+          <th style="text-align:left">Age Approx.</th>
+          <th>Contributions ($)</th>
+          <th>Balance @ 6%</th>
+          <th>Balance @ 8%</th>
+          <th>Balance @ 9%</th>
+          <th>Balance @ 10%</th>
+        </tr>
+      </thead>
+      <tbody id="proj-tbody">
+      </tbody>
+    </table>
+  </div>
+</div>
+
+  <div class="card">
+    <h2>Current Debt Payments</h2>
+    <table class="debt-table">
+      <thead>
+        <tr>
+          <th>Debt</th>
+          <th>Current Balance ($)</th>
+          <th>APR %</th>
+          <th>Min/Planned Payment ($)</th>
+          <th>Priority</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AA Card</strong></td>
+          <td><input type="number" value="4500" style="width:90px"></td>
+          <td><input type="number" value="22.9" step="0.1" style="width:70px"></td>
+          <td><input type="number" id="debt-aa" value="250" style="width:90px" oninput="updateDebtTotal()"></td>
+          <td><span class="priority-med">Medium</span></td>
+          <td style="font-size:0.78rem; color:var(--text-muted)">Payment you listed.</td>
+        </tr>
+        <tr>
+          <td><strong>Capital One</strong></td>
+          <td><input type="number" value="2800" style="width:90px"></td>
+          <td><input type="number" value="20.4" step="0.1" style="width:70px"></td>
+          <td><input type="number" id="debt-cap1" value="150" style="width:90px" oninput="updateDebtTotal()"></td>
+          <td><span class="priority-med">Medium</span></td>
+          <td style="font-size:0.78rem; color:var(--text-muted)">Payment you listed.</td>
+        </tr>
+        <tr>
+          <td><strong>WF 1</strong></td>
+          <td><input type="number" value="18000" style="width:90px"></td>
+          <td><input type="number" value="12.5" step="0.1" style="width:70px"></td>
+          <td><input type="number" id="debt-wf1" value="1250" style="width:90px" oninput="updateDebtTotal()"></td>
+          <td><span class="priority-high">High</span></td>
+          <td style="font-size:0.78rem; color:var(--text-muted)">Biggest payment lever. Range: $1,000–$1,500/month. Add balance + APR for payoff math.</td>
+        </tr>
+        <tr>
+          <td><strong>WF 2</strong></td>
+          <td><input type="number" value="5200" style="width:90px"></td>
+          <td><input type="number" value="15.9" step="0.1" style="width:70px"></td>
+          <td><input type="number" id="debt-wf2" value="200" style="width:90px" oninput="updateDebtTotal()"></td>
+          <td><span class="priority-med">Medium</span></td>
+          <td style="font-size:0.78rem; color:var(--text-muted)">Payment you listed.</td>
+        </tr>
+        <tr>
+          <td><strong>Student Loan</strong></td>
+          <td><input type="number" value="12000" style="width:90px"></td>
+          <td><input type="number" value="5.5" step="0.1" style="width:70px"></td>
+          <td><input type="number" id="debt-student" value="200" style="width:90px" oninput="updateDebtTotal()"></td>
+          <td><span class="priority-med">Medium</span></td>
+          <td style="font-size:0.78rem; color:var(--text-muted)">Lower APR — minimum payments while investing is fine.</td>
+        </tr>
+        <tr>
+          <td><strong>Total Listed Debt Payments</strong></td>
+          <td></td>
+          <td></td>
+          <td id="debt-total">$2,050</td>
+          <td colspan="2"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note">Once you enter balances and APRs, this sheet can become a payoff calculator. For now it organizes the required monthly payments. WF 1 is your biggest lever — adjusting it $250/month changes your flexibility significantly.</div>
+  </div>
+</div>
+
+<!-- HOW TO USE -->
+<div id="page-guide" class="page">
+  <div class="page-header">
+    <h1>Family Budget + $1M Investing Dashboard</h1>
+    <p>How to use this workbook</p>
+  </div>
+
+  <div class="grid-2 mb2">
+    <div class="card">
+      <h2>Getting Started</h2>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Start on Monthly Budget</div>
+            <div class="step-desc">Update the blue (editable) numbers only. Black numbers are formulas.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Track actuals as the month happens</div>
+            <div class="step-desc">The Actual column is for real spending as it occurs.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Dashboard updates automatically</div>
+            <div class="step-desc">Dashboard pulls from your budget and account snapshot.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Roth IRA first, then brokerage</div>
+            <div class="step-desc">Roth gets filled first, then brokerage investing gets the leftovers.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-title">Use Investing Tracker monthly</div>
+            <div class="step-desc">Track Roth, brokerage, and any 401(k) investing each month.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <div class="step-title">Check the $1M Projection tab</div>
+            <div class="step-desc">See how monthly investing can grow over time.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Color Key</h2>
+      <div class="step-list" style="gap:1rem">
+        <div class="step-item" style="align-items:center">
+          <div style="width:28px; height:28px; border-radius:6px; background:var(--blue-light); border:1px solid #bbd0f5; flex-shrink:0"></div>
+          <div class="step-content">
+            <div class="step-title" style="color:var(--blue)">Blue numbers / inputs</div>
+            <div class="step-desc">Hardcoded inputs you can change</div>
+          </div>
+        </div>
+        <div class="step-item" style="align-items:center">
+          <div style="width:28px; height:28px; border-radius:6px; background:var(--surface2); border:1px solid var(--border); flex-shrink:0"></div>
+          <div class="step-content">
+            <div class="step-title">Black / dark numbers</div>
+            <div class="step-desc">Formulas / automatic calculations — don't edit</div>
+          </div>
+        </div>
+        <div class="step-item" style="align-items:center">
+          <div style="width:28px; height:28px; border-radius:6px; background:var(--accent-light); border:1px solid var(--accent-mid); flex-shrink:0"></div>
+          <div class="step-content">
+            <div class="step-title" style="color:var(--accent)">Green / teal</div>
+            <div class="step-desc">Linked from another sheet or surplus / good</div>
+          </div>
+        </div>
+        <div class="step-item" style="align-items:center">
+          <div style="width:28px; height:28px; border-radius:6px; background:var(--amber-light); border:1px solid #f0a030; flex-shrink:0"></div>
+          <div class="step-content">
+            <div class="step-title" style="color:var(--amber)">Orange / amber fill</div>
+            <div class="step-desc">Review / decision area — pay attention</div>
+          </div>
+        </div>
+        <div class="step-item" style="align-items:center">
+          <div style="width:28px; height:28px; border-radius:6px; background:var(--red-light); border:1px solid #e06060; flex-shrink:0"></div>
+          <div class="step-content">
+            <div class="step-title" style="color:var(--red)">Light red fill</div>
+            <div class="step-desc">Warning / over-budget flag</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:1.5rem">
+        <strong>Sources / Notes</strong><br>
+        Income and expenses are based on the numbers you provided. Roth IRA annual contribution limit is an editable assumption (limits can change). This is a planning tool, not tax or investment advice. Review with a professional for taxes.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// TAB NAVIGATION
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+// BUDGET DATA
+const budgetRows = [
+  { cat: 'Income - David', type: 'income', budgeted: 4500, note: 'David is paid every 2 weeks; this uses monthly average.' },
+  { cat: 'Income - You', type: 'income', budgeted: 3000, note: 'Approx. $1,500 on the 1st and 15th.' },
+  { cat: 'EXPENSES', section: true },
+  { cat: 'Rent', type: 'fixed', budgeted: 1600, note: '' },
+  { cat: 'Geico', type: 'fixed', budgeted: 200, note: '' },
+  { cat: 'AT&T', type: 'fixed', budgeted: 100, note: '' },
+  { cat: 'Hulu', type: 'fixed', budgeted: 20, note: '' },
+  { cat: 'Student Loan', type: 'fixed', budgeted: 200, note: '' },
+  { cat: "Rhett's 529", type: 'savings', budgeted: 100, note: '' },
+  { cat: 'AA Card', type: 'debt', budgeted: 250, note: '' },
+  { cat: 'Capital One', type: 'debt', budgeted: 150, note: '' },
+  { cat: 'WF 1', type: 'debt', budgeted: 1250, note: 'Editable: $1,000–$1,500; this uses midpoint.' },
+  { cat: 'WF 2', type: 'debt', budgeted: 200, note: '' },
+  { cat: 'Groceries', type: 'variable', budgeted: 0, note: '' },
+  { cat: 'Gas', type: 'variable', budgeted: 0, note: '' },
+  { cat: 'Eating Out', type: 'variable', budgeted: 0, note: '' },
+  { cat: 'Household', type: 'variable', budgeted: 0, note: '' },
+  { cat: 'Misc', type: 'variable', budgeted: 0, note: '' },
+  { cat: 'Fairfax Water', type: 'fixed', budgeted: 0, note: '' },
+  { cat: 'Dominion Energy', type: 'fixed', budgeted: 0, note: '' },
+  { cat: 'Washington Gas', type: 'fixed', budgeted: 0, note: '' },
+  { cat: 'Emergency / Sinking Fund', type: 'savings', budgeted: 200, note: 'For irregular bills, repairs, gifts, travel, etc.' },
+  { cat: 'INVESTING', section: true },
+  { cat: 'Roth IRA Investment', type: 'invest', budgeted: 625, note: 'First investing priority. $7,500/year ÷ 12.' },
+  { cat: 'Brokerage Investment', type: 'invest', budgeted: 575, note: 'Extra investing after Roth. Adjust based on real month.' },
+];
+
+const typeLabels = {
+  income: ['Income', 'badge-income'],
+  fixed: ['Fixed Expense', 'badge-fixed'],
+  variable: ['Variable Expense', 'badge-variable'],
+  savings: ['Savings', 'badge-savings'],
+  invest: ['Investing', 'badge-invest'],
+  debt: ['Debt Payment', 'badge-debt'],
+};
+
+function buildBudget() {
+  const tbody = document.getElementById('budget-tbody');
+  let html = '';
+
+  budgetRows.forEach((row, i) => {
+    if (row.section) {
+      html += `<tr class="section-row"><td colspan="6">${row.cat}</td></tr>`;
+      return;
+    }
+    const [label, cls] = typeLabels[row.type] || ['', ''];
+    html += `<tr>
+      <td>${row.cat}</td>
+      <td><span class="badge ${cls}">${label}</span></td>
+      <td><input type="number" class="budgeted-input" data-row="${i}" value="${row.budgeted}" style="width:85px" oninput="updateBudgetTotals()"></td>
+      <td><input type="number" class="actual-input" data-row="${i}" value="${row.budgeted}" style="width:85px" oninput="updateBudgetTotals()"></td>
+      <td class="variance-cell" id="var-${i}">$0</td>
+      <td style="font-size:0.75rem; color:var(--text-muted)">${row.note}</td>
+    </tr>`;
+  });
+
+  html += `<tr class="total-row">
+    <td colspan="2">Total Income</td>
+    <td id="total-income-bud">—</td>
+    <td id="total-income-actual">—</td>
+    <td></td><td></td>
+  </tr>
+  <tr class="total-row">
+    <td colspan="2">Total Expenses + Savings</td>
+    <td id="total-exp-bud">—</td>
+    <td id="total-exp-actual">—</td>
+    <td></td><td></td>
+  </tr>
+  <tr class="total-row">
+    <td colspan="2">Total Investing</td>
+    <td id="total-inv-bud">—</td>
+    <td id="total-inv-actual">—</td>
+    <td></td><td></td>
+  </tr>
+  <tr class="total-row">
+    <td colspan="2">Remaining After Budget</td>
+    <td id="remaining-bud">—</td>
+    <td id="remaining-actual">—</td>
+    <td></td><td></td>
+  </tr>`;
+
+  tbody.innerHTML = html;
+  updateBudgetTotals();
+}
+
+function updateBudgetTotals() {
+  let budIncome = 0, budExp = 0, budInvest = 0;
+  let actIncome = 0, actExp = 0, actInvest = 0;
+
+  document.querySelectorAll('.budgeted-input').forEach(budInp => {
+    const i = parseInt(budInp.dataset.row);
+    const row = budgetRows[i];
+    if (!row || row.section) return;
+    const budgeted = parseFloat(budInp.value) || 0;
+    const actualInp = document.querySelector(`.actual-input[data-row="${i}"]`);
+    const actual = parseFloat(actualInp?.value) || 0;
+    const variance = actual - budgeted;
+
+    const varCell = document.getElementById('var-' + i);
+    if (varCell) {
+      const isGoodIfLower = row.type !== 'income' && row.type !== 'invest';
+      const sign = variance > 0 ? '+' : '';
+      varCell.textContent = variance === 0 ? '$0' : `${sign}$${Math.abs(variance).toLocaleString()}${variance < 0 ? ' under' : ' over'}`;
+      varCell.style.color = variance === 0 ? 'var(--text-muted)' :
+        (isGoodIfLower ? (variance > 0 ? 'var(--red)' : 'var(--accent)') : (variance > 0 ? 'var(--accent)' : 'var(--red)'));
+    }
+
+    if (row.type === 'income') { budIncome += budgeted; actIncome += actual; }
+    else if (row.type === 'invest') { budInvest += budgeted; actInvest += actual; }
+    else { budExp += budgeted; actExp += actual; }
+  });
+
+  const budRem = budIncome - budExp - budInvest;
+  const actRem = actIncome - actExp - actInvest;
+
+  const setEl = (id, val, colorize) => {
+    const e = document.getElementById(id);
+    if (!e) return;
+    e.textContent = `${val < 0 ? '-' : ''}$${Math.abs(Math.round(val)).toLocaleString()}`;
+    if (colorize) e.className = val >= 0 ? 'surplus' : 'deficit';
+  };
+
+  setEl('total-income-bud', budIncome);
+  setEl('total-income-actual', actIncome);
+  setEl('total-exp-bud', budExp);
+  setEl('total-exp-actual', actExp);
+  setEl('total-inv-bud', budInvest);
+  setEl('total-inv-actual', actInvest);
+  setEl('remaining-bud', budRem, true);
+  setEl('remaining-actual', actRem, true);
+
+  // Keep dashboard income display in sync and trigger recalc
+  const incomeDisplay = document.getElementById('monthly-income-display');
+  if (incomeDisplay) incomeDisplay.textContent = fmt(budIncome);
+  recalc();
+}
+
+// DASHBOARD CALCULATIONS
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+function recalc() {
+  const balance = parseFloat(document.getElementById('inv-balance').value) || 85000;
+  const goal = parseFloat(document.getElementById('goal-balance').value) || 1000000;
+  // Income is driven by the budget table totals
+  let income = 0;
+  document.querySelectorAll('.budgeted-input').forEach(inp => {
+    const i = parseInt(inp.dataset.row);
+    const row = budgetRows[i];
+    if (row && row.type === 'income') income += parseFloat(inp.value) || 0;
+  });
+  if (income === 0) income = 7500; // fallback before budget table is built
+  const expenses = parseFloat(document.getElementById('monthly-exp').value) || 6800;
+  const monthlyInvest = parseFloat(document.getElementById('monthly-invest').value) || 1200;
+  const annualReturn = (parseFloat(document.getElementById('annual-return').value) || 8) / 100;
+  const rothLimit = parseFloat(document.getElementById('roth-limit').value) || 7500;
+  const r = annualReturn / 12;
+
+  // Years to goal (compound)
+  let months = 0, bal = balance;
+  while (bal < goal && months < 600) { bal = bal * (1 + r) + monthlyInvest; months++; }
+  const years = (months / 12).toFixed(1);
+
+  const rothMonthly = rothLimit / 12;
+  const remaining = rothLimit; // simplified
+
+  // Projected balance at goal age
+  const projBal = balance * Math.pow(1 + r, months) + monthlyInvest * (Math.pow(1 + r, months) - 1) / r;
+  const gap = projBal - goal;
+
+  document.getElementById('years-to-goal').textContent = years + ' yrs';
+  document.getElementById('roth-target').textContent = fmt(rothMonthly) + '/mo';
+  document.getElementById('roth-remaining').textContent = fmt(remaining);
+  document.getElementById('invest-target').textContent = fmt(monthlyInvest) + '/mo';
+  document.getElementById('proj-balance').textContent = fmt(projBal);
+  const gapEl = document.getElementById('gap-surplus');
+  gapEl.textContent = (gap >= 0 ? '+' : '') + fmt(gap);
+  gapEl.className = 'metric-value ' + (gap >= 0 ? 'green' : 'red');
+
+  const budgetedInvest = monthlyInvest;
+  document.getElementById('budgeted-invest').textContent = fmt(budgetedInvest) + '/mo';
+
+  // Budget snapshot
+  document.getElementById('snap-income').textContent = fmt(income);
+  document.getElementById('snap-exp').textContent = fmt(expenses);
+  document.getElementById('snap-invest').textContent = fmt(monthlyInvest);
+  document.getElementById('snap-remaining').textContent = fmt(income - expenses - monthlyInvest);
+  document.getElementById('proj-start').textContent = fmt(balance);
+
+  buildProjection(balance, monthlyInvest, annualReturn);
+}
+
+// ACCOUNT TOTALS
+function updateTotalBalance() {
+  const ids = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k'];
+  const total = ids.reduce((sum, id) => sum + (parseFloat(document.getElementById(id)?.value) || 0), 0);
+  document.getElementById('total-invested-balance').textContent = fmt(total);
+  document.getElementById('inv-balance').value = total;
+  recalc();
+}
+
+// INVESTING TRACKER
+const months2026 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function buildTracker() {
+  const tbody = document.getElementById('tracker-tbody');
+  const rothLimit = 7500;
+  let html = '';
+  months2026.forEach((m, i) => {
+    html += `<tr>
+      <td>${m}</td>
+      <td><input type="number" class="tr-roth" data-i="${i}" value="${m==='May'?625:0}" style="width:75px" oninput="updateTracker()"></td>
+      <td><input type="number" class="tr-broker" data-i="${i}" value="${m==='May'?575:0}" style="width:75px" oninput="updateTracker()"></td>
+      <td><input type="number" class="tr-401k" data-i="${i}" value="0" style="width:75px" oninput="updateTracker()"></td>
+      <td class="tr-total-${i}">—</td>
+      <td class="tr-roth-rem-${i}">—</td>
+      <td class="tr-running-${i}">—</td>
+      <td class="tr-ontrack-${i}">—</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+  updateTracker();
+}
+
+function updateTracker() {
+  const rothLimit = parseFloat(document.getElementById('roth-limit')?.value) || 7500;
+  let totalRoth = 0, totalBroker = 0, total401k = 0, running = parseFloat(document.getElementById('inv-balance')?.value) || 85000;
+  let cumulRoth = 0;
+  months2026.forEach((m, i) => {
+    const roth = parseFloat(document.querySelector(`.tr-roth[data-i="${i}"]`)?.value) || 0;
+    const broker = parseFloat(document.querySelector(`.tr-broker[data-i="${i}"]`)?.value) || 0;
+    const k401 = parseFloat(document.querySelector(`.tr-401k[data-i="${i}"]`)?.value) || 0;
+    const total = roth + broker + k401;
+    totalRoth += roth; totalBroker += broker; total401k += k401;
+    cumulRoth += roth;
+    running += total;
+    const rothRem = Math.max(0, rothLimit - cumulRoth);
+    const onTrack = cumulRoth >= (rothLimit / 12) * (i + 1);
+    const set = (cls, val) => { const e = document.querySelector('.' + cls); if(e) e.textContent = val; };
+    const q = (cls) => document.querySelector('.' + cls);
+    if (q(`tr-total-${i}`)) q(`tr-total-${i}`).textContent = fmt(total);
+    if (q(`tr-roth-rem-${i}`)) q(`tr-roth-rem-${i}`).textContent = fmt(rothRem);
+    if (q(`tr-running-${i}`)) q(`tr-running-${i}`).textContent = fmt(running);
+    const ot = q(`tr-ontrack-${i}`);
+    if (ot) { ot.textContent = onTrack ? '✓ Yes' : '✗ No'; ot.className = `tr-ontrack-${i} ` + (onTrack ? 'on-track' : 'off-track'); }
+  });
+  document.getElementById('tr-annual-roth').textContent = fmt(totalRoth);
+  document.getElementById('tr-annual-broker').textContent = fmt(totalBroker);
+  document.getElementById('tr-annual-401k').textContent = fmt(total401k);
+  document.getElementById('tr-annual-total').textContent = fmt(totalRoth + totalBroker + total401k);
+  document.getElementById('tr-annual-running').textContent = fmt(running);
+}
+
+// PROJECTION TABLE
+function buildProjection(startBal, monthly, annualReturn) {
+  const tbody = document.getElementById('proj-tbody');
+  const currentYear = 2026;
+  const baseAge = 30;
+  let html = '';
+  const rates = [0.06, 0.08, 0.09, 0.10];
+  const numYears = 25;
+
+  for (let y = 1; y <= numYears; y++) {
+    const year = currentYear + y - 1;
+    const age = baseAge + y - 1;
+    const annualContrib = monthly * 12;
+    const milestones = { 5: '5yr', 10: '10yr', 20: '20yr', 25: '25yr' };
+    const ms = milestones[y] ? `<span class="milestone">${milestones[y]}</span>` : '';
+
+    const balances = rates.map(r => {
+      const mr = r / 12;
+      return startBal * Math.pow(1 + mr, y * 12) + monthly * (Math.pow(1 + mr, y * 12) - 1) / mr;
+    });
+
+    html += `<tr>
+      <td>${year}${ms}</td>
+      <td>~${age}</td>
+      <td>${fmt(annualContrib * y)}</td>
+      ${balances.map(b => `<td>${fmt(b)}</td>`).join('')}
+    </tr>`;
+  }
+  tbody.innerHTML = html;
+}
+
+// DEBT TOTAL
+function updateDebtTotal() {
+  const ids = ['debt-aa','debt-cap1','debt-wf1','debt-wf2','debt-student'];
+  const total = ids.reduce((s, id) => s + (parseFloat(document.getElementById(id)?.value) || 0), 0);
+  document.getElementById('debt-total').textContent = fmt(total);
+}
+
+// UPDATE MONTH DISPLAY
+function updateMonth() {
+  const input = document.getElementById('budget-month');
+  if (!input) return;
+  const [year, month] = input.value.split('-');
+  const date = new Date(year, month - 1);
+  const label = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  ['date-display-1','date-display-2','date-display-3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = label;
+  });
+}
+
+// ── LOCAL STORAGE ──────────────────────────────────────────────────────
+const SAVE_KEY = 'family_budget_dashboard_v1';
+
+function saveAll() {
+  const data = {};
+  document.querySelectorAll('input[type="number"][id]').forEach(inp => {
+    data['id_' + inp.id] = inp.value;
+  });
+  document.querySelectorAll('input[type="month"][id]').forEach(inp => {
+    data['id_' + inp.id] = inp.value;
+  });
+  document.querySelectorAll('input.budgeted-input').forEach(inp => {
+    data['bud_' + inp.dataset.row] = inp.value;
+  });
+  document.querySelectorAll('input.actual-input').forEach(inp => {
+    data['act_' + inp.dataset.row] = inp.value;
+  });
+  document.querySelectorAll('input.tr-roth').forEach(inp => {
+    data['roth_' + inp.dataset.i] = inp.value;
+  });
+  document.querySelectorAll('input.tr-broker').forEach(inp => {
+    data['broker_' + inp.dataset.i] = inp.value;
+  });
+  document.querySelectorAll('input.tr-401k').forEach(inp => {
+    data['k401_' + inp.dataset.i] = inp.value;
+  });
+  document.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
+    data['cb_' + i] = cb.checked;
+  });
+  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  const ind = document.getElementById('save-indicator');
+  if (ind) {
+    ind.style.opacity = '1';
+    clearTimeout(ind._t);
+    ind._t = setTimeout(() => ind.style.opacity = '0', 1500);
+  }
+}
+
+function loadAll() {
+  const raw = localStorage.getItem(SAVE_KEY);
+  if (!raw) return;
+  const data = JSON.parse(raw);
+  document.querySelectorAll('input[type="number"][id]').forEach(inp => {
+    if (data['id_' + inp.id] !== undefined) inp.value = data['id_' + inp.id];
+  });
+  document.querySelectorAll('input[type="month"][id]').forEach(inp => {
+    if (data['id_' + inp.id] !== undefined) inp.value = data['id_' + inp.id];
+  });
+  document.querySelectorAll('input.budgeted-input').forEach(inp => {
+    if (data['bud_' + inp.dataset.row] !== undefined) inp.value = data['bud_' + inp.dataset.row];
+  });
+  document.querySelectorAll('input.actual-input').forEach(inp => {
+    if (data['act_' + inp.dataset.row] !== undefined) inp.value = data['act_' + inp.dataset.row];
+  });
+  document.querySelectorAll('input.tr-roth').forEach(inp => {
+    if (data['roth_' + inp.dataset.i] !== undefined) inp.value = data['roth_' + inp.dataset.i];
+  });
+  document.querySelectorAll('input.tr-broker').forEach(inp => {
+    if (data['broker_' + inp.dataset.i] !== undefined) inp.value = data['broker_' + inp.dataset.i];
+  });
+  document.querySelectorAll('input.tr-401k').forEach(inp => {
+    if (data['k401_' + inp.dataset.i] !== undefined) inp.value = data['k401_' + inp.dataset.i];
+  });
+  document.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
+    if (data['cb_' + i] !== undefined) cb.checked = data['cb_' + i];
+  });
+}
+
+function clearSave() {
+  if (confirm('Clear all saved data and reset to defaults?')) {
+    localStorage.removeItem(SAVE_KEY);
+    location.reload();
+  }
+}
+
+document.addEventListener('input', saveAll);
+document.addEventListener('change', saveAll);
+// ─────────────────────────────────────────────────────────────────────────
+
+// INIT
+buildBudget();
+buildTracker();
+loadAll();
+updateBudgetTotals();
+updateTotalBalance();
+updateTracker();
+updateMonth();
+recalc();
+</script>
+
+</body>
+</html>
