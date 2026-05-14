@@ -417,12 +417,92 @@
     .page { padding: 1rem; }
     .nav { padding: 0 1rem; }
   }
+
+  /* PASSWORD SCREEN */
+  #password-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .password-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    text-align: center;
+    width: 340px;
+  }
+  .password-box h2 {
+    font-family: var(--font);
+    font-size: 1.4rem;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+    border: none;
+    padding: 0;
+  }
+  .password-box p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+  .password-box input[type="password"] {
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    background: var(--surface2);
+    color: var(--text);
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+  .password-box input[type="password"]:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+  }
+  .password-btn {
+    width: 100%;
+    padding: 0.65rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .password-btn:hover { background: var(--accent-mid); }
+  .password-error {
+    color: var(--red);
+    font-size: 0.82rem;
+    margin-top: 0.75rem;
+    display: none;
+  }
 </style>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
+
+
+<div id="password-screen">
+  <div class="password-box">
+    <h2>Nuckolls Budget</h2>
+    <p>Enter your password to continue</p>
+    <input type="password" id="password-input" placeholder="Password" 
+           onkeydown="if(event.key==='Enter') checkPassword()">
+    <button class="password-btn" onclick="checkPassword()">Enter</button>
+    <div class="password-error" id="password-error">Incorrect password. Try again.</div>
+  </div>
+</div>
 
 <nav class="nav">
   <div class="nav-brand">Budget Dashboard</div>
@@ -1337,6 +1417,34 @@ function updateMonth() {
   });
 }
 
+
+// ── PASSWORD PROTECTION ──────────────────────────────────────────────────
+const CORRECT_PASSWORD = 'Charli2020!';
+const AUTH_KEY = 'nuckollsbudget_auth';
+
+function checkPassword() {
+  const input = document.getElementById('password-input').value;
+  if (input === CORRECT_PASSWORD) {
+    sessionStorage.setItem(AUTH_KEY, 'true');
+    document.getElementById('password-screen').style.display = 'none';
+  } else {
+    const err = document.getElementById('password-error');
+    err.style.display = 'block';
+    document.getElementById('password-input').value = '';
+    document.getElementById('password-input').focus();
+  }
+}
+
+function checkAuth() {
+  if (sessionStorage.getItem(AUTH_KEY) !== 'true') {
+    document.getElementById('password-screen').style.display = 'flex';
+    setTimeout(() => document.getElementById('password-input').focus(), 100);
+  } else {
+    document.getElementById('password-screen').style.display = 'none';
+  }
+}
+// ─────────────────────────────────────────────────────────────────────────
+
 // ── FIREBASE SYNC ──────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyAzjJj98I6CcZJEl7YveEsE0ZTcynVLSJc",
@@ -1465,6 +1573,7 @@ document.addEventListener('change', saveAll);
 
 // INIT — wrapped in DOMContentLoaded so all DOM elements exist before we run
 document.addEventListener('DOMContentLoaded', function() {
+  checkAuth();
   buildBudget();       // creates .budgeted-input and .actual-input rows
   buildTracker();      // creates .tr-roth, .tr-broker, .tr-401k rows
   updateBudgetTotals();
