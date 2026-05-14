@@ -418,6 +418,9 @@
     .nav { padding: 0 1rem; }
   }
 </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -1334,10 +1337,23 @@ function updateMonth() {
   });
 }
 
-// ── LOCAL STORAGE ──────────────────────────────────────────────────────
-const SAVE_KEY = 'family_budget_dashboard_v1';
+// ── FIREBASE SYNC ──────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyAzjJj98I6CcZJEl7YveEsE0ZTcynVLSJc",
+  authDomain: "nuckollsbudget.firebaseapp.com",
+  projectId: "nuckollsbudget",
+  storageBucket: "nuckollsbudget.firebasestorage.app",
+  messagingSenderId: "53101101522",
+  appId: "1:53101101522:web:8a45215f43c1a327bf080b"
+};
 
-function saveAll() {
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const DOC_REF = db.collection('budget').doc('shared');
+
+let saveTimer = null;
+
+function collectData() {
   const data = {};
   document.querySelectorAll('input[type="number"][id]').forEach(inp => {
     data['id_' + inp.id] = inp.value;
@@ -1363,19 +1379,10 @@ function saveAll() {
   document.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
     data['cb_' + i] = cb.checked;
   });
-  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-  const ind = document.getElementById('save-indicator');
-  if (ind) {
-    ind.style.opacity = '1';
-    clearTimeout(ind._t);
-    ind._t = setTimeout(() => ind.style.opacity = '0', 1500);
-  }
+  return data;
 }
 
-function loadAll() {
-  const raw = localStorage.getItem(SAVE_KEY);
-  if (!raw) return;
-  const data = JSON.parse(raw);
+function applyData(data) {
   document.querySelectorAll('input[type="number"][id]').forEach(inp => {
     if (data['id_' + inp.id] !== undefined) inp.value = data['id_' + inp.id];
   });
@@ -1402,10 +1409,53 @@ function loadAll() {
   });
 }
 
+function showSaveIndicator(msg, color) {
+  const ind = document.getElementById('save-indicator');
+  if (!ind) return;
+  ind.textContent = msg || '✓ Saved';
+  ind.style.color = color || 'var(--accent)';
+  ind.style.opacity = '1';
+  clearTimeout(ind._t);
+  ind._t = setTimeout(() => ind.style.opacity = '0', 2000);
+}
+
+function saveAll() {
+  // Debounce — wait 800ms after last keystroke before saving
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    const data = collectData();
+    DOC_REF.set(data)
+      .then(() => showSaveIndicator('✓ Saved', 'var(--accent)'))
+      .catch(err => {
+        console.error('Save error:', err);
+        showSaveIndicator('⚠ Save failed', 'var(--red)');
+      });
+  }, 800);
+}
+
+function loadAll() {
+  showSaveIndicator('Loading...', 'var(--text-muted)');
+  DOC_REF.get().then(doc => {
+    if (doc.exists) {
+      applyData(doc.data());
+      updateBudgetTotals();
+      updateTotalBalance();
+      updateTracker();
+      updateMonth();
+      recalc();
+      showSaveIndicator('✓ Loaded', 'var(--accent)');
+    } else {
+      showSaveIndicator('No saved data yet', 'var(--text-muted)');
+    }
+  }).catch(err => {
+    console.error('Load error:', err);
+    showSaveIndicator('⚠ Load failed', 'var(--red)');
+  });
+}
+
 function clearSave() {
   if (confirm('Clear all saved data and reset to defaults?')) {
-    localStorage.removeItem(SAVE_KEY);
-    location.reload();
+    DOC_REF.delete().then(() => location.reload());
   }
 }
 
@@ -1417,12 +1467,12 @@ document.addEventListener('change', saveAll);
 document.addEventListener('DOMContentLoaded', function() {
   buildBudget();       // creates .budgeted-input and .actual-input rows
   buildTracker();      // creates .tr-roth, .tr-broker, .tr-401k rows
-  loadAll();           // NOW inputs exist, so loadAll() can find and restore them
-  updateBudgetTotals(); // recalculate with restored values
-  updateTotalBalance(); // recalculate accounts with restored values
-  updateTracker();      // recalculate tracker with restored values
-  updateMonth();        // restore month display
-  recalc();             // final dashboard recalc
+  updateBudgetTotals();
+  updateTotalBalance();
+  updateTracker();
+  updateMonth();
+  recalc();
+  loadAll();           // load from Firebase — updates everything again once data arrives
 });
 </script>
 
