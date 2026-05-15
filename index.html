@@ -486,9 +486,6 @@
     display: none;
   }
 </style>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -508,7 +505,7 @@
   <div class="nav-brand">Budget Dashboard</div>
 <div class="tab active" onclick="showPage('budget', this)">Monthly Budget</div>
   <div class="tab" onclick="showPage('accounts', this)">Accounts</div>
-  <div class="tab" onclick="showPage('tracker', this)">Investing Tracker</div>
+  <div class="tab" onclick="showPage('notes', this)">Notes</div>
   <div style="margin-left:auto; display:flex; align-items:center; gap:0.75rem; padding:0 1rem;">
     <input type="month" id="budget-month" value="2026-05" oninput="updateMonth(); saveAll();" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
     <span id="save-indicator" style="font-size:0.75rem; color:var(--accent); opacity:0; transition:opacity 0.5s;">✓ Saved</span>
@@ -630,284 +627,28 @@
 </div></div>
 </div>
 
-<!-- INVESTING TRACKER -->
-<div id="page-tracker" class="page">
-  <div class="page-header">
-    <h1>Investing Tracker</h1>
-    <p>2026 · Track Roth IRA, brokerage, and 401(k) contributions each month</p>
-  </div>
 
-  <div class="card mb2">
-    <table class="tracker-table" id="tracker-table">
-      <thead>
-        <tr>
-          <th style="text-align:left">Month</th>
-          <th>Roth IRA ($)</th>
-          <th>Brokerage ($)</th>
-          <th>401(k) / Other ($)</th>
-          <th>Total Invested ($)</th>
-          <th>Roth Goal Remaining ($)</th>
-          <th>Running Total ($)</th>
-          <th>On Track?</th>
-        </tr>
-      </thead>
-      <tbody id="tracker-tbody">
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>Annual Total</td>
-          <td id="tr-annual-roth">—</td>
-          <td id="tr-annual-broker">—</td>
-          <td id="tr-annual-401k">—</td>
-          <td id="tr-annual-total">—</td>
-          <td>—</td>
-          <td id="tr-annual-running">—</td>
-          <td>—</td>
-        </tr>
-      </tfoot>
-    </table>
+
+<!-- NOTES -->
+<div id="page-notes" class="page">
+  <div class="page-header">
+    <h1>Shared Notes</h1>
+    <p>Edit directly in the sheet below — updates instantly for both of you</p>
   </div>
-  <div class="note">Enter your actual contributions each month. Roth Goal Remaining shows how much more you need to contribute to max out the annual Roth IRA limit.</div>
+  <div class="card" style="padding:0; overflow:hidden; height:75vh;">
+    <iframe
+      src="https://docs.google.com/spreadsheets/d/12TW-vqII5WcvYFtSoOS1WdW7hLGqNOU-jkwDeQnQWoc/edit?usp=sharing&embedded=true"
+      style="width:100%; height:100%; border:none; display:block;"
+      allowfullscreen>
+    </iframe>
+  </div>
 </div>
 
+
 <script>
-// TAB NAVIGATION
-function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  el.classList.add('active');
-}
-
-// BUDGET DATA
-const budgetRows = [
-  { cat: 'Income - David', type: 'income', budgeted: 4500, note: 'David is paid every 2 weeks; this uses monthly average.' },
-  { cat: 'Income - You', type: 'income', budgeted: 3000, note: 'Approx. $1,500 on the 1st and 15th.' },
-  { cat: 'EXPENSES', section: true },
-  { cat: 'Rent', type: 'fixed', budgeted: 1600, note: '' },
-  { cat: 'Geico', type: 'fixed', budgeted: 200, note: '' },
-  { cat: 'AT&T', type: 'fixed', budgeted: 100, note: '' },
-  { cat: 'Hulu', type: 'fixed', budgeted: 20, note: '' },
-  { cat: 'Student Loan', type: 'fixed', budgeted: 200, note: '' },
-  { cat: "Rhett's 529", type: 'savings', budgeted: 100, note: '' },
-  { cat: 'AA Card', type: 'debt', budgeted: 250, note: '' },
-  { cat: 'Capital One', type: 'debt', budgeted: 150, note: '' },
-  { cat: 'WF 1', type: 'debt', budgeted: 1250, note: 'Editable: $1,000–$1,500; this uses midpoint.' },
-  { cat: 'WF 2', type: 'debt', budgeted: 200, note: '' },
-  { cat: 'Groceries', type: 'variable', budgeted: 0, note: '' },
-  { cat: 'Gas', type: 'variable', budgeted: 0, note: '' },
-  { cat: 'Eating Out', type: 'variable', budgeted: 0, note: '' },
-  { cat: 'Household', type: 'variable', budgeted: 0, note: '' },
-  { cat: 'Misc', type: 'variable', budgeted: 0, note: '' },
-  { cat: 'Fairfax Water', type: 'fixed', budgeted: 0, note: '' },
-  { cat: 'Dominion Energy', type: 'fixed', budgeted: 0, note: '' },
-  { cat: 'Washington Gas', type: 'fixed', budgeted: 0, note: '' },
-  { cat: 'Emergency / Sinking Fund', type: 'savings', budgeted: 200, note: 'For irregular bills, repairs, gifts, travel, etc.' },
-  { cat: 'INVESTING', section: true },
-  { cat: 'Roth IRA Investment', type: 'invest', budgeted: 625, note: 'First investing priority. $7,500/year ÷ 12.' },
-  { cat: 'Brokerage Investment', type: 'invest', budgeted: 575, note: 'Extra investing after Roth. Adjust based on real month.' },
-];
-
-const typeLabels = {
-  income: ['Income', 'badge-income'],
-  fixed: ['Fixed Expense', 'badge-fixed'],
-  variable: ['Variable Expense', 'badge-variable'],
-  savings: ['Savings', 'badge-savings'],
-  invest: ['Investing', 'badge-invest'],
-  debt: ['Debt Payment', 'badge-debt'],
-};
-
-function buildBudget() {
-  const tbody = document.getElementById('budget-tbody');
-  let html = '';
-
-  budgetRows.forEach((row, i) => {
-    if (row.section) {
-      html += `<tr class="section-row"><td colspan="6">${row.cat}</td></tr>`;
-      return;
-    }
-    const [label, cls] = typeLabels[row.type] || ['', ''];
-    html += `<tr>
-      <td>${row.cat}</td>
-      <td><span class="badge ${cls}">${label}</span></td>
-      <td><input type="number" class="budgeted-input" data-row="${i}" value="${row.budgeted}" style="width:85px" oninput="updateBudgetTotals()"></td>
-      <td><input type="number" class="actual-input" data-row="${i}" value="${row.budgeted}" style="width:85px" oninput="updateBudgetTotals()"></td>
-      <td class="variance-cell" id="var-${i}">$0</td>
-    </tr>`;
-  });
-
-  html += `<tr class="total-row">
-    <td colspan="2">Total Income</td>
-    <td id="total-income-bud">—</td>
-    <td id="total-income-actual">—</td>
-    <td></td><td></td>
-  </tr>
-  <tr class="total-row">
-    <td colspan="2">Total Expenses + Savings</td>
-    <td id="total-exp-bud">—</td>
-    <td id="total-exp-actual">—</td>
-    <td></td><td></td>
-  </tr>
-  <tr class="total-row">
-    <td colspan="2">Total Investing</td>
-    <td id="total-inv-bud">—</td>
-    <td id="total-inv-actual">—</td>
-    <td></td><td></td>
-  </tr>
-  <tr class="total-row">
-    <td colspan="2">Remaining After Budget</td>
-    <td id="remaining-bud">—</td>
-    <td id="remaining-actual">—</td>
-    <td></td><td></td>
-  </tr>`;
-
-  tbody.innerHTML = html;
-  updateBudgetTotals();
-}
-
-function updateBudgetTotals() {
-  let budIncome = 0, budExp = 0, budInvest = 0;
-  let actIncome = 0, actExp = 0, actInvest = 0;
-
-  document.querySelectorAll('.budgeted-input').forEach(budInp => {
-    const i = parseInt(budInp.dataset.row);
-    const row = budgetRows[i];
-    if (!row || row.section) return;
-    const budgeted = parseFloat(budInp.value) || 0;
-    const actualInp = document.querySelector(`.actual-input[data-row="${i}"]`);
-    const actual = parseFloat(actualInp?.value) || 0;
-    const variance = actual - budgeted;
-
-    const varCell = document.getElementById('var-' + i);
-    if (varCell) {
-      const isGoodIfLower = row.type !== 'income' && row.type !== 'invest';
-      const sign = variance > 0 ? '+' : '';
-      varCell.textContent = variance === 0 ? '$0' : `${sign}$${Math.abs(variance).toLocaleString()}${variance < 0 ? ' under' : ' over'}`;
-      varCell.style.color = variance === 0 ? 'var(--text-muted)' :
-        (isGoodIfLower ? (variance > 0 ? 'var(--red)' : 'var(--accent)') : (variance > 0 ? 'var(--accent)' : 'var(--red)'));
-    }
-
-    if (row.type === 'income') { budIncome += budgeted; actIncome += actual; }
-    else if (row.type === 'invest') { budInvest += budgeted; actInvest += actual; }
-    else { budExp += budgeted; actExp += actual; }
-  });
-
-  const budRem = budIncome - budExp - budInvest;
-  const actRem = actIncome - actExp - actInvest;
-
-  const setEl = (id, val, colorize) => {
-    const e = document.getElementById(id);
-    if (!e) return;
-    e.textContent = `${val < 0 ? '-' : ''}$${Math.abs(Math.round(val)).toLocaleString()}`;
-    if (colorize) e.className = val >= 0 ? 'surplus' : 'deficit';
-  };
-
-  setEl('total-income-bud', budIncome);
-  setEl('total-income-actual', actIncome);
-  setEl('total-exp-bud', budExp);
-  setEl('total-exp-actual', actExp);
-  setEl('total-inv-bud', budInvest);
-  setEl('total-inv-actual', actInvest);
-  setEl('remaining-bud', budRem, true);
-  setEl('remaining-actual', actRem, true);
-
-  // Keep dashboard income display in sync and trigger recalc
-  const incomeDisplay = document.getElementById('monthly-income-display');
-  if (incomeDisplay) incomeDisplay.textContent = fmt(budIncome);
-}
-
-// DASHBOARD CALCULATIONS
-function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
-
-
-// DEBT TOTAL
-function updateDebtTotal() {
-  const ids = ['debt-aa','debt-cap1','debt-wf1','debt-wf2','debt-student'];
-  const total = ids.reduce((s, id) => s + (parseFloat(document.getElementById(id)?.value) || 0), 0);
-  document.getElementById('debt-total').textContent = fmt(total);
-}
-
-
-// ACCOUNT TOTALS
-function updateTotalBalance() {
-  const ids = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k'];
-  const total = ids.reduce((sum, id) => sum + (parseFloat(document.getElementById(id)?.value) || 0), 0);
-  const el = document.getElementById('total-invested-balance');
-  if (el) el.textContent = fmt(total);
-}
-
-// INVESTING TRACKER
-const months2026 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-function buildTracker() {
-  const tbody = document.getElementById('tracker-tbody');
-  if (!tbody) return;
-  let html = '';
-  months2026.forEach((m, i) => {
-    html += `<tr>
-      <td>${m}</td>
-      <td><input type="number" class="tr-roth" data-i="${i}" value="${m==='May'?625:0}" style="width:75px" oninput="updateTracker()"></td>
-      <td><input type="number" class="tr-broker" data-i="${i}" value="${m==='May'?575:0}" style="width:75px" oninput="updateTracker()"></td>
-      <td><input type="number" class="tr-401k" data-i="${i}" value="0" style="width:75px" oninput="updateTracker()"></td>
-      <td class="tr-total-${i}">—</td>
-      <td class="tr-roth-rem-${i}">—</td>
-      <td class="tr-running-${i}">—</td>
-      <td class="tr-ontrack-${i}">—</td>
-    </tr>`;
-  });
-  tbody.innerHTML = html;
-  updateTracker();
-}
-
-function updateTracker() {
-  const rothLimit = 7500;
-  const startingBalance = 179398;
-  let totalRoth=0, totalBroker=0, total401k=0, running=startingBalance, cumulRoth=0;
-  months2026.forEach((m, i) => {
-    const roth   = parseFloat(document.querySelector(`.tr-roth[data-i="${i}"]`)?.value) || 0;
-    const broker = parseFloat(document.querySelector(`.tr-broker[data-i="${i}"]`)?.value) || 0;
-    const k401   = parseFloat(document.querySelector(`.tr-401k[data-i="${i}"]`)?.value) || 0;
-    const total  = roth + broker + k401;
-    totalRoth += roth; totalBroker += broker; total401k += k401;
-    cumulRoth += roth;
-    running += total;
-    const rothRem = Math.max(0, rothLimit - cumulRoth);
-    const onTrack = cumulRoth >= (rothLimit / 12) * (i + 1);
-    const q = cls => document.querySelector('.' + cls);
-    if (q(`tr-total-${i}`))    q(`tr-total-${i}`).textContent    = fmt(total);
-    if (q(`tr-roth-rem-${i}`)) q(`tr-roth-rem-${i}`).textContent = fmt(rothRem);
-    if (q(`tr-running-${i}`))  q(`tr-running-${i}`).textContent  = fmt(running);
-    const ot = q(`tr-ontrack-${i}`);
-    if (ot) {
-      ot.textContent = onTrack ? '✓ Yes' : '✗ No';
-      ot.className = `tr-ontrack-${i} ` + (onTrack ? 'on-track' : 'off-track');
-    }
-  });
-  const s = id => document.getElementById(id);
-  if (s('tr-annual-roth'))    s('tr-annual-roth').textContent    = fmt(totalRoth);
-  if (s('tr-annual-broker'))  s('tr-annual-broker').textContent  = fmt(totalBroker);
-  if (s('tr-annual-401k'))    s('tr-annual-401k').textContent    = fmt(total401k);
-  if (s('tr-annual-total'))   s('tr-annual-total').textContent   = fmt(totalRoth + totalBroker + total401k);
-  if (s('tr-annual-running')) s('tr-annual-running').textContent = fmt(running);
-}
-
-// UPDATE MONTH DISPLAY
-function updateMonth() {
-  const input = document.getElementById('budget-month');
-  if (!input) return;
-  const [year, month] = input.value.split('-');
-  const date = new Date(year, month - 1);
-  const label = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  ['date-display-1','date-display-2','date-display-3'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = label;
-  });
-}
-
-
-// ── PASSWORD PROTECTION ──────────────────────────────────────────────────
 const CORRECT_PASSWORD = 'Charli2020!';
 const AUTH_KEY = 'nuckollsbudget_auth';
+const SAVE_KEY = 'nuckollsbudget_data_v1';
 
 function checkPassword() {
   const input = document.getElementById('password-input').value;
@@ -915,8 +656,7 @@ function checkPassword() {
     sessionStorage.setItem(AUTH_KEY, 'true');
     document.getElementById('password-screen').style.display = 'none';
   } else {
-    const err = document.getElementById('password-error');
-    err.style.display = 'block';
+    document.getElementById('password-error').style.display = 'block';
     document.getElementById('password-input').value = '';
     document.getElementById('password-input').focus();
   }
@@ -930,145 +670,177 @@ function checkAuth() {
     document.getElementById('password-screen').style.display = 'none';
   }
 }
-// ─────────────────────────────────────────────────────────────────────────
 
-// ── FIREBASE SYNC ──────────────────────────────────────────────────────
-const firebaseConfig = {
-  apiKey: "AIzaSyAzjJj98I6CcZJEl7YveEsE0ZTcynVLSJc",
-  authDomain: "nuckollsbudget.firebaseapp.com",
-  projectId: "nuckollsbudget",
-  storageBucket: "nuckollsbudget.firebasestorage.app",
-  messagingSenderId: "53101101522",
-  appId: "1:53101101522:web:8a45215f43c1a327bf080b"
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+const budgetRows = [
+  { cat: 'Income - David', type: 'income', budgeted: 4500 },
+  { cat: 'Income - You', type: 'income', budgeted: 3000 },
+  { section: true, cat: 'EXPENSES' },
+  { cat: 'Rent', type: 'fixed', budgeted: 4509 },
+  { cat: 'Geico', type: 'fixed', budgeted: 154 },
+  { cat: 'AT&T', type: 'fixed', budgeted: 301 },
+  { cat: 'Hulu', type: 'fixed', budgeted: 20 },
+  { cat: 'Student Loan', type: 'fixed', budgeted: 375 },
+  { cat: "Rhett's 529", type: 'savings', budgeted: 100 },
+  { cat: 'AA Card', type: 'debt', budgeted: 250 },
+  { cat: 'Capital One', type: 'debt', budgeted: 150 },
+  { cat: 'WF 1', type: 'debt', budgeted: 1250 },
+  { cat: 'WF 2', type: 'debt', budgeted: 200 },
+  { cat: 'Fairfax Water', type: 'fixed', budgeted: 0 },
+  { cat: 'Dominion Energy', type: 'fixed', budgeted: 0 },
+  { cat: 'Washington Gas', type: 'fixed', budgeted: 0 },
+  { cat: 'Groceries', type: 'variable', budgeted: 0 },
+  { cat: 'Gas', type: 'variable', budgeted: 0 },
+  { cat: 'Eating Out', type: 'variable', budgeted: 0 },
+  { cat: 'Household', type: 'variable', budgeted: 0 },
+  { cat: 'Misc', type: 'variable', budgeted: 0 },
+  { cat: 'Emergency / Sinking Fund', type: 'savings', budgeted: 200 },
+  { section: true, cat: 'INVESTING' },
+  { cat: 'Roth IRA Investment', type: 'invest', budgeted: 625 },
+  { cat: 'Brokerage Investment', type: 'invest', budgeted: 575 },
+];
+
+const typeLabels = {
+  income:   ['Income', 'badge-income'],
+  fixed:    ['Fixed Expense', 'badge-fixed'],
+  variable: ['Variable Expense', 'badge-variable'],
+  savings:  ['Savings', 'badge-savings'],
+  invest:   ['Investing', 'badge-invest'],
+  debt:     ['Debt Payment', 'badge-debt'],
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const DOC_REF = db.collection('budget').doc('shared');
-
-let saveTimer = null;
-
-function collectData() {
-  const data = {};
-  document.querySelectorAll('input[type="number"][id]').forEach(inp => {
-    data['id_' + inp.id] = inp.value;
-  });
-  document.querySelectorAll('input[type="month"][id]').forEach(inp => {
-    data['id_' + inp.id] = inp.value;
-  });
-  document.querySelectorAll('input.budgeted-input').forEach(inp => {
-    data['bud_' + inp.dataset.row] = inp.value;
-  });
-  document.querySelectorAll('input.actual-input').forEach(inp => {
-    data['act_' + inp.dataset.row] = inp.value;
-  });
-  document.querySelectorAll('input.tr-roth').forEach(inp => {
-    data['roth_' + inp.dataset.i] = inp.value;
-  });
-  document.querySelectorAll('input.tr-broker').forEach(inp => {
-    data['broker_' + inp.dataset.i] = inp.value;
-  });
-  document.querySelectorAll('input.tr-401k').forEach(inp => {
-    data['k401_' + inp.dataset.i] = inp.value;
-  });
-  document.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
-    data['cb_' + i] = cb.checked;
-  });
-  return data;
-}
-
-function applyData(data) {
-  document.querySelectorAll('input[type="number"][id]').forEach(inp => {
-    if (data['id_' + inp.id] !== undefined) inp.value = data['id_' + inp.id];
-  });
-  document.querySelectorAll('input[type="month"][id]').forEach(inp => {
-    if (data['id_' + inp.id] !== undefined) inp.value = data['id_' + inp.id];
-  });
-  document.querySelectorAll('input.budgeted-input').forEach(inp => {
-    if (data['bud_' + inp.dataset.row] !== undefined) inp.value = data['bud_' + inp.dataset.row];
-  });
-  document.querySelectorAll('input.actual-input').forEach(inp => {
-    if (data['act_' + inp.dataset.row] !== undefined) inp.value = data['act_' + inp.dataset.row];
-  });
-  document.querySelectorAll('input.tr-roth').forEach(inp => {
-    if (data['roth_' + inp.dataset.i] !== undefined) inp.value = data['roth_' + inp.dataset.i];
-  });
-  document.querySelectorAll('input.tr-broker').forEach(inp => {
-    if (data['broker_' + inp.dataset.i] !== undefined) inp.value = data['broker_' + inp.dataset.i];
-  });
-  document.querySelectorAll('input.tr-401k').forEach(inp => {
-    if (data['k401_' + inp.dataset.i] !== undefined) inp.value = data['k401_' + inp.dataset.i];
-  });
-  document.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
-    if (data['cb_' + i] !== undefined) cb.checked = data['cb_' + i];
-  });
-}
-
-function showSaveIndicator(msg, color) {
-  const ind = document.getElementById('save-indicator');
-  if (!ind) return;
-  ind.textContent = msg || '✓ Saved';
-  ind.style.color = color || 'var(--accent)';
-  ind.style.opacity = '1';
-  clearTimeout(ind._t);
-  ind._t = setTimeout(() => ind.style.opacity = '0', 2000);
-}
-
-function saveAll() {
-  // Debounce — wait 800ms after last keystroke before saving
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    const data = collectData();
-    DOC_REF.set(data)
-      .then(() => showSaveIndicator('✓ Saved', 'var(--accent)'))
-      .catch(err => {
-        console.error('Save error:', err);
-        showSaveIndicator('⚠ Save failed', 'var(--red)');
-      });
-  }, 800);
-}
-
-function loadAll() {
-  showSaveIndicator('Loading...', 'var(--text-muted)');
-  DOC_REF.get().then(doc => {
-    if (doc.exists) {
-      applyData(doc.data());
-      updateBudgetTotals();
-      updateTotalBalance();
-      updateTracker();
-      updateMonth();
-            showSaveIndicator('✓ Loaded', 'var(--accent)');
-    } else {
-      showSaveIndicator('No saved data yet', 'var(--text-muted)');
+function buildBudget() {
+  const tbody = document.getElementById('budget-tbody');
+  let html = '';
+  budgetRows.forEach((row, i) => {
+    if (row.section) {
+      html += `<tr class="section-row"><td colspan="5">${row.cat}</td></tr>`;
+      return;
     }
-  }).catch(err => {
-    console.error('Load error:', err);
-    showSaveIndicator('⚠ Load failed', 'var(--red)');
+    const [label, cls] = typeLabels[row.type] || ['', ''];
+    html += `<tr>
+      <td>${row.cat}</td>
+      <td><span class="badge ${cls}">${label}</span></td>
+      <td><input type="number" class="budgeted-input" data-row="${i}" value="${row.budgeted}" style="width:85px" oninput="updateBudgetTotals()"></td>
+      <td><input type="number" class="actual-input" data-row="${i}" value="${row.budgeted}" style="width:85px" oninput="updateBudgetTotals()"></td>
+      <td class="variance-cell" id="var-${i}">$0</td>
+    </tr>`;
   });
+  html += `
+  <tr class="total-row"><td colspan="2">Total Income</td><td id="total-income-bud">—</td><td id="total-income-actual">—</td><td></td></tr>
+  <tr class="total-row"><td colspan="2">Total Expenses + Savings</td><td id="total-exp-bud">—</td><td id="total-exp-actual">—</td><td></td></tr>
+  <tr class="total-row"><td colspan="2">Total Investing</td><td id="total-inv-bud">—</td><td id="total-inv-actual">—</td><td></td></tr>
+  <tr class="total-row"><td colspan="2">Remaining After Budget</td><td id="remaining-bud">—</td><td id="remaining-actual">—</td><td></td></tr>`;
+  tbody.innerHTML = html;
+  updateBudgetTotals();
+}
+
+function updateBudgetTotals() {
+  let budIncome=0, budExp=0, budInvest=0, actIncome=0, actExp=0, actInvest=0;
+  document.querySelectorAll('.budgeted-input').forEach(budInp => {
+    const i = parseInt(budInp.dataset.row);
+    const row = budgetRows[i];
+    if (!row || row.section) return;
+    const budgeted = parseFloat(budInp.value) || 0;
+    const actualInp = document.querySelector(`.actual-input[data-row="${i}"]`);
+    const actual = parseFloat(actualInp?.value) || 0;
+    const variance = actual - budgeted;
+    const varCell = document.getElementById('var-' + i);
+    if (varCell) {
+      const isGoodIfLower = row.type !== 'income' && row.type !== 'invest';
+      const sign = variance > 0 ? '+' : '';
+      varCell.textContent = variance === 0 ? '$0' : `${sign}$${Math.abs(variance).toLocaleString()}${variance < 0 ? ' under' : ' over'}`;
+      varCell.style.color = variance === 0 ? 'var(--text-muted)' :
+        (isGoodIfLower ? (variance > 0 ? 'var(--red)' : 'var(--accent)') : (variance > 0 ? 'var(--accent)' : 'var(--red)'));
+    }
+    if (row.type === 'income') { budIncome += budgeted; actIncome += actual; }
+    else if (row.type === 'invest') { budInvest += budgeted; actInvest += actual; }
+    else { budExp += budgeted; actExp += actual; }
+  });
+  const budRem = budIncome - budExp - budInvest;
+  const actRem = actIncome - actExp - actInvest;
+  const setEl = (id, val, colorize) => {
+    const e = document.getElementById(id);
+    if (!e) return;
+    e.textContent = `${val < 0 ? '-' : ''}$${Math.abs(Math.round(val)).toLocaleString()}`;
+    if (colorize) e.className = val >= 0 ? 'surplus' : 'deficit';
+  };
+  setEl('total-income-bud', budIncome); setEl('total-income-actual', actIncome);
+  setEl('total-exp-bud', budExp);       setEl('total-exp-actual', actExp);
+  setEl('total-inv-bud', budInvest);    setEl('total-inv-actual', actInvest);
+  setEl('remaining-bud', budRem, true); setEl('remaining-actual', actRem, true);
+  saveData();
+}
+
+function updateTotalBalance() {
+  const ids = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k'];
+  const total = ids.reduce((sum, id) => sum + (parseFloat(document.getElementById(id)?.value) || 0), 0);
+  const el = document.getElementById('total-invested-balance');
+  if (el) el.textContent = fmt(total);
+  saveData();
+}
+
+function updateMonth() {
+  const input = document.getElementById('budget-month');
+  if (!input) return;
+  const [year, month] = input.value.split('-');
+  const label = new Date(year, month - 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  ['date-display-1','date-display-2','date-display-3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = label;
+  });
+  saveData();
+}
+
+// LOCAL STORAGE SAVE/LOAD
+function saveData() {
+  const data = {};
+  document.querySelectorAll('input[id]').forEach(inp => { data['id_' + inp.id] = inp.type === 'checkbox' ? inp.checked : inp.value; });
+  document.querySelectorAll('.budgeted-input').forEach(inp => { data['bud_' + inp.dataset.row] = inp.value; });
+  document.querySelectorAll('.actual-input').forEach(inp => { data['act_' + inp.dataset.row] = inp.value; });
+  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  const ind = document.getElementById('save-indicator');
+  if (ind) { ind.style.opacity='1'; clearTimeout(ind._t); ind._t = setTimeout(()=>ind.style.opacity='0', 1500); }
+}
+
+function loadData() {
+  const raw = localStorage.getItem(SAVE_KEY);
+  if (!raw) return;
+  const data = JSON.parse(raw);
+  document.querySelectorAll('input[id]').forEach(inp => {
+    const val = data['id_' + inp.id];
+    if (val !== undefined) { if (inp.type === 'checkbox') inp.checked = val; else inp.value = val; }
+  });
+  document.querySelectorAll('.budgeted-input').forEach(inp => { if (data['bud_' + inp.dataset.row] !== undefined) inp.value = data['bud_' + inp.dataset.row]; });
+  document.querySelectorAll('.actual-input').forEach(inp => { if (data['act_' + inp.dataset.row] !== undefined) inp.value = data['act_' + inp.dataset.row]; });
 }
 
 function clearSave() {
   if (confirm('Clear all saved data and reset to defaults?')) {
-    DOC_REF.delete().then(() => location.reload());
+    localStorage.removeItem(SAVE_KEY);
+    location.reload();
   }
 }
 
-document.addEventListener('input', saveAll);
-document.addEventListener('change', saveAll);
-// ─────────────────────────────────────────────────────────────────────────
+document.addEventListener('input', saveData);
 
-// INIT — wrapped in DOMContentLoaded so all DOM elements exist before we run
+// INIT
 document.addEventListener('DOMContentLoaded', function() {
   checkAuth();
-  buildBudget();       // creates .budgeted-input and .actual-input rows
-  buildTracker();      // creates .tr-roth, .tr-broker, .tr-401k rows
+  buildBudget();
+  loadData();
   updateBudgetTotals();
   updateTotalBalance();
-  updateTracker();
   updateMonth();
-  loadAll();           // load from Firebase — updates everything again once data arrives
 });
-
 </script>
 
 
