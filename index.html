@@ -506,11 +506,9 @@
 
 <nav class="nav">
   <div class="nav-brand">Budget Dashboard</div>
-  <div class="tab active" onclick="showPage('dashboard', this)">Dashboard</div>
-  <div class="tab" onclick="showPage('budget', this)">Monthly Budget</div>
+<div class="tab active" onclick="showPage('budget', this)">Monthly Budget</div>
   <div class="tab" onclick="showPage('accounts', this)">Accounts</div>
   <div class="tab" onclick="showPage('tracker', this)">Investing Tracker</div>
-  <div class="tab" onclick="showPage('guide', this)">How to Use</div>
   <div style="margin-left:auto; display:flex; align-items:center; gap:0.75rem; padding:0 1rem;">
     <input type="month" id="budget-month" value="2026-05" oninput="updateMonth(); saveAll();" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
     <span id="save-indicator" style="font-size:0.75rem; color:var(--accent); opacity:0; transition:opacity 0.5s;">✓ Saved</span>
@@ -518,123 +516,8 @@
   </div>
 </nav>
 
-<!-- DASHBOARD -->
-<div id="page-dashboard" class="page active">
-  <div class="page-header">
-    <h1>Budget + Investing Dashboard</h1>
-    <p><span id="date-display-1">May 2026</span> · Key inputs &amp; results — edit blue numbers to update calculations</p>
-  </div>
-
-  <div class="grid-2 mb2">
-    <div class="card">
-      <h2>Key Inputs</h2>
-      <table class="budget-table">
-        <tbody>
-          <tr><td>Current Invested Balance</td><td><input type="number" id="inv-balance" value="85000" oninput="recalc()"> </td></tr>
-          <tr><td>Goal Balance ($)</td><td><input type="number" id="goal-balance" value="1000000" oninput="recalc()"></td></tr>
-          <tr><td>Monthly Income <span style="font-size:0.72rem;color:var(--text-muted)">(from Budget tab)</span></td><td style="text-align:right;font-weight:600" id="monthly-income-display">$7,500</td></tr>
-          <tr><td>Monthly Expenses/Savings</td><td><input type="number" id="monthly-exp" value="6800" oninput="recalc()"></td></tr>
-          <tr><td>Monthly Investing</td><td><input type="number" id="monthly-invest" value="1200" oninput="recalc()"></td></tr>
-          <tr><td>Expected Annual Return (%)</td><td><input type="number" id="annual-return" value="8" step="0.5" oninput="recalc()"></td></tr>
-          <tr><td>Annual Roth IRA Limit ($)</td><td><input type="number" id="roth-limit" value="7500" oninput="recalc()"></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>Results</h2>
-      <div class="grid-2 mb2" style="gap:0.75rem">
-        <div class="metric-tile">
-          <div class="metric-label">Years to Goal</div>
-          <div class="metric-value green" id="years-to-goal">—</div>
-        </div>
-        <div class="metric-tile">
-          <div class="metric-label">Monthly Roth Target</div>
-          <div class="metric-value" id="roth-target">—</div>
-        </div>
-        <div class="metric-tile">
-          <div class="metric-label">Roth Remaining (annual)</div>
-          <div class="metric-value" id="roth-remaining">—</div>
-        </div>
-        <div class="metric-tile">
-          <div class="metric-label">Monthly Investing Target</div>
-          <div class="metric-value green" id="invest-target">—</div>
-        </div>
-        <div class="metric-tile" style="grid-column: 1 / -1">
-          <div class="metric-label">Projected Balance at Goal Age</div>
-          <div class="metric-value green" id="proj-balance">—</div>
-        </div>
-        <div class="metric-tile">
-          <div class="metric-label">Gap / Surplus vs Goal</div>
-          <div class="metric-value" id="gap-surplus">—</div>
-        </div>
-        <div class="metric-tile">
-          <div class="metric-label">Budgeted Monthly Investing</div>
-          <div class="metric-value" id="budgeted-invest">$1,200</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card mb2">
-    <h2>Budget Snapshot (<span id="date-display-2">May 2026</span>)</h2>
-    <div class="grid-4" style="gap:0.75rem">
-      <div class="metric-tile">
-        <div class="metric-label">Total Income</div>
-        <div class="metric-value" id="snap-income">—</div>
-      </div>
-      <div class="metric-tile">
-        <div class="metric-label">Total Expenses + Savings</div>
-        <div class="metric-value" id="snap-exp">—</div>
-      </div>
-      <div class="metric-tile">
-        <div class="metric-label">Total Investing</div>
-        <div class="metric-value" id="snap-invest">—</div>
-      </div>
-      <div class="metric-tile">
-        <div class="metric-label">Remaining After Budget</div>
-        <div class="metric-value green" id="snap-remaining">—</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Decision Guide</h2>
-    <div class="step-list">
-      <div class="step-item">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <div class="step-title">Max Roth IRA first</div>
-          <div class="step-desc">Monthly target shows in results above. First investing priority.</div>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <div class="step-title">Brokerage second</div>
-          <div class="step-desc">Use money left after bills + Roth. Flexible investing account.</div>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <div class="step-title">Keep Microsoft as a smaller slice</div>
-          <div class="step-desc">Growth kicker, not the whole plan. Hold after selling part of position.</div>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <div class="step-title">Review WF 1 payment</div>
-          <div class="step-desc">This is your biggest flexible payment lever. Range: $1,000–$1,500/month.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- MONTHLY BUDGET -->
-<div id="page-budget" class="page">
+<div id="page-budget" class="page active">
   <div class="page-header">
     <h1>Monthly Budget Breakdown</h1>
     <p><span id="date-display-3">May 2026</span> · Edit blue "Actual" columns as the month happens</p>
@@ -650,7 +533,6 @@
           <th>Budgeted ($)</th>
           <th>Actual ($)</th>
           <th>Variance ($)</th>
-          <th>Notes</th>
         </tr>
       </thead>
       <tbody id="budget-tbody">
@@ -667,7 +549,7 @@
 <div id="page-accounts" class="page">
   <div class="page-header">
     <h1>Account Snapshot</h1>
-    <p>Current balances, priorities, and account notes</p>
+    <p>Current balances — update as they change</p>
   </div>
 
   <div class="card mb2">
@@ -680,8 +562,6 @@
           <th>Type</th>
           <th>Tax Bucket</th>
           <th>Balance</th>
-          <th>Priority</th>
-          <th>Notes</th>
         </tr>
       </thead>
       <tbody>
@@ -691,8 +571,6 @@
           <td>Rollover IRA</td>
           <td>Tax-deferred retirement</td>
           <td><input type="number" id="acct-rollover" value="45138" style="width:90px" oninput="updateTotalBalance()"></td>
-          <td><span class="badge badge-fixed">Maintain</span></td>
-          <td style="font-size:0.75rem; color:var(--text-muted)">Already retirement money; usually don't add new taxable money here.</td>
         </tr>
         <tr>
           <td><div class="acct-name">Individual Fidelity Go</div></td>
@@ -700,8 +578,6 @@
           <td>Taxable brokerage</td>
           <td>Taxable</td>
           <td><input type="number" id="acct-fidelity-ind" value="2390" style="width:90px" oninput="updateTotalBalance()"></td>
-          <td><span class="badge badge-debt">Low priority</span></td>
-          <td style="font-size:0.75rem; color:var(--text-muted)">Flexible, but taxable. Can keep or simplify later.</td>
         </tr>
         <tr>
           <td><div class="acct-name">Vanguard Roth IRA</div></td>
@@ -709,8 +585,6 @@
           <td>Roth IRA</td>
           <td>Tax-free retirement</td>
           <td><input type="number" id="acct-roth1" value="15217" style="width:90px" oninput="updateTotalBalance()"></td>
-          <td><span class="badge badge-invest">First priority</span></td>
-          <td style="font-size:0.75rem; color:var(--text-muted)">Max this first each year.</td>
         </tr>
         <tr>
           <td><div class="acct-name">Vanguard Brokerage</div></td>
@@ -718,8 +592,6 @@
           <td>Taxable brokerage</td>
           <td>Taxable</td>
           <td><input type="number" id="acct-vanguard-broker" value="5009" style="width:90px" oninput="updateTotalBalance()"></td>
-          <td><span class="badge badge-variable">Hold / grow</span></td>
-          <td style="font-size:0.75rem; color:var(--text-muted)">Flexible taxable account.</td>
         </tr>
         <tr>
           <td><div class="acct-name">Vanguard Brokerage (MSFT)</div></td>
@@ -727,8 +599,6 @@
           <td>Stock plan / brokerage</td>
           <td>Taxable</td>
           <td><input type="number" id="acct-msft" value="31623" style="width:90px" oninput="updateTotalBalance()"></td>
-          <td><span class="badge badge-variable">Hold as kicker</span></td>
-          <td style="font-size:0.75rem; color:var(--text-muted)">Editable estimate after selling part of position.</td>
         </tr>
         <tr>
           <td><div class="acct-name">Microsoft 401(k)</div></td>
@@ -736,8 +606,6 @@
           <td>401(k)</td>
           <td>Tax-deferred</td>
           <td><input type="number" id="acct-msft-401k" value="33066" style="width:90px" oninput="updateTotalBalance()"></td>
-          <td><span class="badge badge-income">Keep growing</span></td>
-          <td style="font-size:0.75rem; color:var(--text-muted)">Microsoft employer contributions.</td>
         </tr>
         <tr>
           <td><div class="acct-name">STACK 401(k)</div></td>
@@ -745,8 +613,6 @@
           <td>401(k)</td>
           <td>Tax-deferred</td>
           <td><input type="number" id="acct-stack-401k" value="46955" style="width:90px" oninput="updateTotalBalance()"></td>
-          <td><span class="badge badge-income">Keep growing</span></td>
-          <td style="font-size:0.75rem; color:var(--text-muted)">STACK employer contributions.</td>
         </tr>
         <tr>
           <td><strong>Total Current Invested Balance</strong></td>
@@ -772,7 +638,6 @@
           <th>Usual Amount</th>
           <th>Frequency / Date</th>
           <th>Suggested Job</th>
-          <th>Notes</th>
         </tr>
       </thead>
       <tbody>
@@ -894,25 +759,6 @@
   <div class="note">Enter your actual contributions each month. Roth Goal Remaining shows how much more you need to contribute to max out the annual Roth IRA limit.</div>
 </div>
 
-  <div class="card mb2">
-    <h2>Projection Assumptions</h2>
-    <div class="grid-3" style="gap:0.75rem; margin-bottom:1rem">
-      <div class="metric-tile">
-        <div class="metric-label">Starting Balance</div>
-        <div class="metric-value" id="proj-start">$85,000</div>
-      </div>
-      <div class="metric-tile">
-        <div class="metric-label">Monthly Contribution</div>
-        <div class="metric-value">$1,200</div>
-      </div>
-      <div class="metric-tile">
-        <div class="metric-label">Target</div>
-        <div class="metric-value">$1,000,000</div>
-      </div>
-    </div>
-    <div class="note">These are estimates. Real markets do not move in smooth straight lines.</div>
-  </div>
-
   <div class="card">
     <h2>Year-by-Year Projections</h2>
     <table class="proj-table">
@@ -942,8 +788,6 @@
           <th>Current Balance ($)</th>
           <th>APR %</th>
           <th>Min/Planned Payment ($)</th>
-          <th>Priority</th>
-          <th>Notes</th>
         </tr>
       </thead>
       <tbody>
@@ -1000,108 +844,6 @@
   </div>
 </div>
 
-<!-- HOW TO USE -->
-<div id="page-guide" class="page">
-  <div class="page-header">
-    <h1>Family Budget + $1M Investing Dashboard</h1>
-    <p>How to use this workbook</p>
-  </div>
-
-  <div class="grid-2 mb2">
-    <div class="card">
-      <h2>Getting Started</h2>
-      <div class="step-list">
-        <div class="step-item">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <div class="step-title">Start on Monthly Budget</div>
-            <div class="step-desc">Update the blue (editable) numbers only. Black numbers are formulas.</div>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <div class="step-title">Track actuals as the month happens</div>
-            <div class="step-desc">The Actual column is for real spending as it occurs.</div>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <div class="step-title">Dashboard updates automatically</div>
-            <div class="step-desc">Dashboard pulls from your budget and account snapshot.</div>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <div class="step-title">Roth IRA first, then brokerage</div>
-            <div class="step-desc">Roth gets filled first, then brokerage investing gets the leftovers.</div>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">5</div>
-          <div class="step-content">
-            <div class="step-title">Use Investing Tracker monthly</div>
-            <div class="step-desc">Track Roth, brokerage, and any 401(k) investing each month.</div>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">6</div>
-          <div class="step-content">
-            <div class="step-title">Check the $1M Projection tab</div>
-            <div class="step-desc">See how monthly investing can grow over time.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Color Key</h2>
-      <div class="step-list" style="gap:1rem">
-        <div class="step-item" style="align-items:center">
-          <div style="width:28px; height:28px; border-radius:6px; background:var(--blue-light); border:1px solid #bbd0f5; flex-shrink:0"></div>
-          <div class="step-content">
-            <div class="step-title" style="color:var(--blue)">Blue numbers / inputs</div>
-            <div class="step-desc">Hardcoded inputs you can change</div>
-          </div>
-        </div>
-        <div class="step-item" style="align-items:center">
-          <div style="width:28px; height:28px; border-radius:6px; background:var(--surface2); border:1px solid var(--border); flex-shrink:0"></div>
-          <div class="step-content">
-            <div class="step-title">Black / dark numbers</div>
-            <div class="step-desc">Formulas / automatic calculations — don't edit</div>
-          </div>
-        </div>
-        <div class="step-item" style="align-items:center">
-          <div style="width:28px; height:28px; border-radius:6px; background:var(--accent-light); border:1px solid var(--accent-mid); flex-shrink:0"></div>
-          <div class="step-content">
-            <div class="step-title" style="color:var(--accent)">Green / teal</div>
-            <div class="step-desc">Linked from another sheet or surplus / good</div>
-          </div>
-        </div>
-        <div class="step-item" style="align-items:center">
-          <div style="width:28px; height:28px; border-radius:6px; background:var(--amber-light); border:1px solid #f0a030; flex-shrink:0"></div>
-          <div class="step-content">
-            <div class="step-title" style="color:var(--amber)">Orange / amber fill</div>
-            <div class="step-desc">Review / decision area — pay attention</div>
-          </div>
-        </div>
-        <div class="step-item" style="align-items:center">
-          <div style="width:28px; height:28px; border-radius:6px; background:var(--red-light); border:1px solid #e06060; flex-shrink:0"></div>
-          <div class="step-content">
-            <div class="step-title" style="color:var(--red)">Light red fill</div>
-            <div class="step-desc">Warning / over-budget flag</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="note" style="margin-top:1.5rem">
-        <strong>Sources / Notes</strong><br>
-        Income and expenses are based on the numbers you provided. Roth IRA annual contribution limit is an editable assumption (limits can change). This is a planning tool, not tax or investment advice. Review with a professional for taxes.
-      </div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -1167,7 +909,6 @@ function buildBudget() {
       <td><input type="number" class="budgeted-input" data-row="${i}" value="${row.budgeted}" style="width:85px" oninput="updateBudgetTotals()"></td>
       <td><input type="number" class="actual-input" data-row="${i}" value="${row.budgeted}" style="width:85px" oninput="updateBudgetTotals()"></td>
       <td class="variance-cell" id="var-${i}">$0</td>
-      <td style="font-size:0.75rem; color:var(--text-muted)">${row.note}</td>
     </tr>`;
   });
 
@@ -1370,7 +1111,7 @@ function updateTracker() {
 function buildProjection(startBal, monthly, annualReturn) {
   const tbody = document.getElementById('proj-tbody');
   const currentYear = 2026;
-  const baseAge = 30;
+  const baseAge = 47;
   let html = '';
   const rates = [0.06, 0.08, 0.09, 0.10];
   const numYears = 25;
