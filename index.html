@@ -627,96 +627,7 @@
       Optional simplification: You can keep accounts where they are, but going forward the simplest system is: Roth IRA first, then one brokerage account for extra investing.
     </div>
   </div>
-</div>
-
-  <div class="card mb2">
-    <h2>Paycheck Inputs</h2>
-    <table class="paycheck-table">
-      <thead>
-        <tr>
-          <th>Paycheck Source</th>
-          <th>Usual Amount</th>
-          <th>Frequency / Date</th>
-          <th>Suggested Job</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>David paycheck</strong></td>
-          <td><input type="number" id="paycheck-david" value="4500" style="width:90px" oninput="syncIncomeFromPaychecks()"></td>
-          <td>Every 2 weeks</td>
-          <td>Big fixed bills / rent / investing</td>
-          <td style="font-size:0.78rem; color:var(--text-muted)">Use this as the main engine. Months with 3 checks = bonus opportunity.</td>
-        </tr>
-        <tr>
-          <td><strong>Your paycheck #1</strong></td>
-          <td><input type="number" value="1500" style="width:90px"></td>
-          <td>1st of month</td>
-          <td>Groceries / gas / current bills</td>
-          <td style="font-size:0.78rem; color:var(--text-muted)">Approx. $1,500 on the 1st and 15th.</td>
-        </tr>
-        <tr>
-          <td><strong>Your paycheck #2</strong></td>
-          <td><input type="number" value="1500" style="width:90px"></td>
-          <td>15th of month</td>
-          <td>Groceries / variable spending / buffer</td>
-          <td style="font-size:0.78rem; color:var(--text-muted)">Use for variable spending, eating out, kids activities.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card">
-    <h2>Suggested Monthly Cash Flow</h2>
-    <table class="paycheck-table">
-      <thead>
-        <tr>
-          <th>Step</th>
-          <th>What to do</th>
-          <th>Monthly Amount</th>
-          <th>Formula / Source</th>
-          <th>Done?</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>1</strong></td>
-          <td>Cover fixed expenses + debt minimums</td>
-          <td>~$4,200</td>
-          <td>Rent + car insurance + AT&T + loans + cards</td>
-          <td><input type="checkbox"></td>
-        </tr>
-        <tr>
-          <td><strong>2</strong></td>
-          <td>Cover groceries / eating out / misc</td>
-          <td>~$900</td>
-          <td>Groceries + eating out + household + kids</td>
-          <td><input type="checkbox"></td>
-        </tr>
-        <tr>
-          <td><strong>3</strong></td>
-          <td>Fund emergency / sinking fund</td>
-          <td>~$200</td>
-          <td>For irregular bills, repairs, gifts, travel</td>
-          <td><input type="checkbox"></td>
-        </tr>
-        <tr>
-          <td><strong>4</strong></td>
-          <td>Invest Roth first</td>
-          <td>~$625</td>
-          <td>$7,500/year ÷ 12</td>
-          <td><input type="checkbox"></td>
-        </tr>
-        <tr>
-          <td><strong>5</strong></td>
-          <td>Invest brokerage second</td>
-          <td>Whatever's left</td>
-          <td>Extra after Roth. Adjust up/down based on real month.</td>
-          <td><input type="checkbox"></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+</div></div>
 </div>
 
 <!-- INVESTING TRACKER -->
@@ -757,93 +668,6 @@
     </table>
   </div>
   <div class="note">Enter your actual contributions each month. Roth Goal Remaining shows how much more you need to contribute to max out the annual Roth IRA limit.</div>
-</div>
-
-  <div class="card">
-    <h2>Year-by-Year Projections</h2>
-    <table class="proj-table">
-      <thead>
-        <tr>
-          <th style="text-align:left">Year</th>
-          <th style="text-align:left">Age Approx.</th>
-          <th>Contributions ($)</th>
-          <th>Balance @ 6%</th>
-          <th>Balance @ 8%</th>
-          <th>Balance @ 9%</th>
-          <th>Balance @ 10%</th>
-        </tr>
-      </thead>
-      <tbody id="proj-tbody">
-      </tbody>
-    </table>
-  </div>
-</div>
-
-  <div class="card">
-    <h2>Current Debt Payments</h2>
-    <table class="debt-table">
-      <thead>
-        <tr>
-          <th>Debt</th>
-          <th>Current Balance ($)</th>
-          <th>APR %</th>
-          <th>Min/Planned Payment ($)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>AA Card</strong></td>
-          <td><input type="number" value="4500" style="width:90px"></td>
-          <td><input type="number" value="22.9" step="0.1" style="width:70px"></td>
-          <td><input type="number" id="debt-aa" value="250" style="width:90px" oninput="updateDebtTotal()"></td>
-          <td><span class="priority-med">Medium</span></td>
-          <td style="font-size:0.78rem; color:var(--text-muted)">Payment you listed.</td>
-        </tr>
-        <tr>
-          <td><strong>Capital One</strong></td>
-          <td><input type="number" value="2800" style="width:90px"></td>
-          <td><input type="number" value="20.4" step="0.1" style="width:70px"></td>
-          <td><input type="number" id="debt-cap1" value="150" style="width:90px" oninput="updateDebtTotal()"></td>
-          <td><span class="priority-med">Medium</span></td>
-          <td style="font-size:0.78rem; color:var(--text-muted)">Payment you listed.</td>
-        </tr>
-        <tr>
-          <td><strong>WF 1</strong></td>
-          <td><input type="number" value="18000" style="width:90px"></td>
-          <td><input type="number" value="12.5" step="0.1" style="width:70px"></td>
-          <td><input type="number" id="debt-wf1" value="1250" style="width:90px" oninput="updateDebtTotal()"></td>
-          <td><span class="priority-high">High</span></td>
-          <td style="font-size:0.78rem; color:var(--text-muted)">Biggest payment lever. Range: $1,000–$1,500/month. Add balance + APR for payoff math.</td>
-        </tr>
-        <tr>
-          <td><strong>WF 2</strong></td>
-          <td><input type="number" value="5200" style="width:90px"></td>
-          <td><input type="number" value="15.9" step="0.1" style="width:70px"></td>
-          <td><input type="number" id="debt-wf2" value="200" style="width:90px" oninput="updateDebtTotal()"></td>
-          <td><span class="priority-med">Medium</span></td>
-          <td style="font-size:0.78rem; color:var(--text-muted)">Payment you listed.</td>
-        </tr>
-        <tr>
-          <td><strong>Student Loan</strong></td>
-          <td><input type="number" value="12000" style="width:90px"></td>
-          <td><input type="number" value="5.5" step="0.1" style="width:70px"></td>
-          <td><input type="number" id="debt-student" value="200" style="width:90px" oninput="updateDebtTotal()"></td>
-          <td><span class="priority-med">Medium</span></td>
-          <td style="font-size:0.78rem; color:var(--text-muted)">Lower APR — minimum payments while investing is fine.</td>
-        </tr>
-        <tr>
-          <td><strong>Total Listed Debt Payments</strong></td>
-          <td></td>
-          <td></td>
-          <td id="debt-total">$2,050</td>
-          <td colspan="2"></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="note">Once you enter balances and APRs, this sheet can become a payoff calculator. For now it organizes the required monthly payments. WF 1 is your biggest lever — adjusting it $250/month changes your flexibility significantly.</div>
-  </div>
-</div>
-
 </div>
 
 <script>
@@ -990,77 +814,34 @@ function updateBudgetTotals() {
   // Keep dashboard income display in sync and trigger recalc
   const incomeDisplay = document.getElementById('monthly-income-display');
   if (incomeDisplay) incomeDisplay.textContent = fmt(budIncome);
-  recalc();
 }
 
 // DASHBOARD CALCULATIONS
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
 
-function recalc() {
-  const balance = parseFloat(document.getElementById('inv-balance').value) || 85000;
-  const goal = parseFloat(document.getElementById('goal-balance').value) || 1000000;
-  // Income is driven by the budget table totals
-  let income = 0;
-  document.querySelectorAll('.budgeted-input').forEach(inp => {
-    const i = parseInt(inp.dataset.row);
-    const row = budgetRows[i];
-    if (row && row.type === 'income') income += parseFloat(inp.value) || 0;
-  });
-  if (income === 0) income = 7500; // fallback before budget table is built
-  const expenses = parseFloat(document.getElementById('monthly-exp').value) || 6800;
-  const monthlyInvest = parseFloat(document.getElementById('monthly-invest').value) || 1200;
-  const annualReturn = (parseFloat(document.getElementById('annual-return').value) || 8) / 100;
-  const rothLimit = parseFloat(document.getElementById('roth-limit').value) || 7500;
-  const r = annualReturn / 12;
 
-  // Years to goal (compound)
-  let months = 0, bal = balance;
-  while (bal < goal && months < 600) { bal = bal * (1 + r) + monthlyInvest; months++; }
-  const years = (months / 12).toFixed(1);
-
-  const rothMonthly = rothLimit / 12;
-  const remaining = rothLimit; // simplified
-
-  // Projected balance at goal age
-  const projBal = balance * Math.pow(1 + r, months) + monthlyInvest * (Math.pow(1 + r, months) - 1) / r;
-  const gap = projBal - goal;
-
-  document.getElementById('years-to-goal').textContent = years + ' yrs';
-  document.getElementById('roth-target').textContent = fmt(rothMonthly) + '/mo';
-  document.getElementById('roth-remaining').textContent = fmt(remaining);
-  document.getElementById('invest-target').textContent = fmt(monthlyInvest) + '/mo';
-  document.getElementById('proj-balance').textContent = fmt(projBal);
-  const gapEl = document.getElementById('gap-surplus');
-  gapEl.textContent = (gap >= 0 ? '+' : '') + fmt(gap);
-  gapEl.className = 'metric-value ' + (gap >= 0 ? 'green' : 'red');
-
-  const budgetedInvest = monthlyInvest;
-  document.getElementById('budgeted-invest').textContent = fmt(budgetedInvest) + '/mo';
-
-  // Budget snapshot
-  document.getElementById('snap-income').textContent = fmt(income);
-  document.getElementById('snap-exp').textContent = fmt(expenses);
-  document.getElementById('snap-invest').textContent = fmt(monthlyInvest);
-  document.getElementById('snap-remaining').textContent = fmt(income - expenses - monthlyInvest);
-  document.getElementById('proj-start').textContent = fmt(balance);
-
-  buildProjection(balance, monthlyInvest, annualReturn);
+// DEBT TOTAL
+function updateDebtTotal() {
+  const ids = ['debt-aa','debt-cap1','debt-wf1','debt-wf2','debt-student'];
+  const total = ids.reduce((s, id) => s + (parseFloat(document.getElementById(id)?.value) || 0), 0);
+  document.getElementById('debt-total').textContent = fmt(total);
 }
+
 
 // ACCOUNT TOTALS
 function updateTotalBalance() {
   const ids = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k'];
   const total = ids.reduce((sum, id) => sum + (parseFloat(document.getElementById(id)?.value) || 0), 0);
-  document.getElementById('total-invested-balance').textContent = fmt(total);
-  document.getElementById('inv-balance').value = total;
-  recalc();
+  const el = document.getElementById('total-invested-balance');
+  if (el) el.textContent = fmt(total);
 }
 
 // INVESTING TRACKER
 const months2026 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
 function buildTracker() {
   const tbody = document.getElementById('tracker-tbody');
-  const rothLimit = 7500;
+  if (!tbody) return;
   let html = '';
   months2026.forEach((m, i) => {
     html += `<tr>
@@ -1079,70 +860,35 @@ function buildTracker() {
 }
 
 function updateTracker() {
-  const rothLimit = parseFloat(document.getElementById('roth-limit')?.value) || 7500;
-  let totalRoth = 0, totalBroker = 0, total401k = 0, running = parseFloat(document.getElementById('inv-balance')?.value) || 85000;
-  let cumulRoth = 0;
+  const rothLimit = 7500;
+  const startingBalance = 179398;
+  let totalRoth=0, totalBroker=0, total401k=0, running=startingBalance, cumulRoth=0;
   months2026.forEach((m, i) => {
-    const roth = parseFloat(document.querySelector(`.tr-roth[data-i="${i}"]`)?.value) || 0;
+    const roth   = parseFloat(document.querySelector(`.tr-roth[data-i="${i}"]`)?.value) || 0;
     const broker = parseFloat(document.querySelector(`.tr-broker[data-i="${i}"]`)?.value) || 0;
-    const k401 = parseFloat(document.querySelector(`.tr-401k[data-i="${i}"]`)?.value) || 0;
-    const total = roth + broker + k401;
+    const k401   = parseFloat(document.querySelector(`.tr-401k[data-i="${i}"]`)?.value) || 0;
+    const total  = roth + broker + k401;
     totalRoth += roth; totalBroker += broker; total401k += k401;
     cumulRoth += roth;
     running += total;
     const rothRem = Math.max(0, rothLimit - cumulRoth);
     const onTrack = cumulRoth >= (rothLimit / 12) * (i + 1);
-    const set = (cls, val) => { const e = document.querySelector('.' + cls); if(e) e.textContent = val; };
-    const q = (cls) => document.querySelector('.' + cls);
-    if (q(`tr-total-${i}`)) q(`tr-total-${i}`).textContent = fmt(total);
+    const q = cls => document.querySelector('.' + cls);
+    if (q(`tr-total-${i}`))    q(`tr-total-${i}`).textContent    = fmt(total);
     if (q(`tr-roth-rem-${i}`)) q(`tr-roth-rem-${i}`).textContent = fmt(rothRem);
-    if (q(`tr-running-${i}`)) q(`tr-running-${i}`).textContent = fmt(running);
+    if (q(`tr-running-${i}`))  q(`tr-running-${i}`).textContent  = fmt(running);
     const ot = q(`tr-ontrack-${i}`);
-    if (ot) { ot.textContent = onTrack ? '✓ Yes' : '✗ No'; ot.className = `tr-ontrack-${i} ` + (onTrack ? 'on-track' : 'off-track'); }
+    if (ot) {
+      ot.textContent = onTrack ? '✓ Yes' : '✗ No';
+      ot.className = `tr-ontrack-${i} ` + (onTrack ? 'on-track' : 'off-track');
+    }
   });
-  document.getElementById('tr-annual-roth').textContent = fmt(totalRoth);
-  document.getElementById('tr-annual-broker').textContent = fmt(totalBroker);
-  document.getElementById('tr-annual-401k').textContent = fmt(total401k);
-  document.getElementById('tr-annual-total').textContent = fmt(totalRoth + totalBroker + total401k);
-  document.getElementById('tr-annual-running').textContent = fmt(running);
-}
-
-// PROJECTION TABLE
-function buildProjection(startBal, monthly, annualReturn) {
-  const tbody = document.getElementById('proj-tbody');
-  const currentYear = 2026;
-  const baseAge = 47;
-  let html = '';
-  const rates = [0.06, 0.08, 0.09, 0.10];
-  const numYears = 25;
-
-  for (let y = 1; y <= numYears; y++) {
-    const year = currentYear + y - 1;
-    const age = baseAge + y - 1;
-    const annualContrib = monthly * 12;
-    const milestones = { 5: '5yr', 10: '10yr', 20: '20yr', 25: '25yr' };
-    const ms = milestones[y] ? `<span class="milestone">${milestones[y]}</span>` : '';
-
-    const balances = rates.map(r => {
-      const mr = r / 12;
-      return startBal * Math.pow(1 + mr, y * 12) + monthly * (Math.pow(1 + mr, y * 12) - 1) / mr;
-    });
-
-    html += `<tr>
-      <td>${year}${ms}</td>
-      <td>~${age}</td>
-      <td>${fmt(annualContrib * y)}</td>
-      ${balances.map(b => `<td>${fmt(b)}</td>`).join('')}
-    </tr>`;
-  }
-  tbody.innerHTML = html;
-}
-
-// DEBT TOTAL
-function updateDebtTotal() {
-  const ids = ['debt-aa','debt-cap1','debt-wf1','debt-wf2','debt-student'];
-  const total = ids.reduce((s, id) => s + (parseFloat(document.getElementById(id)?.value) || 0), 0);
-  document.getElementById('debt-total').textContent = fmt(total);
+  const s = id => document.getElementById(id);
+  if (s('tr-annual-roth'))    s('tr-annual-roth').textContent    = fmt(totalRoth);
+  if (s('tr-annual-broker'))  s('tr-annual-broker').textContent  = fmt(totalBroker);
+  if (s('tr-annual-401k'))    s('tr-annual-401k').textContent    = fmt(total401k);
+  if (s('tr-annual-total'))   s('tr-annual-total').textContent   = fmt(totalRoth + totalBroker + total401k);
+  if (s('tr-annual-running')) s('tr-annual-running').textContent = fmt(running);
 }
 
 // UPDATE MONTH DISPLAY
@@ -1291,8 +1037,7 @@ function loadAll() {
       updateTotalBalance();
       updateTracker();
       updateMonth();
-      recalc();
-      showSaveIndicator('✓ Loaded', 'var(--accent)');
+            showSaveIndicator('✓ Loaded', 'var(--accent)');
     } else {
       showSaveIndicator('No saved data yet', 'var(--text-muted)');
     }
@@ -1321,10 +1066,11 @@ document.addEventListener('DOMContentLoaded', function() {
   updateTotalBalance();
   updateTracker();
   updateMonth();
-  recalc();
   loadAll();           // load from Firebase — updates everything again once data arrives
 });
+
 </script>
+
 
 </body>
 </html>
