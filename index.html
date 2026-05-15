@@ -485,6 +485,36 @@
     margin-top: 0.75rem;
     display: none;
   }
+
+  /* INVESTING TRACKER */
+  .tracker-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .tracker-table th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    text-align: right;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2);
+  }
+  .tracker-table th:first-child { text-align: left; }
+  .tracker-table td {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .tracker-table td:first-child { text-align: left; font-weight: 500; }
+  .tracker-table input[type="number"] { width: 80px; }
+  .tracker-table tfoot td { font-weight: 700; background: var(--surface2); border-top: 2px solid var(--border-strong); }
+  .on-track { color: var(--accent); font-weight: 600; }
+  .off-track { color: var(--red); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -505,6 +535,7 @@
   <div class="nav-brand">Budget Dashboard</div>
 <div class="tab active" onclick="showPage('budget', this)">Monthly Budget</div>
   <div class="tab" onclick="showPage('accounts', this)">Accounts</div>
+  <div class="tab" onclick="showPage('tracker', this)">Investing Tracker</div>
   <div class="tab" onclick="showPage('notes', this)">Notes</div>
   <div style="margin-left:auto; display:flex; align-items:center; gap:0.75rem; padding:0 1rem;">
     <input type="month" id="budget-month" value="2026-05" oninput="updateMonth(); saveAll();" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
@@ -628,6 +659,45 @@
 </div>
 
 
+
+
+<!-- INVESTING TRACKER -->
+<div id="page-tracker" class="page">
+  <div class="page-header">
+    <h1>Investing Tracker</h1>
+    <p>2026 · Track Roth IRA, brokerage, and 401(k) contributions each month</p>
+  </div>
+  <div class="card mb2">
+    <table class="tracker-table" id="tracker-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Month</th>
+          <th>Roth IRA ($)</th>
+          <th>Brokerage ($)</th>
+          <th>401(k) / Other ($)</th>
+          <th>Total Invested ($)</th>
+          <th>Roth Goal Remaining ($)</th>
+          <th>Running Total ($)</th>
+          <th>On Track?</th>
+        </tr>
+      </thead>
+      <tbody id="tracker-tbody"></tbody>
+      <tfoot>
+        <tr>
+          <td>Annual Total</td>
+          <td id="tr-annual-roth">—</td>
+          <td id="tr-annual-broker">—</td>
+          <td id="tr-annual-401k">—</td>
+          <td id="tr-annual-total">—</td>
+          <td>—</td>
+          <td id="tr-annual-running">—</td>
+          <td>—</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="note">Enter your actual contributions each month. Roth Goal Remaining shows how much more you need to contribute to max out the $7,500 annual Roth IRA limit.</div>
+</div>
 
 <!-- NOTES -->
 <div id="page-notes" class="page">
@@ -800,12 +870,67 @@ function updateMonth() {
   saveData();
 }
 
+
+// INVESTING TRACKER
+const months2026 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function buildTracker() {
+  const tbody = document.getElementById('tracker-tbody');
+  if (!tbody) return;
+  let html = '';
+  months2026.forEach((m, i) => {
+    html += `<tr>
+      <td>${m}</td>
+      <td><input type="number" class="tr-roth" data-i="${i}" value="0" style="width:75px" oninput="updateTracker(); saveData();"></td>
+      <td><input type="number" class="tr-broker" data-i="${i}" value="0" style="width:75px" oninput="updateTracker(); saveData();"></td>
+      <td><input type="number" class="tr-401k" data-i="${i}" value="0" style="width:75px" oninput="updateTracker(); saveData();"></td>
+      <td class="tr-total-${i}">—</td>
+      <td class="tr-roth-rem-${i}">—</td>
+      <td class="tr-running-${i}">—</td>
+      <td class="tr-ontrack-${i}">—</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+  updateTracker();
+}
+
+function updateTracker() {
+  const rothLimit = 7500;
+  const startingBalance = 179398;
+  let totalRoth=0, totalBroker=0, total401k=0, running=startingBalance, cumulRoth=0;
+  months2026.forEach((m, i) => {
+    const roth   = parseFloat(document.querySelector(`.tr-roth[data-i="${i}"]`)?.value) || 0;
+    const broker = parseFloat(document.querySelector(`.tr-broker[data-i="${i}"]`)?.value) || 0;
+    const k401   = parseFloat(document.querySelector(`.tr-401k[data-i="${i}"]`)?.value) || 0;
+    const total  = roth + broker + k401;
+    totalRoth += roth; totalBroker += broker; total401k += k401;
+    cumulRoth += roth; running += total;
+    const rothRem = Math.max(0, rothLimit - cumulRoth);
+    const onTrack = cumulRoth >= (rothLimit / 12) * (i + 1);
+    const q = cls => document.querySelector('.' + cls);
+    if (q(`tr-total-${i}`))    q(`tr-total-${i}`).textContent    = fmt(total);
+    if (q(`tr-roth-rem-${i}`)) q(`tr-roth-rem-${i}`).textContent = fmt(rothRem);
+    if (q(`tr-running-${i}`))  q(`tr-running-${i}`).textContent  = fmt(running);
+    const ot = q(`tr-ontrack-${i}`);
+    if (ot) { ot.textContent = onTrack ? '✓ Yes' : '✗ No'; ot.className = `tr-ontrack-${i} ` + (onTrack ? 'on-track' : 'off-track'); }
+  });
+  const s = id => document.getElementById(id);
+  if (s('tr-annual-roth'))    s('tr-annual-roth').textContent    = fmt(totalRoth);
+  if (s('tr-annual-broker'))  s('tr-annual-broker').textContent  = fmt(totalBroker);
+  if (s('tr-annual-401k'))    s('tr-annual-401k').textContent    = fmt(total401k);
+  if (s('tr-annual-total'))   s('tr-annual-total').textContent   = fmt(totalRoth + totalBroker + total401k);
+  if (s('tr-annual-running')) s('tr-annual-running').textContent = fmt(running);
+}
+
 // LOCAL STORAGE SAVE/LOAD
 function saveData() {
   const data = {};
   document.querySelectorAll('input[id]').forEach(inp => { data['id_' + inp.id] = inp.type === 'checkbox' ? inp.checked : inp.value; });
   document.querySelectorAll('.budgeted-input').forEach(inp => { data['bud_' + inp.dataset.row] = inp.value; });
   document.querySelectorAll('.actual-input').forEach(inp => { data['act_' + inp.dataset.row] = inp.value; });
+  document.querySelectorAll('.tr-roth').forEach(inp => { data['roth_' + inp.dataset.i] = inp.value; });
+  document.querySelectorAll('.tr-broker').forEach(inp => { data['broker_' + inp.dataset.i] = inp.value; });
+  document.querySelectorAll('.tr-401k').forEach(inp => { data['k401_' + inp.dataset.i] = inp.value; });
   localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   const ind = document.getElementById('save-indicator');
   if (ind) { ind.style.opacity='1'; clearTimeout(ind._t); ind._t = setTimeout(()=>ind.style.opacity='0', 1500); }
@@ -821,6 +946,9 @@ function loadData() {
   });
   document.querySelectorAll('.budgeted-input').forEach(inp => { if (data['bud_' + inp.dataset.row] !== undefined) inp.value = data['bud_' + inp.dataset.row]; });
   document.querySelectorAll('.actual-input').forEach(inp => { if (data['act_' + inp.dataset.row] !== undefined) inp.value = data['act_' + inp.dataset.row]; });
+  document.querySelectorAll('.tr-roth').forEach(inp => { if (data['roth_' + inp.dataset.i] !== undefined) inp.value = data['roth_' + inp.dataset.i]; });
+  document.querySelectorAll('.tr-broker').forEach(inp => { if (data['broker_' + inp.dataset.i] !== undefined) inp.value = data['broker_' + inp.dataset.i]; });
+  document.querySelectorAll('.tr-401k').forEach(inp => { if (data['k401_' + inp.dataset.i] !== undefined) inp.value = data['k401_' + inp.dataset.i]; });
 }
 
 function clearSave() {
@@ -836,9 +964,11 @@ document.addEventListener('input', saveData);
 document.addEventListener('DOMContentLoaded', function() {
   checkAuth();
   buildBudget();
+  buildTracker();
   loadData();
   updateBudgetTotals();
   updateTotalBalance();
+  updateTracker();
   updateMonth();
 });
 </script>
