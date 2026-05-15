@@ -538,7 +538,7 @@
   <div class="tab" onclick="showPage('tracker', this)">Investing Tracker</div>
   <div class="tab" onclick="showPage('notes', this)">Notes</div>
   <div style="margin-left:auto; display:flex; align-items:center; gap:0.75rem; padding:0 1rem;">
-    <input type="month" id="budget-month" value="2026-05" oninput="updateMonth(); saveAll();" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
+    <input type="month" id="budget-month" value="2026-05" oninput="updateMonth(); saveData();" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
     <span id="save-indicator" style="font-size:0.75rem; color:var(--accent); opacity:0; transition:opacity 0.5s;">✓ Saved</span>
     <button onclick="clearSave()" style="font-size:0.72rem; padding:0.3rem 0.75rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text-muted); cursor:pointer;">Reset All</button>
   </div>
@@ -932,13 +932,15 @@ function saveData() {
   document.querySelectorAll('.tr-broker').forEach(inp => { data['broker_' + inp.dataset.i] = inp.value; });
   document.querySelectorAll('.tr-401k').forEach(inp => { data['k401_' + inp.dataset.i] = inp.value; });
   localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  console.log('Saved', Object.keys(data).length, 'keys to localStorage');
   const ind = document.getElementById('save-indicator');
   if (ind) { ind.style.opacity='1'; clearTimeout(ind._t); ind._t = setTimeout(()=>ind.style.opacity='0', 1500); }
 }
 
 function loadData() {
   const raw = localStorage.getItem(SAVE_KEY);
-  if (!raw) return;
+  if (!raw) { console.log('No saved data found'); return; }
+  console.log('Loading saved data, keys:', Object.keys(JSON.parse(raw)).length);
   const data = JSON.parse(raw);
   document.querySelectorAll('input[id]').forEach(inp => {
     const val = data['id_' + inp.id];
@@ -959,17 +961,21 @@ function clearSave() {
 }
 
 document.addEventListener('input', saveData);
+document.addEventListener('change', saveData);
 
 // INIT
+// Periodic auto-save every 5 seconds as safety net
+setInterval(saveData, 5000);
+
 document.addEventListener('DOMContentLoaded', function() {
   checkAuth();
-  buildBudget();
-  buildTracker();
-  loadData();
-  updateBudgetTotals();
-  updateTotalBalance();
-  updateTracker();
-  updateMonth();
+  buildBudget();      // build with defaults first
+  buildTracker();     // build tracker with defaults
+  loadData();         // overwrite defaults with saved values
+  updateBudgetTotals(); // recalculate with saved values
+  updateTotalBalance(); // recalculate with saved values
+  updateTracker();    // recalculate with saved values
+  updateMonth();      // restore saved month
 });
 </script>
 
