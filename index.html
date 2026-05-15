@@ -41,7 +41,6 @@
     line-height: 1.6;
   }
 
-  /* NAV */
   .nav {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -55,7 +54,6 @@
     top: 0;
     z-index: 100;
   }
-
   .nav-brand {
     font-family: var(--font);
     font-size: 1rem;
@@ -66,7 +64,6 @@
     margin-right: 1rem;
     flex-shrink: 0;
   }
-
   .tab {
     padding: 0.9rem 1.1rem;
     font-size: 0.82rem;
@@ -83,11 +80,9 @@
   .tab:hover { color: var(--text); background: var(--surface2); }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-  /* CONTENT */
   .page { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
   .page.active { display: block; }
 
-  /* CARDS & LAYOUT */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
   .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
@@ -100,8 +95,6 @@
     box-shadow: var(--shadow);
   }
 
-  .card-sm { padding: 1rem 1.25rem; }
-
   h2 {
     font-family: var(--font);
     font-size: 1.25rem;
@@ -112,90 +105,25 @@
     border-bottom: 1px solid var(--border);
   }
 
-  h3 {
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-muted);
-    margin-bottom: 0.4rem;
-  }
-
-  /* METRIC TILES */
-  .metric-tile {
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-  }
-  .metric-label {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.3rem;
-    font-weight: 500;
-  }
-  .metric-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text);
-    font-family: var(--font-sans);
-  }
-  .metric-value.green { color: var(--accent); }
-  .metric-value.amber { color: var(--amber); }
-  .metric-value.red { color: var(--red); }
-
-  /* BUDGET TABLE */
-  .budget-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
+  .budget-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
   .budget-table th {
-    font-size: 0.73rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-    padding: 0.5rem 0.75rem;
-    text-align: left;
-    border-bottom: 2px solid var(--border);
-    background: var(--surface2);
+    font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); font-weight: 600; padding: 0.5rem 0.75rem;
+    text-align: left; border-bottom: 2px solid var(--border); background: var(--surface2);
   }
   .budget-table th:not(:first-child) { text-align: right; }
-  .budget-table td {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
+  .budget-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
   .budget-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
   .budget-table tr:last-child td { border-bottom: none; }
   .budget-table tr:hover td { background: var(--surface2); }
   .budget-table .section-row td {
-    background: var(--surface2);
-    font-weight: 600;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--text-muted);
-    padding: 0.35rem 0.75rem;
-    border-bottom: 1px solid var(--border);
+    background: var(--surface2); font-weight: 600; font-size: 0.78rem;
+    text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);
+    padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border);
   }
-  .budget-table .total-row td {
-    font-weight: 700;
-    border-top: 2px solid var(--border-strong);
-    background: var(--surface2);
-  }
+  .budget-table .total-row td { font-weight: 700; border-top: 2px solid var(--border-strong); background: var(--surface2); }
 
-  .badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 0.15rem 0.5rem;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
+  .badge { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.04em; }
   .badge-income { background: var(--accent-light); color: var(--accent); }
   .badge-fixed { background: var(--blue-light); color: var(--blue); }
   .badge-variable { background: var(--amber-light); color: var(--amber); }
@@ -203,328 +131,81 @@
   .badge-invest { background: var(--accent-light); color: var(--accent); }
   .badge-debt { background: var(--red-light); color: var(--red); }
 
-  /* INPUT CELLS */
   input[type="number"] {
-    background: var(--blue-light);
-    border: 1px solid #bbd0f5;
-    border-radius: 4px;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    width: 90px;
-    text-align: right;
-    color: var(--blue);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
+    background: var(--blue-light); border: 1px solid #bbd0f5; border-radius: 4px;
+    padding: 0.25rem 0.5rem; font-size: 0.875rem; width: 90px; text-align: right;
+    color: var(--blue); font-weight: 600; font-variant-numeric: tabular-nums;
   }
   input[type="number"]:focus { outline: 2px solid var(--blue); border-color: var(--blue); }
 
-  /* STEPS / GUIDE */
-  .step-list { display: flex; flex-direction: column; gap: 0.75rem; }
-  .step-item {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-  .step-num {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: white;
-    font-size: 0.8rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .step-content { flex: 1; }
-  .step-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.1rem; }
-  .step-desc { font-size: 0.82rem; color: var(--text-muted); }
-
-  /* ACCOUNT TABLE */
-  .acct-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-  }
+  .acct-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
   .acct-table th {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-    padding: 0.4rem 0.75rem;
-    text-align: left;
-    border-bottom: 2px solid var(--border);
-    background: var(--surface2);
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); font-weight: 600; padding: 0.4rem 0.75rem;
+    text-align: left; border-bottom: 2px solid var(--border); background: var(--surface2);
   }
-  .acct-table td {
-    padding: 0.55rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
+  .acct-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
   .acct-table tr:last-child td { border-bottom: none; }
   .acct-table tr:hover td { background: var(--surface2); }
   .acct-name { font-weight: 600; font-size: 0.85rem; }
-  .acct-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
 
-  /* INVESTING TRACKER */
-  .tracker-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-  }
+  .tracker-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
   .tracker-table th {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-    padding: 0.4rem 0.6rem;
-    text-align: right;
-    border-bottom: 2px solid var(--border);
-    background: var(--surface2);
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); font-weight: 600; padding: 0.4rem 0.6rem;
+    text-align: right; border-bottom: 2px solid var(--border); background: var(--surface2);
   }
   .tracker-table th:first-child { text-align: left; }
-  .tracker-table td {
-    padding: 0.45rem 0.6rem;
-    border-bottom: 1px solid var(--border);
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
+  .tracker-table td { padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--border); text-align: right; font-variant-numeric: tabular-nums; }
   .tracker-table td:first-child { text-align: left; font-weight: 500; }
   .tracker-table input[type="number"] { width: 80px; }
-  .tracker-table tr:last-child td { border-bottom: none; font-weight: 700; background: var(--surface2); }
+  .tracker-table tfoot td { font-weight: 700; background: var(--surface2); border-top: 2px solid var(--border-strong); }
   .on-track { color: var(--accent); font-weight: 600; }
   .off-track { color: var(--red); font-weight: 600; }
 
-  /* PROJECTION TABLE */
-  .proj-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-  }
-  .proj-table th {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-    padding: 0.4rem 0.6rem;
-    text-align: right;
-    border-bottom: 2px solid var(--border);
-    background: var(--surface2);
-  }
-  .proj-table th:first-child, .proj-table th:nth-child(2) { text-align: left; }
-  .proj-table td {
-    padding: 0.4rem 0.6rem;
-    border-bottom: 1px solid var(--border);
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-  .proj-table td:first-child, .proj-table td:nth-child(2) { text-align: left; }
-  .proj-table tr:nth-child(5) td { background: var(--accent-light); font-weight: 600; }
-  .proj-table tr:nth-child(10) td { background: var(--amber-light); font-weight: 600; }
-  .proj-table tr:last-child td { background: var(--purple-light); font-weight: 700; }
-  .milestone { display: inline-block; font-size: 0.68rem; background: var(--accent); color: white; padding: 1px 6px; border-radius: 20px; margin-left: 6px; }
+  .page-header { margin-bottom: 1.75rem; }
+  .page-header h1 { font-family: var(--font); font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+  .page-header p { color: var(--text-muted); font-size: 0.875rem; }
 
-  /* PAGE HEADER */
-  .page-header {
-    margin-bottom: 1.75rem;
-  }
-  .page-header h1 {
-    font-family: var(--font);
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.25rem;
-  }
-  .page-header p {
-    color: var(--text-muted);
-    font-size: 0.875rem;
-  }
-
-  .mb1 { margin-bottom: 1rem; }
   .mb2 { margin-bottom: 1.5rem; }
-  .mb3 { margin-bottom: 2rem; }
-
-  .note {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    padding: 0.75rem 1rem;
-    background: var(--surface2);
-    border-left: 3px solid var(--border-strong);
-    border-radius: 0 6px 6px 0;
-    margin-top: 1rem;
-  }
-
+  .note { font-size: 0.78rem; color: var(--text-muted); padding: 0.75rem 1rem; background: var(--surface2); border-left: 3px solid var(--border-strong); border-radius: 0 6px 6px 0; margin-top: 1rem; }
   .surplus { color: var(--accent); }
   .deficit { color: var(--red); }
 
-  .paycheck-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
+  #password-screen {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999;
   }
-  .paycheck-table th {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-    padding: 0.4rem 0.75rem;
-    text-align: left;
-    border-bottom: 2px solid var(--border);
-    background: var(--surface2);
+  .password-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 2.5rem; box-shadow: 0 4px 24px rgba(0,0,0,0.10); text-align: center; width: 340px;
   }
-  .paycheck-table td {
-    padding: 0.6rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
+  .password-box h2 { font-family: var(--font); font-size: 1.4rem; color: var(--text); margin-bottom: 0.25rem; border: none; padding: 0; }
+  .password-box p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+  .password-box input[type="password"] {
+    width: 100%; padding: 0.6rem 0.9rem; border: 1px solid var(--border-strong);
+    border-radius: 6px; font-size: 1rem; margin-bottom: 1rem; background: var(--surface2);
+    color: var(--text); text-align: center; letter-spacing: 0.1em;
   }
-  .paycheck-table tr:last-child td { border-bottom: none; }
-
-  .debt-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-  }
-  .debt-table th {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-    padding: 0.4rem 0.75rem;
-    text-align: left;
-    border-bottom: 2px solid var(--border);
-    background: var(--surface2);
-  }
-  .debt-table th:not(:first-child) { text-align: right; }
-  .debt-table td {
-    padding: 0.55rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .debt-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
-  .debt-table tr:last-child td { border-bottom: none; font-weight: 700; border-top: 2px solid var(--border-strong); background: var(--surface2); }
-  .priority-high { color: var(--red); font-weight: 600; font-size: 0.8rem; }
-  .priority-med { color: var(--amber); font-weight: 600; font-size: 0.8rem; }
+  .password-box input[type="password"]:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+  .password-btn { width: 100%; padding: 0.65rem; background: var(--accent); color: white; border: none; border-radius: 6px; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+  .password-btn:hover { background: var(--accent-mid); }
+  .password-error { color: var(--red); font-size: 0.82rem; margin-top: 0.75rem; display: none; }
 
   @media (max-width: 700px) {
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
     .page { padding: 1rem; }
     .nav { padding: 0 1rem; }
   }
-
-  /* PASSWORD SCREEN */
-  #password-screen {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: var(--bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-  .password-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 2.5rem;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-    text-align: center;
-    width: 340px;
-  }
-  .password-box h2 {
-    font-family: var(--font);
-    font-size: 1.4rem;
-    color: var(--text);
-    margin-bottom: 0.25rem;
-    border: none;
-    padding: 0;
-  }
-  .password-box p {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    margin-bottom: 1.5rem;
-  }
-  .password-box input[type="password"] {
-    width: 100%;
-    padding: 0.6rem 0.9rem;
-    border: 1px solid var(--border-strong);
-    border-radius: 6px;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    background: var(--surface2);
-    color: var(--text);
-    text-align: center;
-    letter-spacing: 0.1em;
-  }
-  .password-box input[type="password"]:focus {
-    outline: 2px solid var(--accent);
-    border-color: var(--accent);
-  }
-  .password-btn {
-    width: 100%;
-    padding: 0.65rem;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-  .password-btn:hover { background: var(--accent-mid); }
-  .password-error {
-    color: var(--red);
-    font-size: 0.82rem;
-    margin-top: 0.75rem;
-    display: none;
-  }
-
-  /* INVESTING TRACKER */
-  .tracker-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-  }
-  .tracker-table th {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-    padding: 0.4rem 0.6rem;
-    text-align: right;
-    border-bottom: 2px solid var(--border);
-    background: var(--surface2);
-  }
-  .tracker-table th:first-child { text-align: left; }
-  .tracker-table td {
-    padding: 0.45rem 0.6rem;
-    border-bottom: 1px solid var(--border);
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-  .tracker-table td:first-child { text-align: left; font-weight: 500; }
-  .tracker-table input[type="number"] { width: 80px; }
-  .tracker-table tfoot td { font-weight: 700; background: var(--surface2); border-top: 2px solid var(--border-strong); }
-  .on-track { color: var(--accent); font-weight: 600; }
-  .off-track { color: var(--red); font-weight: 600; }
 </style>
 </head>
 <body>
-
 
 <div id="password-screen">
   <div class="password-box">
     <h2>Nuckolls Budget</h2>
     <p>Enter your password to continue</p>
-    <input type="password" id="password-input" placeholder="Password" 
+    <input type="password" id="password-input" placeholder="Password"
            onkeydown="if(event.key==='Enter') checkPassword()">
     <button class="password-btn" onclick="checkPassword()">Enter</button>
     <div class="password-error" id="password-error">Incorrect password. Try again.</div>
@@ -533,12 +214,12 @@
 
 <nav class="nav">
   <div class="nav-brand">Budget Dashboard</div>
-<div class="tab active" onclick="showPage('budget', this)">Monthly Budget</div>
+  <div class="tab active" onclick="showPage('budget', this)">Monthly Budget</div>
   <div class="tab" onclick="showPage('accounts', this)">Accounts</div>
   <div class="tab" onclick="showPage('tracker', this)">Investing Tracker</div>
   <div class="tab" onclick="showPage('notes', this)">Notes</div>
   <div style="margin-left:auto; display:flex; align-items:center; gap:0.75rem; padding:0 1rem;">
-    <input type="month" id="budget-month" value="2026-05" oninput="updateMonth(); saveData();" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
+    <input type="month" id="budget-month" value="2026-05" oninput="updateMonth()" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
     <span id="save-indicator" style="font-size:0.75rem; color:var(--accent); opacity:0; transition:opacity 0.5s;">✓ Saved</span>
     <button onclick="clearSave()" style="font-size:0.72rem; padding:0.3rem 0.75rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text-muted); cursor:pointer;">Reset All</button>
   </div>
@@ -548,28 +229,19 @@
 <div id="page-budget" class="page active">
   <div class="page-header">
     <h1>Monthly Budget Breakdown</h1>
-    <p><span id="date-display-3">May 2026</span> · Edit blue "Actual" columns as the month happens</p>
+    <p><span id="date-display-3">May 2026</span> · Edit blue columns as the month happens</p>
   </div>
-
   <div class="card">
-    <h2>Budget target: invest without making life miserable</h2>
+    <h2>Budget</h2>
     <table class="budget-table">
       <thead>
         <tr>
-          <th>Category</th>
-          <th>Type</th>
-          <th>Budgeted ($)</th>
-          <th>Actual ($)</th>
-          <th>Variance ($)</th>
+          <th>Category</th><th>Type</th><th>Budgeted ($)</th><th>Actual ($)</th><th>Variance ($)</th>
         </tr>
       </thead>
-      <tbody id="budget-tbody">
-      </tbody>
+      <tbody id="budget-tbody"></tbody>
     </table>
-
-    <div class="note">
-      💡 Both the <strong>Budgeted</strong> and <strong>Actual</strong> columns are editable — type directly into any cell and totals update instantly. Variance turns red when over budget and green when under.
-    </div>
+    <div class="note">💡 Both Budgeted and Actual columns are editable. Variance turns red when over budget and green when under.</div>
   </div>
 </div>
 
@@ -579,150 +251,74 @@
     <h1>Account Snapshot</h1>
     <p>Current balances — update as they change</p>
   </div>
-
   <div class="card mb2">
     <h2>Investment &amp; Savings Accounts</h2>
     <table class="acct-table">
       <thead>
-        <tr>
-          <th>Account</th>
-          <th>Provider</th>
-          <th>Type</th>
-          <th>Tax Bucket</th>
-          <th>Balance</th>
-        </tr>
+        <tr><th>Account</th><th>Provider</th><th>Type</th><th>Tax Bucket</th><th>Balance</th></tr>
       </thead>
       <tbody>
-        <tr>
-          <td><div class="acct-name">Rollover IRA Fidelity Go</div></td>
-          <td>Fidelity</td>
-          <td>Rollover IRA</td>
-          <td>Tax-deferred retirement</td>
-          <td><input type="number" id="acct-rollover" value="45138" style="width:90px" oninput="updateTotalBalance()"></td>
-        </tr>
-        <tr>
-          <td><div class="acct-name">Individual Fidelity Go</div></td>
-          <td>Fidelity</td>
-          <td>Taxable brokerage</td>
-          <td>Taxable</td>
-          <td><input type="number" id="acct-fidelity-ind" value="2390" style="width:90px" oninput="updateTotalBalance()"></td>
-        </tr>
-        <tr>
-          <td><div class="acct-name">Vanguard Roth IRA</div></td>
-          <td>Vanguard</td>
-          <td>Roth IRA</td>
-          <td>Tax-free retirement</td>
-          <td><input type="number" id="acct-roth1" value="15217" style="width:90px" oninput="updateTotalBalance()"></td>
-        </tr>
-        <tr>
-          <td><div class="acct-name">Vanguard Brokerage</div></td>
-          <td>Vanguard</td>
-          <td>Taxable brokerage</td>
-          <td>Taxable</td>
-          <td><input type="number" id="acct-vanguard-broker" value="5009" style="width:90px" oninput="updateTotalBalance()"></td>
-        </tr>
-        <tr>
-          <td><div class="acct-name">Vanguard Brokerage (MSFT)</div></td>
-          <td>Vanguard</td>
-          <td>Stock plan / brokerage</td>
-          <td>Taxable</td>
-          <td><input type="number" id="acct-msft" value="31623" style="width:90px" oninput="updateTotalBalance()"></td>
-        </tr>
-        <tr>
-          <td><div class="acct-name">Microsoft 401(k)</div></td>
-          <td>Microsoft</td>
-          <td>401(k)</td>
-          <td>Tax-deferred</td>
-          <td><input type="number" id="acct-msft-401k" value="33066" style="width:90px" oninput="updateTotalBalance()"></td>
-        </tr>
-        <tr>
-          <td><div class="acct-name">STACK 401(k)</div></td>
-          <td>STACK</td>
-          <td>401(k)</td>
-          <td>Tax-deferred</td>
-          <td><input type="number" id="acct-stack-401k" value="46955" style="width:90px" oninput="updateTotalBalance()"></td>
-        </tr>
-        <tr>
-          <td><strong>Total Current Invested Balance</strong></td>
-          <td colspan="3"></td>
-          <td><strong id="total-invested-balance">$85,000</strong></td>
-          <td colspan="2"></td>
-        </tr>
+        <tr><td><div class="acct-name">Rollover IRA Fidelity Go</div></td><td>Fidelity</td><td>Rollover IRA</td><td>Tax-deferred</td><td><input type="number" id="acct-rollover" value="45138" oninput="updateTotalBalance()"></td></tr>
+        <tr><td><div class="acct-name">Individual Fidelity Go</div></td><td>Fidelity</td><td>Taxable brokerage</td><td>Taxable</td><td><input type="number" id="acct-fidelity-ind" value="2390" oninput="updateTotalBalance()"></td></tr>
+        <tr><td><div class="acct-name">Vanguard Roth IRA</div></td><td>Vanguard</td><td>Roth IRA</td><td>Tax-free</td><td><input type="number" id="acct-roth1" value="15217" oninput="updateTotalBalance()"></td></tr>
+        <tr><td><div class="acct-name">Vanguard Brokerage</div></td><td>Vanguard</td><td>Taxable brokerage</td><td>Taxable</td><td><input type="number" id="acct-vanguard-broker" value="5009" oninput="updateTotalBalance()"></td></tr>
+        <tr><td><div class="acct-name">Vanguard Brokerage (MSFT)</div></td><td>Vanguard</td><td>Stock plan</td><td>Taxable</td><td><input type="number" id="acct-msft" value="31623" oninput="updateTotalBalance()"></td></tr>
+        <tr><td><div class="acct-name">Microsoft 401(k)</div></td><td>Microsoft</td><td>401(k)</td><td>Tax-deferred</td><td><input type="number" id="acct-msft-401k" value="33066" oninput="updateTotalBalance()"></td></tr>
+        <tr><td><div class="acct-name">STACK 401(k)</div></td><td>STACK</td><td>401(k)</td><td>Tax-deferred</td><td><input type="number" id="acct-stack-401k" value="46955" oninput="updateTotalBalance()"></td></tr>
+        <tr><td><strong>Total</strong></td><td colspan="3"></td><td><strong id="total-invested-balance">$179,398</strong></td></tr>
       </tbody>
     </table>
-
-    <div class="note">
-      Optional simplification: You can keep accounts where they are, but going forward the simplest system is: Roth IRA first, then one brokerage account for extra investing.
-    </div>
   </div>
-</div></div>
 </div>
-
-
-
 
 <!-- INVESTING TRACKER -->
 <div id="page-tracker" class="page">
   <div class="page-header">
     <h1>Investing Tracker</h1>
-    <p>2026 · Track Roth IRA, brokerage, and 401(k) contributions each month</p>
+    <p>2026 · Track contributions each month</p>
   </div>
   <div class="card mb2">
     <table class="tracker-table" id="tracker-table">
       <thead>
         <tr>
           <th style="text-align:left">Month</th>
-          <th>Roth IRA ($)</th>
-          <th>Brokerage ($)</th>
-          <th>401(k) / Other ($)</th>
-          <th>Total Invested ($)</th>
-          <th>Roth Goal Remaining ($)</th>
-          <th>Running Total ($)</th>
-          <th>On Track?</th>
+          <th>Roth IRA ($)</th><th>Brokerage ($)</th><th>401(k) / Other ($)</th>
+          <th>Total Invested ($)</th><th>Roth Remaining ($)</th><th>Running Total ($)</th><th>On Track?</th>
         </tr>
       </thead>
       <tbody id="tracker-tbody"></tbody>
       <tfoot>
         <tr>
           <td>Annual Total</td>
-          <td id="tr-annual-roth">—</td>
-          <td id="tr-annual-broker">—</td>
-          <td id="tr-annual-401k">—</td>
-          <td id="tr-annual-total">—</td>
-          <td>—</td>
-          <td id="tr-annual-running">—</td>
-          <td>—</td>
+          <td id="tr-annual-roth">—</td><td id="tr-annual-broker">—</td><td id="tr-annual-401k">—</td>
+          <td id="tr-annual-total">—</td><td>—</td><td id="tr-annual-running">—</td><td>—</td>
         </tr>
       </tfoot>
     </table>
   </div>
-  <div class="note">Enter your actual contributions each month. Roth Goal Remaining shows how much more you need to contribute to max out the $7,500 annual Roth IRA limit.</div>
+  <div class="note">Enter actual contributions each month. Roth Remaining shows how much more to hit the $7,500 annual limit.</div>
 </div>
 
 <!-- NOTES -->
 <div id="page-notes" class="page">
   <div class="page-header">
     <h1>Shared Notes</h1>
-    <p>Edit directly in the sheet below — updates instantly for both of you</p>
+    <p>Edit directly in the sheet — updates instantly for both of you</p>
   </div>
   <div class="card" style="padding:0; overflow:hidden; height:75vh;">
-    <iframe
-      src="https://docs.google.com/spreadsheets/d/12TW-vqII5WcvYFtSoOS1WdW7hLGqNOU-jkwDeQnQWoc/edit?usp=sharing&embedded=true"
-      style="width:100%; height:100%; border:none; display:block;"
-      allowfullscreen>
-    </iframe>
+    <iframe src="https://docs.google.com/spreadsheets/d/12TW-vqII5WcvYFtSoOS1WdW7hLGqNOU-jkwDeQnQWoc/edit?usp=sharing&embedded=true"
+      style="width:100%; height:100%; border:none; display:block;" allowfullscreen></iframe>
   </div>
 </div>
 
-
 <script>
+// PASSWORD
 const CORRECT_PASSWORD = 'Charli2020!';
 const AUTH_KEY = 'nuckollsbudget_auth';
-const SAVE_KEY = 'nuckollsbudget_data_v1';
 
 function checkPassword() {
-  const input = document.getElementById('password-input').value;
-  if (input === CORRECT_PASSWORD) {
+  const val = document.getElementById('password-input').value;
+  if (val === CORRECT_PASSWORD) {
     sessionStorage.setItem(AUTH_KEY, 'true');
     document.getElementById('password-screen').style.display = 'none';
   } else {
@@ -741,6 +337,7 @@ function checkAuth() {
   }
 }
 
+// NAVIGATION
 function showPage(id, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -750,6 +347,7 @@ function showPage(id, el) {
 
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
 
+// BUDGET
 const budgetRows = [
   { cat: 'Income - David', type: 'income', budgeted: 4500 },
   { cat: 'Income - You', type: 'income', budgeted: 3000 },
@@ -779,22 +377,16 @@ const budgetRows = [
 ];
 
 const typeLabels = {
-  income:   ['Income', 'badge-income'],
-  fixed:    ['Fixed Expense', 'badge-fixed'],
-  variable: ['Variable Expense', 'badge-variable'],
-  savings:  ['Savings', 'badge-savings'],
-  invest:   ['Investing', 'badge-invest'],
-  debt:     ['Debt Payment', 'badge-debt'],
+  income: ['Income', 'badge-income'], fixed: ['Fixed', 'badge-fixed'],
+  variable: ['Variable', 'badge-variable'], savings: ['Savings', 'badge-savings'],
+  invest: ['Investing', 'badge-invest'], debt: ['Debt', 'badge-debt'],
 };
 
 function buildBudget() {
   const tbody = document.getElementById('budget-tbody');
   let html = '';
   budgetRows.forEach((row, i) => {
-    if (row.section) {
-      html += `<tr class="section-row"><td colspan="5">${row.cat}</td></tr>`;
-      return;
-    }
+    if (row.section) { html += `<tr class="section-row"><td colspan="5">${row.cat}</td></tr>`; return; }
     const [label, cls] = typeLabels[row.type] || ['', ''];
     html += `<tr>
       <td>${row.cat}</td>
@@ -805,175 +397,201 @@ function buildBudget() {
     </tr>`;
   });
   html += `
-  <tr class="total-row"><td colspan="2">Total Income</td><td id="total-income-bud">—</td><td id="total-income-actual">—</td><td></td></tr>
-  <tr class="total-row"><td colspan="2">Total Expenses + Savings</td><td id="total-exp-bud">—</td><td id="total-exp-actual">—</td><td></td></tr>
-  <tr class="total-row"><td colspan="2">Total Investing</td><td id="total-inv-bud">—</td><td id="total-inv-actual">—</td><td></td></tr>
-  <tr class="total-row"><td colspan="2">Remaining After Budget</td><td id="remaining-bud">—</td><td id="remaining-actual">—</td><td></td></tr>`;
+    <tr class="total-row"><td colspan="2">Total Income</td><td id="total-income-bud">—</td><td id="total-income-actual">—</td><td></td></tr>
+    <tr class="total-row"><td colspan="2">Total Expenses</td><td id="total-exp-bud">—</td><td id="total-exp-actual">—</td><td></td></tr>
+    <tr class="total-row"><td colspan="2">Total Investing</td><td id="total-inv-bud">—</td><td id="total-inv-actual">—</td><td></td></tr>
+    <tr class="total-row"><td colspan="2">Remaining</td><td id="remaining-bud">—</td><td id="remaining-actual">—</td><td></td></tr>`;
   tbody.innerHTML = html;
-  updateBudgetTotals();
 }
 
 function updateBudgetTotals() {
-  let budIncome=0, budExp=0, budInvest=0, actIncome=0, actExp=0, actInvest=0;
-  document.querySelectorAll('.budgeted-input').forEach(budInp => {
-    const i = parseInt(budInp.dataset.row);
-    const row = budgetRows[i];
+  let bI=0,bE=0,bV=0,aI=0,aE=0,aV=0;
+  document.querySelectorAll('.budgeted-input').forEach(inp => {
+    const i = parseInt(inp.dataset.row), row = budgetRows[i];
     if (!row || row.section) return;
-    const budgeted = parseFloat(budInp.value) || 0;
-    const actualInp = document.querySelector(`.actual-input[data-row="${i}"]`);
-    const actual = parseFloat(actualInp?.value) || 0;
-    const variance = actual - budgeted;
-    const varCell = document.getElementById('var-' + i);
-    if (varCell) {
-      const isGoodIfLower = row.type !== 'income' && row.type !== 'invest';
-      const sign = variance > 0 ? '+' : '';
-      varCell.textContent = variance === 0 ? '$0' : `${sign}$${Math.abs(variance).toLocaleString()}${variance < 0 ? ' under' : ' over'}`;
-      varCell.style.color = variance === 0 ? 'var(--text-muted)' :
-        (isGoodIfLower ? (variance > 0 ? 'var(--red)' : 'var(--accent)') : (variance > 0 ? 'var(--accent)' : 'var(--red)'));
+    const b = parseFloat(inp.value)||0;
+    const a = parseFloat(document.querySelector(`.actual-input[data-row="${i}"]`)?.value)||0;
+    const v = a - b;
+    const vc = document.getElementById('var-' + i);
+    if (vc) {
+      const good = row.type !== 'income' && row.type !== 'invest';
+      vc.textContent = v===0 ? '$0' : `${v>0?'+':''}$${Math.abs(v).toLocaleString()}${v<0?' under':' over'}`;
+      vc.style.color = v===0 ? 'var(--text-muted)' : (good?(v>0?'var(--red)'  :'var(--accent)'):(v>0?'var(--accent)':'var(--red)'));
     }
-    if (row.type === 'income') { budIncome += budgeted; actIncome += actual; }
-    else if (row.type === 'invest') { budInvest += budgeted; actInvest += actual; }
-    else { budExp += budgeted; actExp += actual; }
+    if (row.type==='income'){bI+=b;aI+=a;} else if(row.type==='invest'){bV+=b;aV+=a;} else{bE+=b;aE+=a;}
   });
-  const budRem = budIncome - budExp - budInvest;
-  const actRem = actIncome - actExp - actInvest;
-  const setEl = (id, val, colorize) => {
-    const e = document.getElementById(id);
-    if (!e) return;
-    e.textContent = `${val < 0 ? '-' : ''}$${Math.abs(Math.round(val)).toLocaleString()}`;
-    if (colorize) e.className = val >= 0 ? 'surplus' : 'deficit';
-  };
-  setEl('total-income-bud', budIncome); setEl('total-income-actual', actIncome);
-  setEl('total-exp-bud', budExp);       setEl('total-exp-actual', actExp);
-  setEl('total-inv-bud', budInvest);    setEl('total-inv-actual', actInvest);
-  setEl('remaining-bud', budRem, true); setEl('remaining-actual', actRem, true);
+  const s=(id,v,c)=>{const e=document.getElementById(id);if(!e)return;e.textContent=`${v<0?'-':''}$${Math.abs(Math.round(v)).toLocaleString()}`;if(c)e.className=v>=0?'surplus':'deficit';};
+  s('total-income-bud',bI);s('total-income-actual',aI);
+  s('total-exp-bud',bE);s('total-exp-actual',aE);
+  s('total-inv-bud',bV);s('total-inv-actual',aV);
+  s('remaining-bud',bI-bE-bV,true);s('remaining-actual',aI-aE-aV,true);
 }
 
 function updateTotalBalance() {
   const ids = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k'];
-  const total = ids.reduce((sum, id) => sum + (parseFloat(document.getElementById(id)?.value) || 0), 0);
+  const total = ids.reduce((s,id)=>s+(parseFloat(document.getElementById(id)?.value)||0),0);
   const el = document.getElementById('total-invested-balance');
   if (el) el.textContent = fmt(total);
 }
 
 function updateMonth() {
-  const input = document.getElementById('budget-month');
-  if (!input) return;
-  const [year, month] = input.value.split('-');
-  const label = new Date(year, month - 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  ['date-display-1','date-display-2','date-display-3'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = label;
-  });
-  saveData();
+  const inp = document.getElementById('budget-month');
+  if (!inp) return;
+  const [y,m] = inp.value.split('-');
+  const label = new Date(y, m-1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  ['date-display-1','date-display-2','date-display-3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=label;});
 }
 
-
-// INVESTING TRACKER
+// TRACKER
 const months2026 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
 function buildTracker() {
   const tbody = document.getElementById('tracker-tbody');
   if (!tbody) return;
-  let html = '';
-  months2026.forEach((m, i) => {
-    html += `<tr>
-      <td>${m}</td>
-      <td><input type="number" class="tr-roth" data-i="${i}" value="0" style="width:75px" oninput="updateTracker(); saveData();"></td>
-      <td><input type="number" class="tr-broker" data-i="${i}" value="0" style="width:75px" oninput="updateTracker(); saveData();"></td>
-      <td><input type="number" class="tr-401k" data-i="${i}" value="0" style="width:75px" oninput="updateTracker(); saveData();"></td>
-      <td class="tr-total-${i}">—</td>
-      <td class="tr-roth-rem-${i}">—</td>
-      <td class="tr-running-${i}">—</td>
-      <td class="tr-ontrack-${i}">—</td>
-    </tr>`;
-  });
-  tbody.innerHTML = html;
+  tbody.innerHTML = months2026.map((m,i) => `<tr>
+    <td>${m}</td>
+    <td><input type="number" class="tr-roth" data-i="${i}" value="0" style="width:75px" oninput="updateTracker()"></td>
+    <td><input type="number" class="tr-broker" data-i="${i}" value="0" style="width:75px" oninput="updateTracker()"></td>
+    <td><input type="number" class="tr-401k" data-i="${i}" value="0" style="width:75px" oninput="updateTracker()"></td>
+    <td class="tr-total-${i}">—</td><td class="tr-roth-rem-${i}">—</td>
+    <td class="tr-running-${i}">—</td><td class="tr-ontrack-${i}">—</td>
+  </tr>`).join('');
   updateTracker();
 }
 
 function updateTracker() {
-  const rothLimit = 7500;
-  const startingBalance = 179398;
-  let totalRoth=0, totalBroker=0, total401k=0, running=startingBalance, cumulRoth=0;
-  months2026.forEach((m, i) => {
-    const roth   = parseFloat(document.querySelector(`.tr-roth[data-i="${i}"]`)?.value) || 0;
-    const broker = parseFloat(document.querySelector(`.tr-broker[data-i="${i}"]`)?.value) || 0;
-    const k401   = parseFloat(document.querySelector(`.tr-401k[data-i="${i}"]`)?.value) || 0;
-    const total  = roth + broker + k401;
-    totalRoth += roth; totalBroker += broker; total401k += k401;
-    cumulRoth += roth; running += total;
-    const rothRem = Math.max(0, rothLimit - cumulRoth);
-    const onTrack = cumulRoth >= (rothLimit / 12) * (i + 1);
-    const q = cls => document.querySelector('.' + cls);
-    if (q(`tr-total-${i}`))    q(`tr-total-${i}`).textContent    = fmt(total);
-    if (q(`tr-roth-rem-${i}`)) q(`tr-roth-rem-${i}`).textContent = fmt(rothRem);
-    if (q(`tr-running-${i}`))  q(`tr-running-${i}`).textContent  = fmt(running);
-    const ot = q(`tr-ontrack-${i}`);
-    if (ot) { ot.textContent = onTrack ? '✓ Yes' : '✗ No'; ot.className = `tr-ontrack-${i} ` + (onTrack ? 'on-track' : 'off-track'); }
+  let tR=0,tB=0,t4=0,run=179398,cR=0;
+  months2026.forEach((m,i)=>{
+    const r=parseFloat(document.querySelector(`.tr-roth[data-i="${i}"]`)?.value)||0;
+    const b=parseFloat(document.querySelector(`.tr-broker[data-i="${i}"]`)?.value)||0;
+    const k=parseFloat(document.querySelector(`.tr-401k[data-i="${i}"]`)?.value)||0;
+    tR+=r;tB+=b;t4+=k;cR+=r;run+=r+b+k;
+    const rem=Math.max(0,7500-cR),ok=cR>=(7500/12)*(i+1);
+    const q=c=>document.querySelector('.'+c);
+    if(q(`tr-total-${i}`))q(`tr-total-${i}`).textContent=fmt(r+b+k);
+    if(q(`tr-roth-rem-${i}`))q(`tr-roth-rem-${i}`).textContent=fmt(rem);
+    if(q(`tr-running-${i}`))q(`tr-running-${i}`).textContent=fmt(run);
+    const ot=q(`tr-ontrack-${i}`);
+    if(ot){ot.textContent=ok?'✓ Yes':'✗ No';ot.className=`tr-ontrack-${i} `+(ok?'on-track':'off-track');}
   });
-  const s = id => document.getElementById(id);
-  if (s('tr-annual-roth'))    s('tr-annual-roth').textContent    = fmt(totalRoth);
-  if (s('tr-annual-broker'))  s('tr-annual-broker').textContent  = fmt(totalBroker);
-  if (s('tr-annual-401k'))    s('tr-annual-401k').textContent    = fmt(total401k);
-  if (s('tr-annual-total'))   s('tr-annual-total').textContent   = fmt(totalRoth + totalBroker + total401k);
-  if (s('tr-annual-running')) s('tr-annual-running').textContent = fmt(running);
+  const g=id=>document.getElementById(id);
+  if(g('tr-annual-roth'))g('tr-annual-roth').textContent=fmt(tR);
+  if(g('tr-annual-broker'))g('tr-annual-broker').textContent=fmt(tB);
+  if(g('tr-annual-401k'))g('tr-annual-401k').textContent=fmt(t4);
+  if(g('tr-annual-total'))g('tr-annual-total').textContent=fmt(tR+tB+t4);
+  if(g('tr-annual-running'))g('tr-annual-running').textContent=fmt(run);
 }
 
-// LOCAL STORAGE SAVE/LOAD
-function saveData() {
+
+// SAVE / LOAD via Supabase
+const SUPABASE_URL = 'https://wriztuuhiyufufbnzgtd.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndyaXp0dXVoaXl1ZnVmYm56Z3RkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODAyNDMsImV4cCI6MjA5NDQ1NjI0M30.uUB7D8iAiyubuiG6BA6Vimg0nClrIbDGfdJVeUvgaKc';
+const ROW_ID = 'shared';
+let saveTimer = null;
+
+function collectData() {
   const data = {};
-  document.querySelectorAll('input[id]').forEach(inp => { data['id_' + inp.id] = inp.type === 'checkbox' ? inp.checked : inp.value; });
-  document.querySelectorAll('.budgeted-input').forEach(inp => { data['bud_' + inp.dataset.row] = inp.value; });
-  document.querySelectorAll('.actual-input').forEach(inp => { data['act_' + inp.dataset.row] = inp.value; });
-  document.querySelectorAll('.tr-roth').forEach(inp => { data['roth_' + inp.dataset.i] = inp.value; });
-  document.querySelectorAll('.tr-broker').forEach(inp => { data['broker_' + inp.dataset.i] = inp.value; });
-  document.querySelectorAll('.tr-401k').forEach(inp => { data['k401_' + inp.dataset.i] = inp.value; });
-  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-  console.log('Saved', Object.keys(data).length, 'keys to localStorage');
-  const ind = document.getElementById('save-indicator');
-  if (ind) { ind.style.opacity='1'; clearTimeout(ind._t); ind._t = setTimeout(()=>ind.style.opacity='0', 1500); }
+  document.querySelectorAll('.budgeted-input').forEach(inp => { data['b'+inp.dataset.row] = inp.value; });
+  document.querySelectorAll('.actual-input').forEach(inp => { data['a'+inp.dataset.row] = inp.value; });
+  document.querySelectorAll('.tr-roth').forEach(inp => { data['r'+inp.dataset.i] = inp.value; });
+  document.querySelectorAll('.tr-broker').forEach(inp => { data['k'+inp.dataset.i] = inp.value; });
+  document.querySelectorAll('.tr-401k').forEach(inp => { data['f'+inp.dataset.i] = inp.value; });
+  ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k','budget-month'].forEach(id => {
+    const el = document.getElementById(id); if (el) data[id] = el.value;
+  });
+  return data;
 }
 
-function loadData() {
-  const raw = localStorage.getItem(SAVE_KEY);
-  if (!raw) { console.log('No saved data found'); return; }
-  console.log('Loading saved data, keys:', Object.keys(JSON.parse(raw)).length);
-  const data = JSON.parse(raw);
-  document.querySelectorAll('input[id]').forEach(inp => {
-    const val = data['id_' + inp.id];
-    if (val !== undefined) { if (inp.type === 'checkbox') inp.checked = val; else inp.value = val; }
+function applyData(data) {
+  document.querySelectorAll('.budgeted-input').forEach(inp => { if(data['b'+inp.dataset.row]!==undefined) inp.value=data['b'+inp.dataset.row]; });
+  document.querySelectorAll('.actual-input').forEach(inp => { if(data['a'+inp.dataset.row]!==undefined) inp.value=data['a'+inp.dataset.row]; });
+  document.querySelectorAll('.tr-roth').forEach(inp => { if(data['r'+inp.dataset.i]!==undefined) inp.value=data['r'+inp.dataset.i]; });
+  document.querySelectorAll('.tr-broker').forEach(inp => { if(data['k'+inp.dataset.i]!==undefined) inp.value=data['k'+inp.dataset.i]; });
+  document.querySelectorAll('.tr-401k').forEach(inp => { if(data['f'+inp.dataset.i]!==undefined) inp.value=data['f'+inp.dataset.i]; });
+  ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k','budget-month'].forEach(id => {
+    const el = document.getElementById(id); if (el && data[id]!==undefined) el.value=data[id];
   });
-  document.querySelectorAll('.budgeted-input').forEach(inp => { if (data['bud_' + inp.dataset.row] !== undefined) inp.value = data['bud_' + inp.dataset.row]; });
-  document.querySelectorAll('.actual-input').forEach(inp => { if (data['act_' + inp.dataset.row] !== undefined) inp.value = data['act_' + inp.dataset.row]; });
-  document.querySelectorAll('.tr-roth').forEach(inp => { if (data['roth_' + inp.dataset.i] !== undefined) inp.value = data['roth_' + inp.dataset.i]; });
-  document.querySelectorAll('.tr-broker').forEach(inp => { if (data['broker_' + inp.dataset.i] !== undefined) inp.value = data['broker_' + inp.dataset.i]; });
-  document.querySelectorAll('.tr-401k').forEach(inp => { if (data['k401_' + inp.dataset.i] !== undefined) inp.value = data['k401_' + inp.dataset.i]; });
+}
+
+function showIndicator(msg, color) {
+  const ind = document.getElementById('save-indicator');
+  if (!ind) return;
+  ind.textContent = msg;
+  ind.style.color = color || 'var(--accent)';
+  ind.style.opacity = '1';
+  clearTimeout(ind._t);
+  ind._t = setTimeout(() => ind.style.opacity = '0', 2000);
+}
+
+function saveData() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    const data = collectData();
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/budget_data`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify({ id: ROW_ID, data: data, updated_at: new Date().toISOString() })
+      });
+      if (res.ok) showIndicator('✓ Saved', 'var(--accent)');
+      else showIndicator('⚠ Save failed', 'var(--red)');
+    } catch(e) {
+      showIndicator('⚠ Offline', 'var(--amber)');
+    }
+  }, 800);
+}
+
+async function loadData() {
+  showIndicator('Loading...', 'var(--text-muted)');
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/budget_data?id=eq.${ROW_ID}&select=data`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY
+      }
+    });
+    const rows = await res.json();
+    if (rows && rows.length > 0 && rows[0].data) {
+      applyData(rows[0].data);
+      updateBudgetTotals();
+      updateTotalBalance();
+      updateTracker();
+      updateMonth();
+      showIndicator('✓ Loaded', 'var(--accent)');
+    } else {
+      showIndicator('No saved data yet', 'var(--text-muted)');
+    }
+  } catch(e) {
+    showIndicator('⚠ Load failed', 'var(--amber)');
+  }
 }
 
 function clearSave() {
   if (confirm('Clear all saved data and reset to defaults?')) {
-    localStorage.removeItem(SAVE_KEY);
-    location.reload();
+    fetch(`${SUPABASE_URL}/rest/v1/budget_data?id=eq.${ROW_ID}`, {
+      method: 'DELETE',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    }).then(() => location.reload());
   }
 }
+
 
 // INIT
 document.addEventListener('DOMContentLoaded', function() {
   checkAuth();
-  buildBudget();        // build table with defaults
-  buildTracker();       // build tracker with defaults
-  loadData();           // overwrite inputs with saved values
-  updateBudgetTotals(); // recalculate totals from saved inputs
-  updateTotalBalance(); // recalculate account total
-  updateTracker();      // recalculate tracker
-  updateMonth();        // restore month display
-  // Now that everything is loaded, enable saving on user input
+  buildBudget();
+  buildTracker();
+  updateBudgetTotals();
+  updateTotalBalance();
+  updateTracker();
+  updateMonth();
+  loadData(); // async - loads from Supabase and updates display when done
   document.addEventListener('input', saveData);
-  document.addEventListener('change', saveData);
 });
 </script>
-
-
 </body>
 </html>
