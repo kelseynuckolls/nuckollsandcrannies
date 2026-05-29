@@ -1,3 +1,4 @@
+L
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,9 +31,9 @@
     --radius: 10px;
     --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
   }
-
+ 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   body {
     font-family: var(--font-sans);
     background: var(--bg);
@@ -40,7 +41,7 @@
     min-height: 100vh;
     line-height: 1.6;
   }
-
+ 
   .nav {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -79,14 +80,14 @@
   }
   .tab:hover { color: var(--text); background: var(--surface2); }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
+ 
   .page { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
   .page.active { display: block; }
-
+ 
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
   .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-
+ 
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -94,7 +95,7 @@
     padding: 1.5rem;
     box-shadow: var(--shadow);
   }
-
+ 
   h2 {
     font-family: var(--font);
     font-size: 1.25rem;
@@ -104,7 +105,7 @@
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--border);
   }
-
+ 
   .budget-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
   .budget-table th {
     font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.05em;
@@ -122,7 +123,7 @@
     padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border);
   }
   .budget-table .total-row td { font-weight: 700; border-top: 2px solid var(--border-strong); background: var(--surface2); }
-
+ 
   .badge { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.04em; }
   .badge-income { background: var(--accent-light); color: var(--accent); }
   .badge-fixed { background: var(--blue-light); color: var(--blue); }
@@ -130,14 +131,14 @@
   .badge-savings { background: var(--purple-light); color: var(--purple); }
   .badge-invest { background: var(--accent-light); color: var(--accent); }
   .badge-debt { background: var(--red-light); color: var(--red); }
-
+ 
   input[type="number"] {
     background: var(--blue-light); border: 1px solid #bbd0f5; border-radius: 4px;
     padding: 0.25rem 0.5rem; font-size: 0.875rem; width: 90px; text-align: right;
     color: var(--blue); font-weight: 600; font-variant-numeric: tabular-nums;
   }
   input[type="number"]:focus { outline: 2px solid var(--blue); border-color: var(--blue); }
-
+ 
   .acct-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
   .acct-table th {
     font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
@@ -148,7 +149,7 @@
   .acct-table tr:last-child td { border-bottom: none; }
   .acct-table tr:hover td { background: var(--surface2); }
   .acct-name { font-weight: 600; font-size: 0.85rem; }
-
+ 
   .proj-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
   .proj-table th {
     font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
@@ -162,26 +163,77 @@
   .proj-table .yr5 { color: var(--blue); }
   .proj-table .yr10 { color: var(--purple); }
   .proj-table .yr15 { color: var(--accent); }
-
+ 
   .page-header { margin-bottom: 1.75rem; }
   .page-header h1 { font-family: var(--font); font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
   .page-header p { color: var(--text-muted); font-size: 0.875rem; }
-
+ 
   .mb2 { margin-bottom: 1.5rem; }
   .note { font-size: 0.78rem; color: var(--text-muted); padding: 0.75rem 1rem; background: var(--surface2); border-left: 3px solid var(--border-strong); border-radius: 0 6px 6px 0; margin-top: 1rem; }
   .surplus { color: var(--accent); }
   .deficit { color: var(--red); }
-
+ 
   .milestone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
   .milestone-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; box-shadow: var(--shadow); }
   .milestone-card .m-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
   .milestone-card .m-val { font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
   .milestone-card .m-yr { font-size: 0.75rem; color: var(--text-hint); margin-top: 0.1rem; }
-
+ 
   .proj-controls { display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1.5rem; }
   .proj-controls label { font-size: 0.78rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.3rem; }
   .proj-controls input[type="number"] { width: 100px; }
-
+ 
+  /* IMPORTANT DATES */
+  .dates-toolbar { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+  .view-toggle { display:flex; border:1px solid var(--border-strong); border-radius:6px; overflow:hidden; }
+  .view-btn { padding:0.4rem 0.9rem; font-size:0.8rem; font-weight:600; cursor:pointer; border:none; background:var(--surface2); color:var(--text-muted); transition:all 0.15s; }
+  .view-btn.active { background:var(--accent); color:white; }
+  .add-date-btn { padding:0.4rem 1rem; font-size:0.82rem; font-weight:600; cursor:pointer; border:none; background:var(--accent); color:white; border-radius:6px; }
+  .add-date-btn:hover { background:var(--accent-mid); }
+ 
+  /* CALENDAR */
+  .cal-nav { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+  .cal-nav button { background:none; border:1px solid var(--border-strong); border-radius:6px; padding:0.3rem 0.75rem; cursor:pointer; font-size:0.9rem; color:var(--text-muted); }
+  .cal-nav button:hover { background:var(--surface2); }
+  .cal-month-label { font-family:var(--font); font-size:1.1rem; font-weight:700; color:var(--text); min-width:160px; text-align:center; }
+  .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+  .cal-dow { text-align:center; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); padding:0.4rem 0; }
+  .cal-day { min-height:72px; background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:0.35rem 0.4rem; font-size:0.78rem; position:relative; }
+  .cal-day.other-month { background:var(--surface2); opacity:0.5; }
+  .cal-day.today { border-color:var(--accent); }
+  .cal-day-num { font-size:0.75rem; font-weight:600; color:var(--text-muted); margin-bottom:2px; }
+  .cal-day.today .cal-day-num { color:var(--accent); }
+  .cal-event { font-size:0.68rem; padding:1px 4px; border-radius:3px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; }
+  .cat-birthday { background:#fde8f0; color:#9b2c5a; }
+  .cat-anniversary { background:#e8eeff; color:#2c4a9b; }
+  .cat-holiday { background:#e8f4ef; color:#2d6a4f; }
+  .cat-other { background:#fef3c7; color:#b45309; }
+ 
+  /* LIST */
+  .dates-list { display:flex; flex-direction:column; gap:0.6rem; }
+  .date-item { display:flex; align-items:center; gap:1rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.85rem 1rem; box-shadow:var(--shadow); }
+  .date-item-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .date-item-info { flex:1; }
+  .date-item-name { font-weight:600; font-size:0.9rem; }
+  .date-item-date { font-size:0.78rem; color:var(--text-muted); }
+  .date-item-upcoming { font-size:0.75rem; font-weight:600; color:var(--accent); margin-left:auto; white-space:nowrap; }
+  .date-item-delete { background:none; border:none; color:var(--text-hint); cursor:pointer; font-size:1rem; padding:0 0.25rem; }
+  .date-item-delete:hover { color:var(--red); }
+  .dates-section-header { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); padding:0.5rem 0 0.25rem; border-bottom:1px solid var(--border); margin-bottom:0.25rem; }
+ 
+  /* ADD DATE MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:500; align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal-box { background:var(--surface); border:1px solid var(--border-strong); border-radius:var(--radius); padding:1.75rem; width:90%; max-width:400px; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
+  .modal-box h3 { font-family:var(--font); font-size:1.1rem; margin-bottom:1.25rem; }
+  .modal-field { margin-bottom:0.9rem; }
+  .modal-field label { display:block; font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:0.3rem; text-transform:uppercase; letter-spacing:0.04em; }
+  .modal-field input, .modal-field select { width:100%; padding:0.5rem 0.75rem; border:1px solid var(--border-strong); border-radius:6px; font-size:0.9rem; background:var(--surface2); color:var(--text); }
+  .modal-field input:focus, .modal-field select:focus { outline:2px solid var(--accent); border-color:var(--accent); }
+  .modal-btns { display:flex; gap:0.75rem; justify-content:flex-end; margin-top:1.25rem; }
+  .modal-btn-cancel { padding:0.45rem 1rem; border:1px solid var(--border-strong); border-radius:6px; background:none; color:var(--text-muted); cursor:pointer; font-size:0.85rem; }
+  .modal-btn-save { padding:0.45rem 1.1rem; border:none; border-radius:6px; background:var(--accent); color:white; cursor:pointer; font-size:0.85rem; font-weight:600; }
+ 
   #password-screen {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999;
@@ -201,7 +253,7 @@
   .password-btn { width: 100%; padding: 0.65rem; background: var(--accent); color: white; border: none; border-radius: 6px; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
   .password-btn:hover { background: var(--accent-mid); }
   .password-error { color: var(--red); font-size: 0.82rem; margin-top: 0.75rem; display: none; }
-
+ 
   @media (max-width: 700px) {
     .grid-2, .grid-3, .grid-4, .milestone-grid { grid-template-columns: 1fr; }
     .page { padding: 1rem; }
@@ -210,7 +262,7 @@
 </style>
 </head>
 <body>
-
+ 
 <div id="password-screen">
   <div class="password-box">
     <h2>Nuckolls Budget</h2>
@@ -221,20 +273,21 @@
     <div class="password-error" id="password-error">Incorrect password. Try again.</div>
   </div>
 </div>
-
+ 
 <nav class="nav">
   <div class="nav-brand">Budget Dashboard</div>
   <div class="tab active" onclick="showPage('budget', this)">Monthly Budget</div>
   <div class="tab" onclick="showPage('accounts', this)">Accounts</div>
   <div class="tab" onclick="showPage('projections', this)">Investment Projections</div>
   <div class="tab" onclick="showPage('notes', this)">Daily Checking</div>
+  <div class="tab" onclick="showPage('dates', this)">Important Dates</div>
   <div style="margin-left:auto; display:flex; align-items:center; gap:0.75rem; padding:0 1rem;">
     <input type="month" id="budget-month" value="2026-05" oninput="updateMonth()" style="font-size:0.78rem; padding:0.3rem 0.6rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text); cursor:pointer;">
     <span id="save-indicator" style="font-size:0.75rem; color:var(--accent); opacity:0; transition:opacity 0.5s;">✓ Saved</span>
     <button onclick="clearSave()" style="font-size:0.72rem; padding:0.3rem 0.75rem; border:1px solid var(--border-strong); border-radius:20px; background:var(--surface2); color:var(--text-muted); cursor:pointer;">Reset All</button>
   </div>
 </nav>
-
+ 
 <!-- MONTHLY BUDGET — untouched from original -->
 <div id="page-budget" class="page active">
   <div class="page-header">
@@ -254,7 +307,7 @@
     <div class="note">💡 Both Budgeted and Actual columns are editable. Variance turns red when over budget and green when under.</div>
   </div>
 </div>
-
+ 
 <!-- ACCOUNTS — original + renamed MSFT Stocks-Fidelity -->
 <div id="page-accounts" class="page">
   <div class="page-header">
@@ -280,14 +333,14 @@
     </table>
   </div>
 </div>
-
+ 
 <!-- INVESTMENT PROJECTIONS — new tab -->
 <div id="page-projections" class="page">
   <div class="page-header">
     <h1>Investment Projections</h1>
     <p>Based on your live account balances. Adjust assumptions to model scenarios.</p>
   </div>
-
+ 
   <div class="card mb2">
     <h2>Assumptions</h2>
     <div class="proj-controls">
@@ -303,9 +356,9 @@
     </div>
     <div class="note">401(k) accounts are projected on current balance + growth only — no contributions added.</div>
   </div>
-
+ 
   <div class="milestone-grid" id="milestone-grid"></div>
-
+ 
   <div class="card mb2">
     <h2>5, 10 &amp; 15-Year Projections</h2>
     <table class="proj-table">
@@ -329,7 +382,7 @@
     </table>
     <div class="note" id="proj-note"></div>
   </div>
-
+ 
   <div class="card">
     <h2>By Tax Bucket</h2>
     <table class="proj-table">
@@ -346,7 +399,7 @@
     </table>
   </div>
 </div>
-
+ 
 <!-- DAILY CHECKING — just the Google Sheet embed -->
 <div id="page-notes" class="page">
   <div class="page-header">
@@ -358,12 +411,85 @@
       style="width:100%; height:100%; border:none; display:block;" allowfullscreen></iframe>
   </div>
 </div>
-
+ 
+<!-- IMPORTANT DATES PAGE -->
+<div id="page-dates" class="page">
+  <div class="page-header">
+    <h1>Important Dates</h1>
+    <p>Birthdays, anniversaries, holidays &amp; more</p>
+  </div>
+  <div class="dates-toolbar">
+    <div class="view-toggle">
+      <button class="view-btn active" id="btn-cal" onclick="setDatesView('calendar')">📅 Calendar</button>
+      <button class="view-btn" id="btn-list" onclick="setDatesView('list')">📋 List</button>
+    </div>
+    <button class="add-date-btn" onclick="openAddDate()">+ Add Date</button>
+  </div>
+ 
+  <!-- CALENDAR VIEW -->
+  <div id="dates-calendar-view">
+    <div class="card">
+      <div class="cal-nav">
+        <button onclick="calPrev()">&#8592;</button>
+        <div class="cal-month-label" id="cal-month-label"></div>
+        <button onclick="calNext()">&#8594;</button>
+      </div>
+      <div class="cal-grid" id="cal-dow-row">
+        <div class="cal-dow">Sun</div><div class="cal-dow">Mon</div><div class="cal-dow">Tue</div>
+        <div class="cal-dow">Wed</div><div class="cal-dow">Thu</div><div class="cal-dow">Fri</div><div class="cal-dow">Sat</div>
+      </div>
+      <div class="cal-grid" id="cal-days"></div>
+    </div>
+  </div>
+ 
+  <!-- LIST VIEW -->
+  <div id="dates-list-view" style="display:none;">
+    <div class="card">
+      <div id="dates-list-container"></div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ADD DATE MODAL -->
+<div class="modal-overlay" id="add-date-modal">
+  <div class="modal-box">
+    <h3>Add Important Date</h3>
+    <div class="modal-field">
+      <label>Name / Description</label>
+      <input type="text" id="new-date-name" placeholder="e.g. Mom's Birthday">
+    </div>
+    <div class="modal-field">
+      <label>Date</label>
+      <input type="date" id="new-date-date">
+    </div>
+    <div class="modal-field">
+      <label>Repeats Yearly?</label>
+      <select id="new-date-repeat">
+        <option value="yes">Yes — repeats every year</option>
+        <option value="no">No — one time only</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Category</label>
+      <select id="new-date-cat">
+        <option value="birthday">🎂 Birthday</option>
+        <option value="anniversary">💍 Anniversary</option>
+        <option value="holiday">🎉 Holiday</option>
+        <option value="other">📌 Other</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" onclick="closeAddDate()">Cancel</button>
+      <button class="modal-btn-save" onclick="saveNewDate()">Save</button>
+    </div>
+  </div>
+</div>
+ 
 <script>
 // PASSWORD
 const CORRECT_PASSWORD = 'Charli2020!';
 const AUTH_KEY = 'nuckollsbudget_auth';
-
+ 
 function checkPassword() {
   const val = document.getElementById('password-input').value;
   if (val === CORRECT_PASSWORD) {
@@ -375,7 +501,7 @@ function checkPassword() {
     document.getElementById('password-input').focus();
   }
 }
-
+ 
 function checkAuth() {
   if (sessionStorage.getItem(AUTH_KEY) !== 'true') {
     document.getElementById('password-screen').style.display = 'flex';
@@ -384,7 +510,7 @@ function checkAuth() {
     document.getElementById('password-screen').style.display = 'none';
   }
 }
-
+ 
 // NAVIGATION
 function showPage(id, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -393,9 +519,9 @@ function showPage(id, el) {
   el.classList.add('active');
   if (id === 'projections') renderProjections();
 }
-
+ 
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
-
+ 
 // BUDGET — exactly as original
 const budgetRows = [
   { cat: 'Income - David', type: 'income', budgeted: 4500 },
@@ -424,13 +550,13 @@ const budgetRows = [
   { cat: 'Roth IRA Investment', type: 'invest', budgeted: 625 },
   { cat: 'Brokerage Investment', type: 'invest', budgeted: 575 },
 ];
-
+ 
 const typeLabels = {
   income: ['Income', 'badge-income'], fixed: ['Fixed', 'badge-fixed'],
   variable: ['Variable', 'badge-variable'], savings: ['Savings', 'badge-savings'],
   invest: ['Investing', 'badge-invest'], debt: ['Debt', 'badge-debt'],
 };
-
+ 
 function buildBudget() {
   const tbody = document.getElementById('budget-tbody');
   let html = '';
@@ -452,7 +578,7 @@ function buildBudget() {
     <tr class="total-row"><td colspan="2">Remaining</td><td id="remaining-bud">—</td><td id="remaining-actual">—</td><td></td></tr>`;
   tbody.innerHTML = html;
 }
-
+ 
 function updateBudgetTotals() {
   let bI=0,bE=0,bV=0,aI=0,aE=0,aV=0;
   document.querySelectorAll('.budgeted-input').forEach(inp => {
@@ -475,7 +601,7 @@ function updateBudgetTotals() {
   s('total-inv-bud',bV);s('total-inv-actual',aV);
   s('remaining-bud',bI-bE-bV,true);s('remaining-actual',aI-aE-aV,true);
 }
-
+ 
 // ACCOUNTS
 function updateTotalBalance() {
   const ids = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k'];
@@ -483,7 +609,7 @@ function updateTotalBalance() {
   const el = document.getElementById('total-invested-balance');
   if (el) el.textContent = fmt(total);
 }
-
+ 
 function updateMonth() {
   const inp = document.getElementById('budget-month');
   if (!inp) return;
@@ -491,7 +617,7 @@ function updateMonth() {
   const label = new Date(y, m-1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
   ['date-display-1','date-display-2','date-display-3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=label;});
 }
-
+ 
 // PROJECTIONS
 const projAccounts = [
   { id:'acct-rollover',       name:'Rollover IRA (Fidelity)',  bucket:'deferred', rate:0.075, contrib:()=>0 },
@@ -502,30 +628,30 @@ const projAccounts = [
   { id:'acct-msft-401k',      name:'Microsoft 401(k)',         bucket:'deferred', rate:0.08,  contrib:()=>0 },
   { id:'acct-stack-401k',     name:'STACK 401(k)',             bucket:'deferred', rate:0.08,  contrib:()=>0 },
 ];
-
+ 
 function project(balance, rate, annualContrib, years) {
   let b = balance;
   for (let y = 0; y < years; y++) b = b * (1 + rate) + annualContrib;
   return Math.round(b);
 }
-
+ 
 function renderProjections() {
   const curYear = new Date().getFullYear();
-
+ 
   // milestones
   const totals = [5,10,15].map(yr =>
     projAccounts.reduce((s,a) => s + project(+(document.getElementById(a.id)?.value)||0, a.rate, a.contrib(), yr), 0)
   );
   const current = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k']
     .reduce((s,id)=>s+(+(document.getElementById(id)?.value)||0),0);
-
+ 
   document.getElementById('milestone-grid').innerHTML = `
     <div class="milestone-card"><div class="m-label">Current Total</div><div class="m-val" style="color:var(--accent)">${fmt(current)}</div><div class="m-yr">Today</div></div>
     <div class="milestone-card"><div class="m-label">5-Year Projection</div><div class="m-val" style="color:var(--blue)">${fmt(totals[0])}</div><div class="m-yr">${curYear+5}</div></div>
     <div class="milestone-card"><div class="m-label">10-Year Projection</div><div class="m-val" style="color:var(--purple)">${fmt(totals[1])}</div><div class="m-yr">${curYear+10}</div></div>
     <div class="milestone-card"><div class="m-label">15-Year Projection</div><div class="m-val" style="color:var(--accent-mid)">${fmt(totals[2])}</div><div class="m-yr">${curYear+15}</div></div>
   `;
-
+ 
   // per-account table
   let html = '', t5=0, t10=0, t15=0;
   projAccounts.forEach(a => {
@@ -538,12 +664,12 @@ function renderProjections() {
   document.getElementById('proj-total-5').textContent = fmt(t5);
   document.getElementById('proj-total-10').textContent = fmt(t10);
   document.getElementById('proj-total-15').textContent = fmt(t15);
-
+ 
   const rothC = +(document.getElementById('proj-roth-contrib').value)||0;
   const brokC = (+(document.getElementById('proj-brok-contrib').value)||0)*12;
   document.getElementById('proj-note').textContent =
     `Contributions modeled: Roth IRA ${fmt(rothC)}/yr · Vanguard Brokerage ${fmt(brokC)}/yr. 401(k)s grow on current balance only. Return rates: IRA/Brokerage 7.5% · Roth/401(k) 8% · MSFT Stocks 9%.`;
-
+ 
   // bucket table
   const buckets = [
     { key:'deferred', label:'Tax-Deferred' },
@@ -561,13 +687,13 @@ function renderProjections() {
   });
   document.getElementById('bucket-tbody').innerHTML = bhtml;
 }
-
+ 
 // SAVE / LOAD via Supabase
 const SUPABASE_URL = 'https://wriztuuhiyufufbnzgtd.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndyaXp0dXVoaXl1ZnVmYm56Z3RkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4ODAyNDMsImV4cCI6MjA5NDQ1NjI0M30.uUB7D8iAiyubuiG6BA6Vimg0nClrIbDGfdJVeUvgaKc';
 const ROW_ID = 'shared';
 let saveTimer = null;
-
+ 
 function collectData() {
   const data = {};
   document.querySelectorAll('.budgeted-input').forEach(inp => { data['b'+inp.dataset.row] = inp.value; });
@@ -577,7 +703,7 @@ function collectData() {
   });
   return data;
 }
-
+ 
 function applyData(data) {
   document.querySelectorAll('.budgeted-input').forEach(inp => { if(data['b'+inp.dataset.row]!==undefined) inp.value=data['b'+inp.dataset.row]; });
   document.querySelectorAll('.actual-input').forEach(inp => { if(data['a'+inp.dataset.row]!==undefined) inp.value=data['a'+inp.dataset.row]; });
@@ -585,7 +711,7 @@ function applyData(data) {
     const el = document.getElementById(id); if (el && data[id]!==undefined) el.value=data[id];
   });
 }
-
+ 
 function showIndicator(msg, color) {
   const ind = document.getElementById('save-indicator');
   if (!ind) return;
@@ -595,7 +721,7 @@ function showIndicator(msg, color) {
   clearTimeout(ind._t);
   ind._t = setTimeout(() => ind.style.opacity = '0', 2000);
 }
-
+ 
 function saveData() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
@@ -618,7 +744,7 @@ function saveData() {
     }
   }, 800);
 }
-
+ 
 async function loadData() {
   showIndicator('Loading...', 'var(--text-muted)');
   try {
@@ -639,7 +765,7 @@ async function loadData() {
     showIndicator('⚠ Load failed', 'var(--amber)');
   }
 }
-
+ 
 function clearSave() {
   if (confirm('Clear all saved data and reset to defaults?')) {
     fetch(`${SUPABASE_URL}/rest/v1/budget_data?id=eq.${ROW_ID}`, {
@@ -648,7 +774,172 @@ function clearSave() {
     }).then(() => location.reload());
   }
 }
-
+ 
+// IMPORTANT DATES
+let importantDates = [];
+let calYear, calMonth;
+const catColors = { birthday:'cat-birthday', anniversary:'cat-anniversary', holiday:'cat-holiday', other:'cat-other' };
+const catDots   = { birthday:'#e91e8c', anniversary:'#3b5bdb', holiday:'#2d6a4f', other:'#b45309' };
+const catEmoji  = { birthday:'🎂', anniversary:'💍', holiday:'🎉', other:'📌' };
+ 
+function loadDates() {
+  const saved = localStorage.getItem('important_dates');
+  importantDates = saved ? JSON.parse(saved) : [
+    { id:1, name:"David's Birthday",  date:'1987-10-15', repeat:'yes', cat:'birthday' },
+    { id:2, name:"Kelsey's Birthday", date:'1990-03-22', repeat:'yes', cat:'birthday' },
+    { id:3, name:'Wedding Anniversary', date:'2015-06-06', repeat:'yes', cat:'anniversary' },
+    { id:4, name:'Christmas', date:'2026-12-25', repeat:'yes', cat:'holiday' },
+  ];
+}
+ 
+function saveDates() {
+  localStorage.setItem('important_dates', JSON.stringify(importantDates));
+}
+ 
+function setDatesView(v) {
+  document.getElementById('dates-calendar-view').style.display = v==='calendar' ? 'block' : 'none';
+  document.getElementById('dates-list-view').style.display = v==='list' ? 'block' : 'none';
+  document.getElementById('btn-cal').classList.toggle('active', v==='calendar');
+  document.getElementById('btn-list').classList.toggle('active', v==='list');
+  if (v==='calendar') renderCalendar();
+  else renderList();
+}
+ 
+function openAddDate() {
+  document.getElementById('new-date-name').value = '';
+  document.getElementById('new-date-date').value = '';
+  document.getElementById('new-date-repeat').value = 'yes';
+  document.getElementById('new-date-cat').value = 'birthday';
+  document.getElementById('add-date-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('new-date-name').focus(), 50);
+}
+ 
+function closeAddDate() {
+  document.getElementById('add-date-modal').classList.remove('open');
+}
+ 
+function saveNewDate() {
+  const name = document.getElementById('new-date-name').value.trim();
+  const date = document.getElementById('new-date-date').value;
+  if (!name || !date) { alert('Please fill in name and date.'); return; }
+  importantDates.push({
+    id: Date.now(),
+    name,
+    date,
+    repeat: document.getElementById('new-date-repeat').value,
+    cat: document.getElementById('new-date-cat').value
+  });
+  saveDates();
+  closeAddDate();
+  renderCalendar();
+  renderList();
+  saveData();
+}
+ 
+function deleteDate(id) {
+  importantDates = importantDates.filter(d=>d.id!==id);
+  saveDates();
+  renderCalendar();
+  renderList();
+  saveData();
+}
+ 
+// Returns occurrences of a date entry for a given year/month (handles repeating)
+function getEventsForMonth(yr, mo) {
+  const results = [];
+  importantDates.forEach(d => {
+    const [ey, em, eday] = d.date.split('-').map(Number);
+    if (d.repeat==='yes') {
+      if (em === mo+1) results.push({ ...d, displayDate: new Date(yr, mo, eday) });
+    } else {
+      if (ey===yr && em===mo+1) results.push({ ...d, displayDate: new Date(yr, mo, eday) });
+    }
+  });
+  return results;
+}
+ 
+function renderCalendar() {
+  const now = new Date();
+  if (calYear===undefined) { calYear=now.getFullYear(); calMonth=now.getMonth(); }
+  const label = new Date(calYear, calMonth).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  document.getElementById('cal-month-label').textContent = label;
+ 
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+  const events = getEventsForMonth(calYear, calMonth);
+ 
+  let html = '';
+  // prev month padding
+  for (let i=firstDay-1; i>=0; i--) {
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${daysInPrev-i}</div></div>`;
+  }
+  for (let d=1; d<=daysInMonth; d++) {
+    const isToday = d===now.getDate() && calMonth===now.getMonth() && calYear===now.getFullYear();
+    const dayEvents = events.filter(e=>e.displayDate.getDate()===d);
+    const evHtml = dayEvents.map(e=>`<div class="cal-event ${catColors[e.cat]}" title="${e.name}">${catEmoji[e.cat]} ${e.name}</div>`).join('');
+    html += `<div class="cal-day${isToday?' today':''}"><div class="cal-day-num">${d}</div>${evHtml}</div>`;
+  }
+  // next month padding
+  const total = firstDay + daysInMonth;
+  const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let i=1; i<=remaining; i++) {
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
+  }
+  document.getElementById('cal-days').innerHTML = html;
+}
+ 
+function calPrev() { calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+function calNext() { calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
+ 
+function renderList() {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+ 
+  // Build list with next occurrence
+  const withNext = importantDates.map(d => {
+    const [ey, em, eday] = d.date.split('-').map(Number);
+    let next;
+    if (d.repeat==='yes') {
+      next = new Date(now.getFullYear(), em-1, eday);
+      if (next < today) next = new Date(now.getFullYear()+1, em-1, eday);
+    } else {
+      next = new Date(ey, em-1, eday);
+    }
+    const diff = Math.round((next-today)/(1000*60*60*24));
+    return { ...d, next, diff };
+  }).sort((a,b)=>a.diff-b.diff);
+ 
+  const upcoming = withNext.filter(d=>d.diff>=0);
+  const past = withNext.filter(d=>d.diff<0);
+ 
+  function itemHtml(d) {
+    const diffLabel = d.diff===0 ? '🎉 Today!' : d.diff===1 ? 'Tomorrow' : `In ${d.diff} days`;
+    const dateLabel = d.next.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    const origYear = d.date.split('-')[0];
+    const age = d.cat==='birthday' ? ` · Turns ${now.getFullYear()-+origYear}` : '';
+    return `<div class="date-item">
+      <div class="date-item-dot" style="background:${catDots[d.cat]}"></div>
+      <div class="date-item-info">
+        <div class="date-item-name">${catEmoji[d.cat]} ${d.name}</div>
+        <div class="date-item-date">${dateLabel}${age}</div>
+      </div>
+      <div class="date-item-upcoming">${d.diff>=0?diffLabel:''}</div>
+      <button class="date-item-delete" onclick="deleteDate(${d.id})" title="Delete">✕</button>
+    </div>`;
+  }
+ 
+  let html = '';
+  if (upcoming.length) {
+    html += `<div class="dates-section-header">Upcoming</div><div class="dates-list">${upcoming.map(itemHtml).join('')}</div>`;
+  }
+  if (past.length) {
+    html += `<div class="dates-section-header" style="margin-top:1.25rem">Past (this year)</div><div class="dates-list">${past.map(itemHtml).join('')}</div>`;
+  }
+  if (!importantDates.length) html = '<p style="color:var(--text-muted);font-size:0.85rem;">No dates added yet. Click + Add Date to get started.</p>';
+  document.getElementById('dates-list-container').innerHTML = html;
+}
+ 
 // INIT
 document.addEventListener('DOMContentLoaded', function() {
   checkAuth();
@@ -656,6 +947,8 @@ document.addEventListener('DOMContentLoaded', function() {
   updateBudgetTotals();
   updateTotalBalance();
   updateMonth();
+  loadDates();
+  renderCalendar();
   loadData();
   document.addEventListener('input', saveData);
 });
