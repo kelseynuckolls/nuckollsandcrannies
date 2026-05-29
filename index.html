@@ -915,13 +915,11 @@ function renderList() {
   function itemHtml(d) {
     const diffLabel = d.diff===0 ? '🎉 Today!' : d.diff===1 ? 'Tomorrow' : `In ${d.diff} days`;
     const dateLabel = d.next.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-    const origYear = d.date.split('-')[0];
-    const age = d.cat==='birthday' ? ` · Turns ${now.getFullYear()-+origYear}` : '';
     return `<div class="date-item">
       <div class="date-item-dot" style="background:${catDots[d.cat]}"></div>
       <div class="date-item-info">
         <div class="date-item-name">${catEmoji[d.cat]} ${d.name}</div>
-        <div class="date-item-date">${dateLabel}${age}</div>
+        <div class="date-item-date">${dateLabel}</div>
       </div>
       <div class="date-item-upcoming">${d.diff>=0?diffLabel:''}</div>
       <button class="date-item-delete" onclick="deleteDate(${d.id})" title="Delete">✕</button>
