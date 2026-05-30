@@ -182,7 +182,31 @@
   .proj-controls label { font-size: 0.78rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.3rem; }
   .proj-controls input[type="number"] { width: 100px; }
 
-  /* IMPORTANT DATES */
+  /* HOME DASHBOARD */
+  .home-hero { margin-bottom: 1.75rem; }
+  .home-hero h1 { font-family: var(--font); font-size: 2rem; font-weight: 700; color: var(--text); }
+  .home-hero p { color: var(--text-muted); font-size: 0.95rem; margin-top: 0.2rem; }
+  .home-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
+  .home-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: var(--shadow); cursor: pointer; transition: box-shadow 0.15s; }
+  .home-stat:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .home-stat-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.4rem; }
+  .home-stat-value { font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .home-stat-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .home-upcoming { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.25rem; }
+  .home-upcoming h2 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 1rem; font-family: var(--font-sans); border: none; padding: 0; }
+  .home-event-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+  .home-event-row:last-child { border-bottom: none; }
+  .home-event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .home-event-name { flex: 1; font-weight: 500; }
+  .home-event-date { color: var(--text-muted); font-size: 0.78rem; }
+  .home-event-count { font-size: 0.75rem; font-weight: 600; color: var(--accent); }
+  .home-quicklinks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .home-ql { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; box-shadow: var(--shadow); transition: all 0.15s; }
+  .home-ql:hover { background: var(--accent-light); border-color: var(--accent); }
+  .home-ql-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .home-ql-label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+
+  /* HOME DASHBOARD */
   .dates-toolbar { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap; }
   .view-toggle { display:flex; border:1px solid var(--border-strong); border-radius:6px; overflow:hidden; }
   .view-btn { padding:0.4rem 0.9rem; font-size:0.8rem; font-weight:600; cursor:pointer; border:none; background:var(--surface2); color:var(--text-muted); transition:all 0.15s; }
@@ -275,7 +299,8 @@
 
 <nav class="nav">
   <div class="nav-brand">Budget Dashboard</div>
-  <div class="tab active" onclick="showPage('budget', this)">Monthly Budget</div>
+  <div class="tab active" onclick="showPage('home', this)">🏠 Home</div>
+  <div class="tab" onclick="showPage('budget', this)">Monthly Budget</div>
   <div class="tab" onclick="showPage('accounts', this)">Accounts</div>
   <div class="tab" onclick="showPage('projections', this)">Investment Projections</div>
   <div class="tab" onclick="showPage('notes', this)">Daily Checking</div>
@@ -287,8 +312,46 @@
   </div>
 </nav>
 
+<!-- HOME DASHBOARD -->
+<div id="page-home" class="page active">
+  <div class="home-hero">
+    <h1>👋 Welcome back, Nuckolls family</h1>
+    <p id="home-date-label"></p>
+  </div>
+
+  <div class="home-grid">
+    <div class="home-stat" onclick="showPageByName('accounts')">
+      <div class="home-stat-label">💰 Total Portfolio</div>
+      <div class="home-stat-value" id="home-portfolio" style="color:var(--accent)">—</div>
+      <div class="home-stat-sub">All investment accounts</div>
+    </div>
+    <div class="home-stat" onclick="showPageByName('budget')">
+      <div class="home-stat-label">📊 Budget Remaining</div>
+      <div class="home-stat-value" id="home-remaining">—</div>
+      <div class="home-stat-sub" id="home-budget-month-label">This month</div>
+    </div>
+    <div class="home-stat" onclick="showPageByName('projections')">
+      <div class="home-stat-label">📈 10-Year Projection</div>
+      <div class="home-stat-value" id="home-projection" style="color:var(--purple)">—</div>
+      <div class="home-stat-sub">At 7.5% avg return</div>
+    </div>
+  </div>
+
+  <div class="home-upcoming">
+    <h2>🗓 Upcoming Dates</h2>
+    <div id="home-upcoming-list"><p style="color:var(--text-muted);font-size:0.85rem;">Loading...</p></div>
+  </div>
+
+  <div class="home-quicklinks">
+    <div class="home-ql" onclick="showPageByName('budget')"><div class="home-ql-icon">📋</div><div class="home-ql-label">Monthly Budget</div></div>
+    <div class="home-ql" onclick="showPageByName('accounts')"><div class="home-ql-icon">🏦</div><div class="home-ql-label">Accounts</div></div>
+    <div class="home-ql" onclick="showPageByName('notes')"><div class="home-ql-icon">🏧</div><div class="home-ql-label">Daily Checking</div></div>
+    <div class="home-ql" onclick="showPageByName('dates')"><div class="home-ql-icon">🎂</div><div class="home-ql-label">Important Dates</div></div>
+  </div>
+</div>
+
 <!-- MONTHLY BUDGET — untouched from original -->
-<div id="page-budget" class="page active">
+<div id="page-budget" class="page">
   <div class="page-header">
     <h1>Monthly Budget Breakdown</h1>
     <p><span id="date-display-3">May 2026</span> · Edit blue columns as the month happens</p>
@@ -782,8 +845,8 @@ const catDots   = { birthday:'#e91e8c', anniversary:'#3b5bdb', holiday:'#2d6a4f'
 const catEmoji  = { birthday:'🎂', anniversary:'💍', holiday:'🎉', other:'📌' };
 
 function loadDates() {
-  const saved = localStorage.getItem('important_dates');
-  importantDates = saved ? JSON.parse(saved) : [
+  // Default placeholder dates — will be overwritten by Supabase on load
+  importantDates = [
     { id:1, name:"David's Birthday",  date:'1987-10-15', repeat:'yes', cat:'birthday' },
     { id:2, name:"Kelsey's Birthday", date:'1990-03-22', repeat:'yes', cat:'birthday' },
     { id:3, name:'Wedding Anniversary', date:'2015-06-06', repeat:'yes', cat:'anniversary' },
@@ -791,8 +854,34 @@ function loadDates() {
   ];
 }
 
-function saveDates() {
-  localStorage.setItem('important_dates', JSON.stringify(importantDates));
+async function saveDates() {
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/budget_data`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ id: 'dates', data: importantDates, updated_at: new Date().toISOString() })
+    });
+  } catch(e) { console.warn('Dates save failed', e); }
+}
+
+async function loadDatesFromSupabase() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/budget_data?id=eq.dates&select=data`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    const rows = await res.json();
+    if (rows && rows.length > 0 && rows[0].data) {
+      importantDates = rows[0].data;
+    }
+  } catch(e) { console.warn('Dates load failed', e); }
+  renderCalendar();
+  renderList();
+  renderHomeUpcoming();
 }
 
 function setDatesView(v) {
@@ -832,7 +921,7 @@ function saveNewDate() {
   closeAddDate();
   renderCalendar();
   renderList();
-  saveData();
+  renderHomeUpcoming();
 }
 
 function deleteDate(id) {
@@ -840,7 +929,7 @@ function deleteDate(id) {
   saveDates();
   renderCalendar();
   renderList();
-  saveData();
+  renderHomeUpcoming();
 }
 
 // Returns occurrences of a date entry for a given year/month (handles repeating)
@@ -937,6 +1026,82 @@ function renderList() {
   document.getElementById('dates-list-container').innerHTML = html;
 }
 
+// HOME DASHBOARD
+function showPageByName(id) {
+  const tab = [...document.querySelectorAll('.tab')].find(t => t.getAttribute('onclick')?.includes(`'${id}'`));
+  if (tab) showPage(id, tab);
+}
+
+function renderHomeDashboard() {
+  // Date label
+  document.getElementById('home-date-label').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+
+  // Portfolio total
+  const ids = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k'];
+  const total = ids.reduce((s,id)=>s+(parseFloat(document.getElementById(id)?.value)||0),0);
+  document.getElementById('home-portfolio').textContent = fmt(total);
+
+  // Budget remaining
+  let incomeA=0, expA=0, invA=0;
+  document.querySelectorAll('.actual-input').forEach(inp => {
+    const i = parseInt(inp.dataset.row), row = budgetRows[i];
+    if (!row || row.section) return;
+    const a = parseFloat(inp.value)||0;
+    if (row.type==='income') incomeA+=a;
+    else if (row.type==='invest') invA+=a;
+    else expA+=a;
+  });
+  const remaining = incomeA - expA - invA;
+  const remEl = document.getElementById('home-remaining');
+  remEl.textContent = (remaining>=0?'':'-') + fmt(Math.abs(remaining));
+  remEl.style.color = remaining >= 0 ? 'var(--accent)' : 'var(--red)';
+
+  // 10-year projection
+  const proj10 = projAccounts.reduce((s,a) => {
+    const bal = +(document.getElementById(a.id)?.value)||0;
+    return s + project(bal, a.rate, a.contrib(), 10);
+  }, 0);
+  document.getElementById('home-projection').textContent = fmt(proj10);
+
+  // Budget month label
+  const inp = document.getElementById('budget-month');
+  if (inp) {
+    const [y,m] = inp.value.split('-');
+    document.getElementById('home-budget-month-label').textContent =
+      new Date(y, m-1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  }
+}
+
+function renderHomeUpcoming() {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const withNext = importantDates.map(d => {
+    const [ey, em, eday] = d.date.split('-').map(Number);
+    let next;
+    if (d.repeat==='yes') {
+      next = new Date(now.getFullYear(), em-1, eday);
+      if (next < today) next = new Date(now.getFullYear()+1, em-1, eday);
+    } else {
+      next = new Date(ey, em-1, eday);
+    }
+    const diff = Math.round((next-today)/(1000*60*60*24));
+    return { ...d, next, diff };
+  }).filter(d=>d.diff>=0).sort((a,b)=>a.diff-b.diff).slice(0,5);
+
+  const el = document.getElementById('home-upcoming-list');
+  if (!withNext.length) { el.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;">No upcoming dates. Add some in the Important Dates tab!</p>'; return; }
+  el.innerHTML = withNext.map(d => {
+    const diffLabel = d.diff===0 ? '🎉 Today!' : d.diff===1 ? 'Tomorrow' : `In ${d.diff} days`;
+    const dateLabel = d.next.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+    return `<div class="home-event-row">
+      <div class="home-event-dot" style="background:${catDots[d.cat]}"></div>
+      <div class="home-event-name">${catEmoji[d.cat]} ${d.name}</div>
+      <div class="home-event-date">${dateLabel}</div>
+      <div class="home-event-count">${diffLabel}</div>
+    </div>`;
+  }).join('');
+}
+
 // INIT
 document.addEventListener('DOMContentLoaded', function() {
   checkAuth();
@@ -946,8 +1111,11 @@ document.addEventListener('DOMContentLoaded', function() {
   updateMonth();
   loadDates();
   renderCalendar();
+  renderHomeDashboard();
+  renderHomeUpcoming();
   loadData();
-  document.addEventListener('input', saveData);
+  loadDatesFromSupabase();
+  document.addEventListener('input', () => { saveData(); renderHomeDashboard(); });
 });
 </script>
 </body>
