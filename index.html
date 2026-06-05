@@ -350,7 +350,7 @@
   </div>
 </div>
 
-<!-- MONTHLY BUDGET — untouched from original -->
+<!-- MONTHLY BUDGET -->
 <div id="page-budget" class="page">
   <div class="page-header">
     <h1>Monthly Budget Breakdown</h1>
@@ -370,7 +370,7 @@
   </div>
 </div>
 
-<!-- ACCOUNTS — original + renamed MSFT Stocks-Fidelity -->
+<!-- ACCOUNTS -->
 <div id="page-accounts" class="page">
   <div class="page-header">
     <h1>Account Snapshot</h1>
@@ -396,7 +396,7 @@
   </div>
 </div>
 
-<!-- INVESTMENT PROJECTIONS — new tab -->
+<!-- INVESTMENT PROJECTIONS -->
 <div id="page-projections" class="page">
   <div class="page-header">
     <h1>Investment Projections</h1>
@@ -415,8 +415,11 @@
       <label>Brokerage contrib/mo $
         <input type="number" id="proj-brok-contrib" value="500" min="0" oninput="renderProjections()">
       </label>
+      <label>STACK employer match %
+        <input type="number" id="proj-stack-match" value="0" min="0" max="4.9" step="0.1" oninput="renderProjections()">
+      </label>
     </div>
-    <div class="note">401(k) accounts are projected on current balance + growth only — no contributions added.</div>
+    <div class="note">STACK 401(k) includes David's 7% salary contribution ($1,021/mo). Enter employer match % above (under 5%) once confirmed. Other 401(k)s grow on current balance only. Return rates: IRA/Brokerage 7.5% · Roth/401(k) 8% · MSFT Stocks 9%.</div>
   </div>
 
   <div class="milestone-grid" id="milestone-grid"></div>
@@ -462,7 +465,7 @@
   </div>
 </div>
 
-<!-- DAILY CHECKING — just the Google Sheet embed -->
+<!-- DAILY CHECKING -->
 <div id="page-notes" class="page">
   <div class="page-header">
     <h1>Daily Checking</h1>
@@ -584,7 +587,7 @@ function showPage(id, el) {
 
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
 
-// BUDGET — exactly as original
+// BUDGET
 const budgetRows = [
   { cat: 'Income - David', type: 'income', budgeted: 4500 },
   { cat: 'Income - You', type: 'income', budgeted: 3000 },
@@ -681,6 +684,17 @@ function updateMonth() {
 }
 
 // PROJECTIONS
+// David's STACK contribution: 7% of $175,000 salary = $12,250/yr = $1,021/mo
+const STACK_SALARY = 175000;
+const STACK_EMP_RATE = 0.07;
+const STACK_EMP_ANNUAL = Math.round(STACK_SALARY * STACK_EMP_RATE);
+
+function getStackContrib() {
+  const matchPct = (+(document.getElementById('proj-stack-match')?.value) || 0) / 100;
+  const matchAnnual = Math.round(STACK_SALARY * matchPct);
+  return STACK_EMP_ANNUAL + matchAnnual;
+}
+
 const projAccounts = [
   { id:'acct-rollover',       name:'Rollover IRA (Fidelity)',  bucket:'deferred', rate:0.075, contrib:()=>0 },
   { id:'acct-fidelity-ind',   name:'Individual Fidelity Go',   bucket:'taxable',  rate:0.075, contrib:()=>0 },
@@ -688,7 +702,7 @@ const projAccounts = [
   { id:'acct-vanguard-broker',name:'Vanguard Brokerage',       bucket:'taxable',  rate:0.075, contrib:()=>(+(document.getElementById('proj-brok-contrib').value)||0)*12 },
   { id:'acct-msft',           name:'MSFT Stocks-Fidelity',     bucket:'taxable',  rate:0.09,  contrib:()=>0 },
   { id:'acct-msft-401k',      name:'Microsoft 401(k)',         bucket:'deferred', rate:0.08,  contrib:()=>0 },
-  { id:'acct-stack-401k',     name:'STACK 401(k)',             bucket:'deferred', rate:0.08,  contrib:()=>0 },
+  { id:'acct-stack-401k',     name:'STACK 401(k)',             bucket:'deferred', rate:0.08,  contrib:()=>getStackContrib() },
 ];
 
 function project(balance, rate, annualContrib, years) {
@@ -700,7 +714,6 @@ function project(balance, rate, annualContrib, years) {
 function renderProjections() {
   const curYear = new Date().getFullYear();
 
-  // milestones
   const totals = [5,10,15].map(yr =>
     projAccounts.reduce((s,a) => s + project(+(document.getElementById(a.id)?.value)||0, a.rate, a.contrib(), yr), 0)
   );
@@ -714,7 +727,6 @@ function renderProjections() {
     <div class="milestone-card"><div class="m-label">15-Year Projection</div><div class="m-val" style="color:var(--accent-mid)">${fmt(totals[2])}</div><div class="m-yr">${curYear+15}</div></div>
   `;
 
-  // per-account table
   let html = '', t5=0, t10=0, t15=0;
   projAccounts.forEach(a => {
     const bal = +(document.getElementById(a.id)?.value)||0;
@@ -729,10 +741,11 @@ function renderProjections() {
 
   const rothC = +(document.getElementById('proj-roth-contrib').value)||0;
   const brokC = (+(document.getElementById('proj-brok-contrib').value)||0)*12;
+  const matchPct = +(document.getElementById('proj-stack-match')?.value)||0;
+  const matchAnnual = Math.round(STACK_SALARY * matchPct / 100);
   document.getElementById('proj-note').textContent =
-    `Contributions modeled: Roth IRA ${fmt(rothC)}/yr · Vanguard Brokerage ${fmt(brokC)}/yr. 401(k)s grow on current balance only. Return rates: IRA/Brokerage 7.5% · Roth/401(k) 8% · MSFT Stocks 9%.`;
+    `Contributions modeled: Roth IRA ${fmt(rothC)}/yr · Vanguard Brokerage ${fmt(brokC)}/yr · STACK 401(k) ${fmt(STACK_EMP_ANNUAL)}/yr (David, 7% of salary)${matchAnnual > 0 ? ' + ' + fmt(matchAnnual) + '/yr (employer match)' : ' · Enter employer match % above once confirmed'}. Return rates: IRA/Brokerage 7.5% · Roth/401(k) 8% · MSFT Stocks 9%.`;
 
-  // bucket table
   const buckets = [
     { key:'deferred', label:'Tax-Deferred' },
     { key:'free',     label:'Tax-Free' },
@@ -845,7 +858,6 @@ const catDots   = { birthday:'#e91e8c', anniversary:'#3b5bdb', holiday:'#2d6a4f'
 const catEmoji  = { birthday:'🎂', anniversary:'💍', holiday:'🎉', other:'📌' };
 
 function loadDates() {
-  // Default placeholder dates — will be overwritten by Supabase on load
   importantDates = [
     { id:1, name:"David's Birthday",  date:'1987-10-15', repeat:'yes', cat:'birthday' },
     { id:2, name:"Kelsey's Birthday", date:'1990-03-22', repeat:'yes', cat:'birthday' },
@@ -932,7 +944,6 @@ function deleteDate(id) {
   renderHomeUpcoming();
 }
 
-// Returns occurrences of a date entry for a given year/month (handles repeating)
 function getEventsForMonth(yr, mo) {
   const results = [];
   importantDates.forEach(d => {
@@ -958,7 +969,6 @@ function renderCalendar() {
   const events = getEventsForMonth(calYear, calMonth);
 
   let html = '';
-  // prev month padding
   for (let i=firstDay-1; i>=0; i--) {
     html += `<div class="cal-day other-month"><div class="cal-day-num">${daysInPrev-i}</div></div>`;
   }
@@ -968,7 +978,6 @@ function renderCalendar() {
     const evHtml = dayEvents.map(e=>`<div class="cal-event ${catColors[e.cat]}" title="${e.name}">${catEmoji[e.cat]} ${e.name}</div>`).join('');
     html += `<div class="cal-day${isToday?' today':''}"><div class="cal-day-num">${d}</div>${evHtml}</div>`;
   }
-  // next month padding
   const total = firstDay + daysInMonth;
   const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
   for (let i=1; i<=remaining; i++) {
@@ -984,7 +993,6 @@ function renderList() {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  // Build list with next occurrence
   const withNext = importantDates.map(d => {
     const [ey, em, eday] = d.date.split('-').map(Number);
     let next;
@@ -1033,15 +1041,12 @@ function showPageByName(id) {
 }
 
 function renderHomeDashboard() {
-  // Date label
   document.getElementById('home-date-label').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 
-  // Portfolio total
   const ids = ['acct-rollover','acct-fidelity-ind','acct-roth1','acct-vanguard-broker','acct-msft','acct-msft-401k','acct-stack-401k'];
   const total = ids.reduce((s,id)=>s+(parseFloat(document.getElementById(id)?.value)||0),0);
   document.getElementById('home-portfolio').textContent = fmt(total);
 
-  // Budget remaining
   let incomeA=0, expA=0, invA=0;
   document.querySelectorAll('.actual-input').forEach(inp => {
     const i = parseInt(inp.dataset.row), row = budgetRows[i];
@@ -1056,14 +1061,12 @@ function renderHomeDashboard() {
   remEl.textContent = (remaining>=0?'':'-') + fmt(Math.abs(remaining));
   remEl.style.color = remaining >= 0 ? 'var(--accent)' : 'var(--red)';
 
-  // 10-year projection
   const proj10 = projAccounts.reduce((s,a) => {
     const bal = +(document.getElementById(a.id)?.value)||0;
     return s + project(bal, a.rate, a.contrib(), 10);
   }, 0);
   document.getElementById('home-projection').textContent = fmt(proj10);
 
-  // Budget month label
   const inp = document.getElementById('budget-month');
   if (inp) {
     const [y,m] = inp.value.split('-');
