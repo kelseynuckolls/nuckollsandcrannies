@@ -277,8 +277,61 @@
   .password-btn:hover { background: var(--accent-mid); }
   .password-error { color: var(--red); font-size: 0.82rem; margin-top: 0.75rem; display: none; }
 
+  /* SAVINGS ACCOUNTS */
+  .savings-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+  .savings-acct-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .savings-acct-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .savings-acct-name { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+  .savings-acct-inst { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.1rem; }
+  .savings-balance-row { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.1rem; }
+  .savings-balance-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+  .savings-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .savings-stat { }
+  .savings-stat-label { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.15rem; }
+  .savings-stat-val { font-size: 0.85rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .savings-history { margin-top: 0.9rem; }
+  .savings-history-label { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+  .savings-history-list { max-height: 90px; overflow-y: auto; }
+  .savings-history-item { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); padding: 0.2rem 0; border-bottom: 1px solid var(--border); }
+  .savings-history-item:last-child { border-bottom: none; }
+  .savings-chg-pos { color: var(--accent); font-weight: 600; }
+  .savings-chg-neg { color: var(--red); font-weight: 600; }
+  .savings-no-history { font-size: 0.72rem; color: var(--text-hint); font-style: italic; }
+  .savings-input-row { display: flex; align-items: center; gap: 0.5rem; }
+  .savings-input-row input[type="number"] { width: 110px; }
+  .savings-update-btn {
+    padding: 0.3rem 0.75rem; border: none; border-radius: 5px;
+    background: var(--accent); color: white; font-size: 0.75rem; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+  }
+  .savings-update-btn:hover { background: var(--accent-mid); }
+  .savings-apy-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem; }
+  .savings-apy-row label { font-size: 0.72rem; color: var(--text-muted); }
+  .savings-apy-row input[type="number"] { width: 70px; }
+
+  .savings-combined-bar {
+    background: var(--accent-light);
+    border: 1px solid #b2d8c7;
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .savings-combined-label { font-size: 0.78rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+  .savings-combined-val { font-size: 1.3rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .savings-combined-sub { font-size: 0.72rem; color: var(--accent-mid); margin-top: 0.1rem; }
+
+  .savings-chart-wrap { position: relative; width: 100%; height: 220px; margin-top: 1rem; }
+
   @media (max-width: 700px) {
-    .grid-2, .grid-3, .grid-4, .milestone-grid { grid-template-columns: 1fr; }
+    .grid-2, .grid-3, .grid-4, .milestone-grid, .savings-cards { grid-template-columns: 1fr; }
     .page { padding: 1rem; }
     .nav { padding: 0 1rem; }
   }
@@ -376,6 +429,8 @@
     <h1>Account Snapshot</h1>
     <p>Current balances — update as they change</p>
   </div>
+
+  <!-- INVESTMENT ACCOUNTS -->
   <div class="card mb2">
     <h2>Investment &amp; Savings Accounts</h2>
     <table class="acct-table">
@@ -393,6 +448,33 @@
         <tr><td><strong>Total</strong></td><td colspan="3"></td><td><strong id="total-invested-balance">$179,398</strong></td></tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- SAVINGS ACCOUNTS -->
+  <div class="card">
+    <h2>💵 Savings Accounts</h2>
+
+    <div class="savings-combined-bar">
+      <div>
+        <div class="savings-combined-label">Combined savings balance</div>
+        <div class="savings-combined-sub" id="savings-combined-sub">Est. annual earnings: —</div>
+      </div>
+      <div class="savings-combined-val" id="savings-combined-total">—</div>
+    </div>
+
+    <div class="savings-cards" id="savings-cards-container"></div>
+
+    <div class="card" style="background:var(--surface2); box-shadow:none; padding:1rem 1.25rem;">
+      <div style="font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">5-Year Growth Projection</div>
+      <div class="savings-chart-wrap">
+        <canvas id="savings-growth-chart" role="img" aria-label="Line chart showing 5-year projected growth for both savings accounts"></canvas>
+      </div>
+      <div style="display:flex; gap:1.25rem; margin-top:0.75rem; font-size:0.72rem; color:var(--text-muted);">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#1d4ed8;margin-right:4px;vertical-align:middle;"></span>Wells Fargo Savings</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#2d6a4f;margin-right:4px;vertical-align:middle;"></span>Western Alliance HYSA</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#888;margin-right:4px;vertical-align:middle;border-style:dashed;"></span>Combined</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -491,7 +573,6 @@
     <button class="add-date-btn" onclick="openAddDate()">+ Add Date</button>
   </div>
 
-  <!-- CALENDAR VIEW -->
   <div id="dates-calendar-view">
     <div class="card">
       <div class="cal-nav">
@@ -507,7 +588,6 @@
     </div>
   </div>
 
-  <!-- LIST VIEW -->
   <div id="dates-list-view" style="display:none;">
     <div class="card">
       <div id="dates-list-container"></div>
@@ -550,6 +630,7 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 // PASSWORD
 const CORRECT_PASSWORD = 'Charli2020!';
@@ -583,9 +664,11 @@ function showPage(id, el) {
   document.getElementById('page-' + id).classList.add('active');
   el.classList.add('active');
   if (id === 'projections') renderProjections();
+  if (id === 'accounts') { renderSavingsCards(); renderSavingsChart(); }
 }
 
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+function fmtDec(n) { return '$' + n.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}); }
 
 // BUDGET
 const budgetRows = [
@@ -656,7 +739,7 @@ function updateBudgetTotals() {
     if (vc) {
       const good = row.type !== 'income' && row.type !== 'invest';
       vc.textContent = v===0 ? '$0' : `${v>0?'+':''}$${Math.abs(v).toLocaleString()}${v<0?' under':' over'}`;
-      vc.style.color = v===0 ? 'var(--text-muted)' : (good?(v>0?'var(--red)'  :'var(--accent)'):(v>0?'var(--accent)':'var(--red)'));
+      vc.style.color = v===0 ? 'var(--text-muted)' : (good?(v>0?'var(--red)':'var(--accent)'):(v>0?'var(--accent)':'var(--red)'));
     }
     if (row.type==='income'){bI+=b;aI+=a;} else if(row.type==='invest'){bV+=b;aV+=a;} else{bE+=b;aE+=a;}
   });
@@ -683,8 +766,242 @@ function updateMonth() {
   ['date-display-1','date-display-2','date-display-3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=label;});
 }
 
-// PROJECTIONS
-// David's STACK contribution: 7% of $175,000 salary = $12,250/yr = $1,021/mo
+// ─── SAVINGS ACCOUNTS ───────────────────────────────────────────────────────
+
+const savingsAccounts = [
+  {
+    id: 'savings-wf',
+    name: 'Wells Fargo Savings',
+    inst: 'Wells Fargo',
+    apy: 0.01,
+    balance: 1405,
+    history: []
+  },
+  {
+    id: 'savings-wa',
+    name: 'High Yield Savings',
+    inst: 'Western Alliance',
+    apy: 3.8,
+    balance: 4316,
+    history: []
+  }
+];
+
+let savingsChartInstance = null;
+
+function savingsAnnual(acct) { return acct.balance * (acct.apy / 100); }
+function savingsMonthly(acct) { return savingsAnnual(acct) / 12; }
+
+function renderSavingsCards() {
+  const container = document.getElementById('savings-cards-container');
+  if (!container) return;
+
+  container.innerHTML = savingsAccounts.map((acct, idx) => {
+    const lastEntry = acct.history.length > 0 ? acct.history[acct.history.length - 1] : null;
+    const chgHtml = lastEntry && lastEntry.change !== 0
+      ? `<span class="${lastEntry.change > 0 ? 'savings-chg-pos' : 'savings-chg-neg'}" style="font-size:0.78rem;margin-left:0.5rem;">${lastEntry.change > 0 ? '+' : ''}${fmtDec(lastEntry.change)}</span>`
+      : '';
+
+    const histHtml = acct.history.length === 0
+      ? `<div class="savings-no-history">No updates yet — enter a balance and click Save.</div>`
+      : acct.history.slice().reverse().slice(0, 6).map(h =>
+          `<div class="savings-history-item">
+            <span>${h.date}</span>
+            <span>${fmtDec(h.balance)}</span>
+            <span class="${h.change >= 0 ? 'savings-chg-pos' : 'savings-chg-neg'}">${h.change >= 0 ? '+' : ''}${fmtDec(h.change)}</span>
+          </div>`
+        ).join('');
+
+    return `<div class="savings-acct-card">
+      <div class="savings-acct-header">
+        <div>
+          <div class="savings-acct-name">${acct.name}</div>
+          <div class="savings-acct-inst">${acct.inst}</div>
+        </div>
+        <span style="font-size:0.72rem;background:var(--accent-light);color:var(--accent);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600;">${acct.apy.toFixed(2)}% APY</span>
+      </div>
+
+      <div class="savings-balance-label">Current balance</div>
+      <div class="savings-balance-row">
+        <span style="font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;">${fmtDec(acct.balance)}</span>
+        ${chgHtml}
+      </div>
+
+      <div class="savings-stats">
+        <div class="savings-stat">
+          <div class="savings-stat-label">Monthly est.</div>
+          <div class="savings-stat-val">${fmtDec(savingsMonthly(acct))}</div>
+        </div>
+        <div class="savings-stat">
+          <div class="savings-stat-label">Annual est.</div>
+          <div class="savings-stat-val">${fmtDec(savingsAnnual(acct))}</div>
+        </div>
+        <div class="savings-stat">
+          <div class="savings-stat-label">5-yr growth</div>
+          <div class="savings-stat-val">${fmtDec(acct.balance * Math.pow(1 + acct.apy / 100, 5) - acct.balance)}</div>
+        </div>
+      </div>
+
+      <div style="margin-top:0.9rem;">
+        <div class="savings-balance-label">Update balance</div>
+        <div class="savings-input-row">
+          <input type="number" id="savings-input-bal-${idx}" value="${acct.balance}" step="0.01" min="0">
+          <button class="savings-update-btn" onclick="updateSavingsBalance(${idx})">Save</button>
+        </div>
+        <div class="savings-apy-row">
+          <label>APY %</label>
+          <input type="number" id="savings-input-apy-${idx}" value="${acct.apy}" step="0.01" min="0">
+        </div>
+      </div>
+
+      <div class="savings-history">
+        <div class="savings-history-label">Balance history</div>
+        <div class="savings-history-list">${histHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  updateSavingsCombined();
+}
+
+function updateSavingsBalance(idx) {
+  const newBal = parseFloat(document.getElementById(`savings-input-bal-${idx}`)?.value) || 0;
+  const newApy = parseFloat(document.getElementById(`savings-input-apy-${idx}`)?.value) || 0;
+  const acct = savingsAccounts[idx];
+  const change = parseFloat((newBal - acct.balance).toFixed(2));
+  const today = new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+
+  acct.history.push({ date: today, balance: newBal, change });
+  acct.balance = newBal;
+  acct.apy = newApy;
+
+  renderSavingsCards();
+  renderSavingsChart();
+  saveSavingsData();
+  saveData();
+}
+
+function updateSavingsCombined() {
+  const total = savingsAccounts.reduce((s, a) => s + a.balance, 0);
+  const annualEarnings = savingsAccounts.reduce((s, a) => s + savingsAnnual(a), 0);
+  const el = document.getElementById('savings-combined-total');
+  const sub = document.getElementById('savings-combined-sub');
+  if (el) el.textContent = fmtDec(total);
+  if (sub) sub.textContent = `Est. annual earnings across both accounts: ${fmtDec(annualEarnings)}`;
+}
+
+function renderSavingsChart() {
+  const canvas = document.getElementById('savings-growth-chart');
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  const now = new Date().getFullYear();
+  const labels = Array.from({length: 6}, (_, i) => (now + i).toString());
+
+  function project5(acct) {
+    return Array.from({length: 6}, (_, y) =>
+      parseFloat((acct.balance * Math.pow(1 + acct.apy / 100, y)).toFixed(2))
+    );
+  }
+
+  const d0 = project5(savingsAccounts[0]);
+  const d1 = project5(savingsAccounts[1]);
+  const combined = d0.map((v, i) => parseFloat((v + d1[i]).toFixed(2)));
+
+  if (savingsChartInstance) { savingsChartInstance.destroy(); savingsChartInstance = null; }
+
+  savingsChartInstance = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Wells Fargo Savings',
+          data: d0,
+          borderColor: '#1d4ed8',
+          backgroundColor: 'rgba(29,78,216,0.07)',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.35,
+          borderDash: [5, 4]
+        },
+        {
+          label: 'Western Alliance HYSA',
+          data: d1,
+          borderColor: '#2d6a4f',
+          backgroundColor: 'rgba(45,106,79,0.07)',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.35
+        },
+        {
+          label: 'Combined',
+          data: combined,
+          borderColor: '#888',
+          backgroundColor: 'rgba(136,136,136,0.05)',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.35,
+          borderDash: [3, 3]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' ' + fmtDec(ctx.parsed.y) } }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, callback: v => '$' + v.toLocaleString() } }
+      }
+    }
+  });
+}
+
+// Supabase persistence for savings
+async function saveSavingsData() {
+  try {
+    const payload = savingsAccounts.map(a => ({
+      id: a.id, name: a.name, inst: a.inst, apy: a.apy, balance: a.balance, history: a.history
+    }));
+    await fetch(`${SUPABASE_URL}/rest/v1/budget_data`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ id: 'savings_accounts', data: payload, updated_at: new Date().toISOString() })
+    });
+  } catch(e) { console.warn('Savings save failed', e); }
+}
+
+async function loadSavingsData() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/budget_data?id=eq.savings_accounts&select=data`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    const rows = await res.json();
+    if (rows && rows.length > 0 && rows[0].data) {
+      rows[0].data.forEach(saved => {
+        const acct = savingsAccounts.find(a => a.id === saved.id);
+        if (acct) {
+          acct.balance = saved.balance ?? acct.balance;
+          acct.apy = saved.apy ?? acct.apy;
+          acct.history = saved.history ?? [];
+        }
+      });
+    }
+  } catch(e) { console.warn('Savings load failed', e); }
+  renderSavingsCards();
+  renderSavingsChart();
+}
+
+// ─── PROJECTIONS ─────────────────────────────────────────────────────────────
+
 const STACK_SALARY = 175000;
 const STACK_EMP_RATE = 0.07;
 const STACK_EMP_ANNUAL = Math.round(STACK_SALARY * STACK_EMP_RATE);
@@ -914,18 +1231,14 @@ function openAddDate() {
   setTimeout(()=>document.getElementById('new-date-name').focus(), 50);
 }
 
-function closeAddDate() {
-  document.getElementById('add-date-modal').classList.remove('open');
-}
+function closeAddDate() { document.getElementById('add-date-modal').classList.remove('open'); }
 
 function saveNewDate() {
   const name = document.getElementById('new-date-name').value.trim();
   const date = document.getElementById('new-date-date').value;
   if (!name || !date) { alert('Please fill in name and date.'); return; }
   importantDates.push({
-    id: Date.now(),
-    name,
-    date,
+    id: Date.now(), name, date,
     repeat: document.getElementById('new-date-repeat').value,
     cat: document.getElementById('new-date-cat').value
   });
@@ -1118,6 +1431,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderHomeUpcoming();
   loadData();
   loadDatesFromSupabase();
+  loadSavingsData();
   document.addEventListener('input', () => { saveData(); renderHomeDashboard(); });
 });
 </script>
