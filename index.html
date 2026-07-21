@@ -332,6 +332,30 @@
 
   .savings-chart-wrap { position: relative; width: 100%; height: 220px; margin-top: 1rem; }
 
+  /* CREDIT CARDS */
+  .credit-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .credit-card-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem; }
+  .credit-card-title { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .credit-card-title h3 { font-family: var(--font); font-size: 1rem; }
+  .credit-apr { display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; }
+  .credit-apr input { width: 68px; }
+  .credit-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .credit-field label { display: block; font-size: 0.69rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.25rem; }
+  .credit-field input[type="number"] { width: 100%; }
+  .credit-slider-row { margin-top: 0.85rem; }
+  .credit-slider-label { display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+  .credit-slider-row input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  .credit-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.45rem; margin-top: 1rem; padding-top: 0.9rem; border-top: 1px solid var(--border); }
+  .credit-result { min-width: 0; }
+  .credit-result-label { font-size: 0.64rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+  .credit-result-value { font-size: 0.82rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .credit-warning { grid-column: 1 / -1; padding: 0.6rem 0.75rem; border-radius: 6px; background: var(--amber-light); color: var(--amber); font-size: 0.76rem; font-weight: 600; }
+  .credit-summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; padding: 0.85rem 1rem; background: var(--red-light); border: 1px solid #efc4c0; border-radius: var(--radius); }
+  .credit-summary-label { font-size: 0.72rem; color: var(--red); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  .credit-summary-value { color: var(--red); font-size: 1.2rem; font-weight: 700; }
+  @media (max-width: 750px) { .credit-card-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 430px) { .credit-results { grid-template-columns: 1fr 1fr; } .credit-fields { grid-template-columns: 1fr; } }
+
   /* COOKBOOK */
   .modal-field textarea {
     width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--border-strong); border-radius: 6px;
@@ -483,6 +507,20 @@
         <tr><td><strong>Total</strong></td><td colspan="3"></td><td><strong id="total-invested-balance">$179,398</strong></td></tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- CREDIT CARDS -->
+  <div class="card mb2">
+    <h2>Credit Cards &amp; Payoff Planner</h2>
+    <div class="credit-summary">
+      <div>
+        <div class="credit-summary-label">Total credit-card balance</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);">Balances and payoff settings save automatically</div>
+      </div>
+      <div class="credit-summary-value" id="credit-total-balance">$0.00</div>
+    </div>
+    <div class="credit-card-grid" id="credit-card-grid"></div>
+    <div class="note">Estimates assume the APR stays fixed, interest compounds monthly, no new charges are made, and the selected payment is made once per month.</div>
   </div>
 
   <!-- SAVINGS ACCOUNTS -->
@@ -762,7 +800,7 @@ function showPage(id, el) {
   document.getElementById('page-' + id).classList.add('active');
   el.classList.add('active');
   if (id === 'projections') renderProjections();
-  if (id === 'accounts') { renderSavingsCards(); renderSavingsChart(); }
+  if (id === 'accounts') { renderCreditCards(); renderSavingsCards(); renderSavingsChart(); }
   if (id === 'cookbook') renderCookbook();
 }
 
@@ -855,6 +893,146 @@ function updateTotalBalance() {
   const total = ids.reduce((s,id)=>s+(parseFloat(document.getElementById(id)?.value)||0),0);
   const el = document.getElementById('total-invested-balance');
   if (el) el.textContent = fmt(total);
+}
+
+// CREDIT CARDS
+const creditCards = [
+  { id: 'wf-3178', name: 'WF 3178', apr: 23, balance: 0, payment: 250 },
+  { id: 'wf-0284', name: 'WF 0284', apr: 0, balance: 0, payment: 200 },
+  { id: 'citibank', name: 'Citibank', apr: 29, balance: 0, payment: 250 },
+  { id: 'capital-one', name: 'Capital One', apr: null, balance: 0, payment: 150 }
+];
+
+function escCreditAttr(value) {
+  return String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function creditSliderMax(card) {
+  return Math.max(500, Math.ceil(Math.max(card.balance, card.payment) / 100) * 100);
+}
+
+function calculateCreditPayoff(balance, apr, payment) {
+  if (balance <= 0) return { status: 'paid', months: 0, interest: 0, date: new Date() };
+  if (payment <= 0) return { status: 'no-payment' };
+  const monthlyRate = Math.max(0, apr) / 1200;
+  const firstInterest = balance * monthlyRate;
+  if (monthlyRate > 0 && payment <= firstInterest) return { status: 'insufficient', firstInterest };
+
+  let remaining = balance;
+  let interest = 0;
+  let months = 0;
+  while (remaining > 0.005 && months < 1200) {
+    const charge = remaining * monthlyRate;
+    interest += charge;
+    remaining = Math.max(0, remaining + charge - payment);
+    months++;
+  }
+  if (months >= 1200 && remaining > 0.005) return { status: 'too-long' };
+  const payoffDate = new Date();
+  payoffDate.setDate(1);
+  payoffDate.setMonth(payoffDate.getMonth() + months);
+  return { status: 'ok', months, interest, date: payoffDate };
+}
+
+function creditDuration(months) {
+  if (months === 0) return 'Paid off';
+  const years = Math.floor(months / 12), rem = months % 12;
+  return [years ? `${years} yr${years === 1 ? '' : 's'}` : '', rem ? `${rem} mo` : ''].filter(Boolean).join(' ');
+}
+
+function creditResultHtml(card) {
+  if (card.apr === null || !Number.isFinite(card.apr)) {
+    return '<div class="credit-warning">Enter the current APR to calculate a payoff estimate.</div>';
+  }
+  const result = calculateCreditPayoff(card.balance, card.apr, card.payment);
+  if (result.status === 'no-payment') return '<div class="credit-warning">Enter a monthly payment greater than $0.</div>';
+  if (result.status === 'insufficient') return `<div class="credit-warning">Payment is too low: first-month interest is ${fmtDec(result.firstInterest)}. Choose more than that amount to reduce the balance.</div>`;
+  if (result.status === 'too-long') return '<div class="credit-warning">This payment would take more than 100 years. Increase it to see a useful estimate.</div>';
+  const date = result.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  return `
+    <div class="credit-result"><div class="credit-result-label">Payoff time</div><div class="credit-result-value">${creditDuration(result.months)}</div></div>
+    <div class="credit-result"><div class="credit-result-label">Total interest</div><div class="credit-result-value">${fmtDec(result.interest)}</div></div>
+    <div class="credit-result"><div class="credit-result-label">Payoff date</div><div class="credit-result-value">${date}</div></div>`;
+}
+
+function renderCreditCards() {
+  const grid = document.getElementById('credit-card-grid');
+  if (!grid) return;
+  grid.innerHTML = creditCards.map((card, index) => {
+    const max = creditSliderMax(card);
+    const aprValue = card.apr === null ? '' : card.apr;
+    return `<section class="credit-card-item" aria-labelledby="credit-title-${index}">
+      <div class="credit-card-title">
+        <h3 id="credit-title-${index}">${escCreditAttr(card.name)}</h3>
+        <label class="credit-apr">APR <input type="number" min="0" max="100" step="0.01" value="${aprValue}" placeholder="Unknown" aria-label="${escCreditAttr(card.name)} APR" oninput="updateCreditCard(${index}, 'apr', this.value)">%</label>
+      </div>
+      <div class="credit-fields">
+        <div class="credit-field"><label for="credit-balance-${index}">Current balance</label><input id="credit-balance-${index}" type="number" min="0" step="0.01" value="${card.balance}" oninput="updateCreditCard(${index}, 'balance', this.value)"></div>
+        <div class="credit-field"><label for="credit-payment-${index}">Monthly payment</label><input id="credit-payment-${index}" type="number" min="0" step="1" value="${card.payment}" oninput="updateCreditPayment(${index}, this.value, 'number')"></div>
+      </div>
+      <div class="credit-slider-row">
+        <div class="credit-slider-label"><label for="credit-slider-${index}">Adjust payment</label><span>$0 – ${fmt(max)}</span></div>
+        <input id="credit-slider-${index}" type="range" min="0" max="${max}" step="5" value="${Math.min(card.payment, max)}" aria-label="Adjust ${escCreditAttr(card.name)} monthly payment" oninput="updateCreditPayment(${index}, this.value, 'slider')">
+      </div>
+      <div class="credit-results" id="credit-results-${index}">${creditResultHtml(card)}</div>
+    </section>`;
+  }).join('');
+  const total = creditCards.reduce((sum, card) => sum + card.balance, 0);
+  document.getElementById('credit-total-balance').textContent = fmtDec(total);
+}
+
+function updateCreditCard(index, field, rawValue) {
+  const card = creditCards[index];
+  card[field] = field === 'apr' && rawValue === '' ? null : Math.max(0, parseFloat(rawValue) || 0);
+  const result = document.getElementById(`credit-results-${index}`);
+  if (result) result.innerHTML = creditResultHtml(card);
+  if (field === 'balance') {
+    const slider = document.getElementById(`credit-slider-${index}`);
+    if (slider) slider.max = creditSliderMax(card);
+    const total = creditCards.reduce((sum, item) => sum + item.balance, 0);
+    const totalEl = document.getElementById('credit-total-balance');
+    if (totalEl) totalEl.textContent = fmtDec(total);
+  }
+  saveCreditCards();
+}
+
+function updateCreditPayment(index, rawValue, source) {
+  const card = creditCards[index];
+  card.payment = Math.max(0, parseFloat(rawValue) || 0);
+  if (source === 'slider') {
+    const paymentInput = document.getElementById(`credit-payment-${index}`);
+    if (paymentInput) paymentInput.value = card.payment;
+  }
+  const result = document.getElementById(`credit-results-${index}`);
+  if (result) result.innerHTML = creditResultHtml(card);
+  saveCreditCards();
+}
+
+async function saveCreditCards() {
+  localStorage.setItem('nuckolls_credit_cards', JSON.stringify(creditCards));
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/budget_data`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'resolution=merge-duplicates' },
+      body: JSON.stringify({ id: 'credit_cards', data: creditCards, updated_at: new Date().toISOString() })
+    });
+  } catch (e) { console.warn('Credit-card save failed', e); }
+}
+
+async function loadCreditCards() {
+  let saved = null;
+  try {
+    const local = localStorage.getItem('nuckolls_credit_cards');
+    if (local) saved = JSON.parse(local);
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/budget_data?id=eq.credit_cards&select=data`, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+    const rows = await response.json();
+    if (rows && rows[0] && Array.isArray(rows[0].data)) saved = rows[0].data;
+  } catch (e) { console.warn('Credit-card load failed', e); }
+  if (Array.isArray(saved)) saved.forEach(item => {
+    const card = creditCards.find(c => c.id === item.id);
+    if (card) { card.apr = item.apr ?? (item.apr === null ? null : card.apr); card.balance = Math.max(0, Number(item.balance) || 0); card.payment = Math.max(0, Number(item.payment) || 0); }
+  });
+  renderCreditCards();
 }
 
 function updateMonth() {
@@ -1888,6 +2066,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderHomeUpcoming();
   loadData();
   loadDatesFromSupabase();
+  loadCreditCards();
   loadSavingsData();
   loadCookbookData();
   document.addEventListener('input', () => { saveData(); renderHomeDashboard(); });
