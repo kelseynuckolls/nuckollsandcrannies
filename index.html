@@ -332,6 +332,47 @@
 
   .savings-chart-wrap { position: relative; width: 100%; height: 220px; margin-top: 1rem; }
 
+  /* DAILY CHECKING */
+  .checking-hero { display:grid; grid-template-columns:1.2fr 1fr; gap:1rem; margin-bottom:1.25rem; }
+  .checking-stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.15rem 1.25rem; }
+  .checking-stat.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .checking-stat-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); font-weight:700; }
+  .checking-stat.primary .checking-stat-label { color:rgba(255,255,255,.76); }
+  .checking-stat-value { margin-top:.3rem; font-size:1.55rem; font-weight:800; font-variant-numeric:tabular-nums; }
+  .checking-stat-sub { margin-top:.25rem; font-size:.72rem; color:var(--text-muted); }
+  .checking-stat.primary .checking-stat-sub { color:rgba(255,255,255,.72); }
+  .checking-layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(260px,.75fr); gap:1.25rem; align-items:start; }
+  .checking-toolbar { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:.85rem; }
+  .checking-sync { display:flex; align-items:center; justify-content:flex-end; gap:.65rem; flex-wrap:wrap; }
+  .checking-sync-status { font-size:.7rem; color:var(--text-muted); }
+  .checking-sync-status.error { color:var(--red); }
+  .checking-toolbar h2, .checking-side-title { font-family:var(--font); font-size:1.05rem; margin:0; }
+  .checking-add { border:0; background:var(--accent); color:#fff; border-radius:7px; padding:.45rem .75rem; font-size:.75rem; font-weight:700; cursor:pointer; }
+  .checking-table { width:100%; border-collapse:collapse; }
+  .checking-table th { text-align:left; padding:.55rem .65rem; font-size:.65rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.05em; border-bottom:1px solid var(--border); }
+  .checking-table td { padding:.45rem .35rem; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .checking-table input { width:100%; min-width:0; border:1px solid transparent; background:transparent; color:var(--text); padding:.38rem .3rem; border-radius:5px; font:inherit; font-size:.78rem; }
+  .checking-table input:focus { outline:none; border-color:var(--accent); background:var(--surface2); }
+  .checking-table .amount-input { text-align:right; font-variant-numeric:tabular-nums; font-weight:700; }
+  .checking-table .money-in { color:var(--accent); }
+  .checking-table .money-out { color:var(--red); }
+  .checking-delete { border:0; background:transparent; color:var(--text-hint); cursor:pointer; font-size:1rem; padding:.25rem; }
+  .checking-delete:hover { color:var(--red); }
+  .checking-budget-list { display:grid; gap:.65rem; margin-top:.85rem; }
+  .checking-budget-item { border:1px solid var(--border); background:var(--surface2); border-radius:8px; padding:.7rem .8rem; }
+  .checking-budget-top { display:flex; justify-content:space-between; gap:.75rem; font-size:.78rem; font-weight:700; }
+  .checking-status { font-size:.62rem; text-transform:uppercase; letter-spacing:.04em; border-radius:999px; padding:.18rem .45rem; }
+  .checking-status.ok { color:var(--accent); background:var(--accent-light); }
+  .checking-status.over { color:var(--red); background:var(--red-light); }
+  .checking-progress { height:6px; background:var(--border); border-radius:99px; overflow:hidden; margin:.55rem 0 .35rem; }
+  .checking-progress span { display:block; height:100%; background:var(--accent); border-radius:99px; }
+  .checking-progress span.over { background:var(--red); }
+  .checking-budget-meta { display:flex; justify-content:space-between; gap:.5rem; color:var(--text-muted); font-size:.68rem; }
+  .checking-notes { display:grid; gap:.5rem; margin-top:.8rem; }
+  .checking-note { width:100%; border:1px solid var(--border); background:var(--surface2); color:var(--text); border-radius:7px; padding:.55rem .65rem; font-size:.75rem; }
+  @media (max-width:900px) { .checking-layout { grid-template-columns:1fr; } }
+  @media (max-width:700px) { .checking-hero { grid-template-columns:1fr; } .checking-table th:nth-child(3), .checking-table td:nth-child(3) { display:none; } }
+
   /* CREDIT CARDS */
   .credit-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .credit-card-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem; }
@@ -410,10 +451,10 @@
 <nav class="nav">
   <div class="nav-brand">Budget Dashboard</div>
   <div class="tab active" onclick="showPage('home', this)">🏠 Home</div>
-  <div class="tab" onclick="showPage('budget', this)">Monthly Budget</div>
+  <div class="tab" onclick="showPage('notes', this)">Daily Checking</div>
   <div class="tab" onclick="showPage('accounts', this)">Accounts</div>
   <div class="tab" onclick="showPage('projections', this)">Investment Projections</div>
-  <div class="tab" onclick="showPage('notes', this)">Daily Checking</div>
+  <div class="tab" onclick="showPage('budget', this)">Budget Worksheet</div>
   <div class="tab" onclick="showPage('dates', this)">Important Dates</div>
   <div class="tab" onclick="showPage('cookbook', this)">🍳 Cookbook</div>
   <div style="margin-left:auto; display:flex; align-items:center; gap:0.75rem; padding:0 1rem;">
@@ -624,11 +665,39 @@
 <div id="page-notes" class="page">
   <div class="page-header">
     <h1>Daily Checking</h1>
-    <p>Edit directly in the sheet — updates instantly for both of you</p>
+    <p>Your checking plan at a glance — no spreadsheet required</p>
   </div>
-  <div class="card" style="padding:0; overflow:hidden; height:75vh;">
-    <iframe src="https://docs.google.com/spreadsheets/d/1WjvYVqV7G5yH_-Ti6UJe5cf2a0E-Im1r8zxVDV4pC7k/edit?usp=sharing&embedded=true"
-      style="width:100%; height:100%; border:none; display:block;" allowfullscreen></iframe>
+  <div class="checking-hero">
+    <div class="checking-stat primary">
+      <div class="checking-stat-label">In checking now</div>
+      <div class="checking-stat-value" id="checking-current">$1,926.93</div>
+      <div class="checking-stat-sub">As of August 11</div>
+    </div>
+    <div class="checking-stat">
+      <div class="checking-stat-label">Going into September</div>
+      <div class="checking-stat-value" id="checking-projected">$4,314.99</div>
+      <div class="checking-stat-sub">After planned activity</div>
+    </div>
+  </div>
+  <div class="checking-layout">
+    <div class="card">
+      <div class="checking-toolbar">
+        <h2>Upcoming activity</h2>
+        <div class="checking-sync"><span class="checking-sync-status" id="checking-sync-status">Connecting to Google Sheets...</span><button class="checking-add" onclick="syncDailyChecking(true)">Refresh</button></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="checking-table">
+          <thead><tr><th style="width:88px;">Date</th><th>Description</th><th style="width:125px;">Category</th><th style="width:115px;text-align:right;">Amount</th></tr></thead>
+          <tbody id="checking-transactions"></tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem;">
+        <h2 class="checking-side-title">Budget watch</h2>
+        <div class="checking-budget-list" id="checking-budgets"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -802,6 +871,7 @@ function showPage(id, el) {
   if (id === 'projections') renderProjections();
   if (id === 'accounts') { renderCreditCards(); renderSavingsCards(); renderSavingsChart(); }
   if (id === 'cookbook') renderCookbook();
+  if (id === 'notes') syncDailyChecking();
 }
 
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
@@ -1041,6 +1111,8 @@ function updateMonth() {
   const [y,m] = inp.value.split('-');
   const label = new Date(y, m-1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
   ['date-display-1','date-display-2','date-display-3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=label;});
+  const checkingPage = document.getElementById('page-notes');
+  if (checkingPage && checkingPage.classList.contains('active') && typeof syncDailyChecking === 'function') syncDailyChecking(true);
 }
 
 function currentMonthValue() {
@@ -1503,6 +1575,141 @@ function clearSave() {
   }
 }
 
+// DAILY CHECKING
+const CHECKING_KEY = 'nuckolls_daily_checking_sheet_cache_v2';
+const CHECKING_SHEET_ID = '1WjvYVqV7G5yH_-Ti6UJe5cf2a0E-Im1r8zxVDV4pC7k';
+const checkingDefaults = {
+  current: 1926.93,
+  transactions: [
+    {date:'Aug 11', description:"To Rhett's 529", category:'Savings', amount:-100},
+    {date:'Aug 11', description:"David's Capital One", category:'Credit card', amount:-250},
+    {date:'Aug 12', description:'Gas', category:'Gas', amount:-176},
+    {date:'Aug 12', description:'Groceries', category:'Groceries', amount:-878},
+    {date:'Aug 12', description:'Household', category:'Household', amount:-581},
+    {date:'Aug 13', description:'Dallas Morning News', category:'Subscription', amount:-29.96},
+    {date:'Aug 13', description:'Netflix', category:'Subscription', amount:-20},
+    {date:'Aug 13', description:'Podcast subscription', category:'Subscription', amount:-5.21},
+    {date:'Aug 13', description:'Podcast subscription', category:'Subscription', amount:-5.40},
+    {date:'Aug 14', description:'ChatGPT memberships', category:'Subscription', amount:-20},
+    {date:'Aug 14', description:'Syterra Yoga', category:'Wellness', amount:-149},
+    {date:'Aug 14', description:'Kindle Unlimited', category:'Subscription', amount:-11.99},
+    {date:'Aug 15', description:'Verizon', category:'Utilities', amount:-95},
+    {date:'Aug 15', description:"K's paycheck", category:'Income', amount:1360},
+    {date:'Aug 16', description:'Washington Gas / Light', category:'Utilities', amount:-50.38},
+    {date:'Aug 16', description:'Savings for trips', category:'Savings', amount:-1000},
+    {date:'Aug 21', description:"David's paycheck", category:'Income', amount:4400}
+  ],
+  budgets: [
+    {name:'Gas', budget:250, remaining:175.65},
+    {name:'Groceries', budget:1500, remaining:877.67},
+    {name:'Household', budget:1200, remaining:581.05},
+    {name:'Misc', budget:800, remaining:-1607.63}
+  ]
+};
+let checkingData = JSON.parse(JSON.stringify(checkingDefaults));
+let checkingSyncing = false;
+
+function loadCheckingData() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(CHECKING_KEY));
+    if (cached && cached.data) checkingData = cached.data;
+  } catch(e) {}
+  renderChecking();
+  syncDailyChecking();
+}
+function checkingMoney(n) { return (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function checkingAttr(value) { return String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function checkingNumber(value) {
+  if (typeof value === 'number') return value;
+  const cleaned = String(value || '').replace(/[$,]/g,'').trim();
+  if (!cleaned) return null;
+  const n = Number(cleaned.replace(/^\((.*)\)$/,'-$1'));
+  return Number.isFinite(n) ? n : null;
+}
+function checkingSheetName() {
+  const raw = document.getElementById('budget-month').value || new Date().toISOString().slice(0,7);
+  const parts = raw.split('-'), year = Number(parts[0]), month = Number(parts[1]);
+  const names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','dec'];
+  return names[month-1] + String(year).slice(-2);
+}
+function gvizCell(cell) { return cell ? (cell.f !== undefined ? cell.f : (cell.v !== undefined ? cell.v : '')) : ''; }
+function rowsFromGviz(table) {
+  return (table.rows || []).map(row => Array.from({length:9}, (_,i) => gvizCell((row.c || [])[i])));
+}
+function checkingCategory(description) {
+  const d = String(description).toLowerCase();
+  if (d.includes('paycheck')) return 'Income';
+  if (d.includes('saving') || d.includes('529') || d.includes('brokerage')) return 'Savings';
+  if (d.includes('gas') || d.includes('energy') || d.includes('verizon')) return 'Utilities';
+  if (d.includes('grocery')) return 'Groceries';
+  if (d.includes('household')) return 'Household';
+  if (d.includes('card') || d.includes('capital one')) return 'Credit card';
+  if (d.includes('netflix') || d.includes('podcast') || d.includes('chatgpt') || d.includes('kindle') || d.includes('news')) return 'Subscription';
+  return 'Other';
+}
+function checkingDataFromRows(rows) {
+  const inCheckingRows = rows.map((r,i)=>({r,i})).filter(x=>String(x.r[3]).trim().toLowerCase()==='in checking');
+  const currentRow = inCheckingRows.length ? inCheckingRows[inCheckingRows.length-1] : null;
+  const projectedRow = rows.map((r,i)=>({r,i})).find(x=>/going in to/i.test(String(x.r[3])));
+  const current = currentRow ? checkingNumber(currentRow.r[1]) : null;
+  const projected = projectedRow ? checkingNumber(projectedRow.r[1]) : null;
+  if (current === null) throw new Error('Could not find the In Checking balance');
+  const start = currentRow ? currentRow.i + 1 : 0;
+  const end = projectedRow ? projectedRow.i : rows.length;
+  let activeDate = '';
+  const transactions = [];
+  for (let i=start; i<end; i++) {
+    const r=rows[i];
+    if (r[0] && String(r[0]).toUpperCase() !== 'X') activeDate=String(r[0]);
+    const description=String(r[3] || '').trim(), amount=checkingNumber(r[1]);
+    if (!description || amount === null || /in checking|going in to/i.test(description)) continue;
+    transactions.push({date:activeDate,description,category:checkingCategory(description),amount});
+  }
+  const budgets = rows.slice(0,12).map(r=>({name:String(r[5]||'').trim(),budget:checkingNumber(r[6]),remaining:checkingNumber(r[7])}))
+    .filter(b=>b.name && b.budget !== null && b.remaining !== null && !/alert guide/i.test(b.name));
+  return {current, projected, transactions, budgets};
+}
+async function syncDailyChecking(force) {
+  if (checkingSyncing && !force) return;
+  checkingSyncing=true;
+  const status=document.getElementById('checking-sync-status');
+  if (status) { status.textContent='Updating from Google Sheets...'; status.classList.remove('error'); }
+  const sheet=checkingSheetName();
+  try {
+    const query=encodeURIComponent('select A,B,C,D,E,F,G,H,I limit 100');
+    const url=`https://docs.google.com/spreadsheets/d/${CHECKING_SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheet)}&headers=0&tqx=out:json&tq=${query}&_=${Date.now()}`;
+    const response=await fetch(url,{cache:'no-store'});
+    if (!response.ok) throw new Error('Sheet request failed');
+    const text=await response.text(), first=text.indexOf('{'), last=text.lastIndexOf('}');
+    if (first<0 || last<first) throw new Error('Unexpected sheet response');
+    const payload=JSON.parse(text.slice(first,last+1));
+    if (payload.status==='error' || !payload.table) throw new Error('Sheet tab unavailable');
+    checkingData=checkingDataFromRows(rowsFromGviz(payload.table));
+    localStorage.setItem(CHECKING_KEY,JSON.stringify({sheet,updatedAt:new Date().toISOString(),data:checkingData}));
+    renderChecking();
+    if (status) status.textContent=`Live from ${sheet} · updated ${new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}`;
+  } catch(e) {
+    if (status) { status.textContent=`Could not refresh ${sheet} · showing last saved view`; status.classList.add('error'); }
+    console.warn('Daily Checking sync failed',e);
+  } finally { checkingSyncing=false; }
+}
+function renderCheckingSummary() {
+  const projected = checkingData.projected !== undefined ? checkingData.projected : checkingData.current + checkingData.transactions.reduce((s,t)=>s+(Number(t.amount)||0),0);
+  document.getElementById('checking-current').textContent = checkingMoney(checkingData.current);
+  document.getElementById('checking-projected').textContent = checkingMoney(projected);
+}
+function renderChecking() {
+  renderCheckingSummary();
+  document.getElementById('checking-transactions').innerHTML = checkingData.transactions.map((t,i)=>`<tr>
+    <td><span style="font-size:.78rem;padding:.38rem .3rem;display:block;">${checkingAttr(t.date)}</span></td>
+    <td><span style="font-size:.78rem;padding:.38rem .3rem;display:block;">${checkingAttr(t.description)}</span></td>
+    <td><span style="font-size:.72rem;color:var(--text-muted);padding:.38rem .3rem;display:block;">${checkingAttr(t.category)}</span></td>
+    <td style="text-align:right;font-weight:700;" class="${Number(t.amount)>=0?'money-in':'money-out'}">${checkingMoney(Number(t.amount))}</td></tr>`).join('');
+  document.getElementById('checking-budgets').innerHTML = checkingData.budgets.map(b=>{
+    const spent=b.budget-b.remaining, pct=Math.max(0,Math.min(100,(spent/b.budget)*100)), over=b.remaining<0;
+    return `<div class="checking-budget-item"><div class="checking-budget-top"><span>${escHtml(b.name)}</span><span class="checking-status ${over?'over':'ok'}">${over?'Over budget':'OK'}</span></div><div class="checking-progress"><span class="${over?'over':''}" style="width:${over?100:pct}%"></span></div><div class="checking-budget-meta"><span>${checkingMoney(spent)} spent</span><span>${checkingMoney(b.remaining)} left</span></div></div>`;
+  }).join('');
+}
 // IMPORTANT DATES
 let importantDates = [];
 let calYear, calMonth;
@@ -2069,6 +2276,15 @@ document.addEventListener('DOMContentLoaded', function() {
   loadCreditCards();
   loadSavingsData();
   loadCookbookData();
+  loadCheckingData();
+  window.addEventListener('focus', () => {
+    const page=document.getElementById('page-notes');
+    if (page && page.classList.contains('active')) syncDailyChecking();
+  });
+  setInterval(() => {
+    const page=document.getElementById('page-notes');
+    if (page && page.classList.contains('active') && !document.hidden) syncDailyChecking();
+  }, 300000);
   document.addEventListener('input', () => { saveData(); renderHomeDashboard(); });
 });
 </script>
