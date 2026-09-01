@@ -1586,7 +1586,7 @@ function dailyCheckingMoney(v){const n=Number(v),currency=String.fromCharCode(36
 function dailyCheckingEscape(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function dailyCheckingChangeMonth(s){dailyCheckingMonthIndex=Math.max(0,Math.min(DAILY_CHECKING_MONTHS.length-1,dailyCheckingMonthIndex+s));renderDailyCheckingCalendar()}
 function initDailyCheckingCalendar(){const n=new Date().toLocaleString('en-US',{month:'long'}),i=DAILY_CHECKING_MONTHS.indexOf(n);dailyCheckingMonthIndex=i>=0?i:0;renderDailyCheckingCalendar()}
-function renderDailyCheckingCalendar(){const root=document.getElementById('page-notes');if(!root)return;const name=DAILY_CHECKING_MONTHS[dailyCheckingMonthIndex],m=DAILY_CHECKING_CALENDARS[name],y=2026,mn=new Date(name+' 1, '+y).getMonth(),first=new Date(y,mn,1).getDay(),count=new Date(y,mn+1,0).getDate(),map=new Map(m.days.map(d=>[d.day,d])),cells=[];for(let i=0;i<first;i++)cells.push('<div class="checking-calendar-day empty" aria-hidden="true"></div>');for(let n=1;n<=count;n++){const d=map.get(n)||{items:[],amount:0,target:'',balance:null},items=d.items.length?d.items.map(x=>'<div class="checking-calendar-item">'+dailyCheckingEscape(x)+'</div>').join(''):'<div class="checking-calendar-empty">No scheduled items</div>',cl=Number(d.amount)<0?'negative':Number(d.amount)>0?'positive':'',amount=Number(d.amount)?'<div class="checking-calendar-amount '+cl+'">Scheduled: '+dailyCheckingMoney(d.amount)+'</div>':'',target=d.target?'<div class="checking-calendar-target">'+dailyCheckingEscape(d.target)+'</div>':'',balance=d.balance!=null?'<div class="checking-calendar-balance">Projected balance: '+dailyCheckingMoney(d.balance)+'</div>':'';cells.push('<div class="checking-calendar-day"><div class="checking-calendar-date">'+n+'</div><div class="checking-calendar-items">'+items+'</div><div class="checking-calendar-foot">'+amount+target+balance+'</div></div>')}while(cells.length%7)cells.push('<div class="checking-calendar-day empty" aria-hidden="true"></div>');const stats=m.stats.map(s=>'<div class="checking-calendar-stat"><div class="checking-calendar-stat-label">'+dailyCheckingEscape(s.label)+'</div><div class="checking-calendar-stat-value">'+dailyCheckingMoney(s.value)+'</div></div>').join('');root.innerHTML='<div class="checking-calendar-shell"><div class="page-header"><h1>Daily Checking</h1><p>Your checking calendar at a glance — view only</p></div><div class="checking-calendar-head"><div class="checking-month-nav"><button onclick="dailyCheckingChangeMonth(-1)" aria-label="Previous month" '+(dailyCheckingMonthIndex===0?'disabled':'')+'>&larr;</button><div class="checking-month-label">'+dailyCheckingEscape(name)+' '+y+'</div><button onclick="dailyCheckingChangeMonth(1)" aria-label="Next month" '+(dailyCheckingMonthIndex===DAILY_CHECKING_MONTHS.length-1?'disabled':'')+'>&rarr;</button></div><span class="checking-readonly">🔒 Read only</span></div><div class="checking-calendar-stats">'+stats+'</div><div class="checking-calendar-card"><div class="checking-calendar-grid"><div class="checking-calendar-dow">SUN</div><div class="checking-calendar-dow">MON</div><div class="checking-calendar-dow">TUE</div><div class="checking-calendar-dow">WED</div><div class="checking-calendar-dow">THU</div><div class="checking-calendar-dow">FRI</div><div class="checking-calendar-dow">SAT</div>'+cells.join('')+'</div></div><div class="checking-calendar-source">Calendar data from 2026_Budget_Calendar_Aug_Dec.xlsm · edited in Google Drive</div></div>'}
+function renderDailyCheckingCalendar(){const root=document.getElementById('page-notes');if(!root)return;const name=DAILY_CHECKING_MONTHS[dailyCheckingMonthIndex],m=DAILY_CHECKING_CALENDARS[name],y=m.year||2026,mn=new Date(name+' 1, '+y).getMonth(),first=new Date(y,mn,1).getDay(),count=new Date(y,mn+1,0).getDate(),map=new Map(m.days.map(d=>[d.day,d])),cells=[];for(let i=0;i<first;i++)cells.push('<div class="checking-calendar-day empty" aria-hidden="true"></div>');for(let n=1;n<=count;n++){const d=map.get(n)||{items:[],amount:0,target:'',balance:null},items=d.items.length?d.items.map(x=>'<div class="checking-calendar-item">'+dailyCheckingEscape(x)+'</div>').join(''):'<div class="checking-calendar-empty">No scheduled items</div>',cl=Number(d.amount)<0?'negative':Number(d.amount)>0?'positive':'',amount=Number(d.amount)?'<div class="checking-calendar-amount '+cl+'">Scheduled: '+dailyCheckingMoney(d.amount)+'</div>':'',target=d.target?'<div class="checking-calendar-target">'+dailyCheckingEscape(d.target)+'</div>':'',balance=d.balance!=null?'<div class="checking-calendar-balance">Projected balance: '+dailyCheckingMoney(d.balance)+'</div>':'';cells.push('<div class="checking-calendar-day"><div class="checking-calendar-date">'+n+'</div><div class="checking-calendar-items">'+items+'</div><div class="checking-calendar-foot">'+amount+target+balance+'</div></div>')}while(cells.length%7)cells.push('<div class="checking-calendar-day empty" aria-hidden="true"></div>');const stats=m.stats.map(s=>'<div class="checking-calendar-stat"><div class="checking-calendar-stat-label">'+dailyCheckingEscape(s.label)+'</div><div class="checking-calendar-stat-value">'+dailyCheckingMoney(s.value)+'</div></div>').join('');root.innerHTML='<div class="checking-calendar-shell"><div class="page-header"><h1>Daily Checking</h1><p>Your checking calendar at a glance — view only</p></div><div class="checking-calendar-head"><div class="checking-month-nav"><button onclick="dailyCheckingChangeMonth(-1)" aria-label="Previous month" '+(dailyCheckingMonthIndex===0?'disabled':'')+'>&larr;</button><div class="checking-month-label">'+dailyCheckingEscape(name)+' '+y+'</div><button onclick="dailyCheckingChangeMonth(1)" aria-label="Next month" '+(dailyCheckingMonthIndex===DAILY_CHECKING_MONTHS.length-1?'disabled':'')+'>&rarr;</button></div><span class="checking-readonly">🔒 Read only</span></div><div class="checking-calendar-stats">'+stats+'</div><div class="checking-calendar-card"><div class="checking-calendar-grid"><div class="checking-calendar-dow">SUN</div><div class="checking-calendar-dow">MON</div><div class="checking-calendar-dow">TUE</div><div class="checking-calendar-dow">WED</div><div class="checking-calendar-dow">THU</div><div class="checking-calendar-dow">FRI</div><div class="checking-calendar-dow">SAT</div>'+cells.join('')+'</div></div><div class="checking-calendar-source">'+dailyCheckingEscape(m.live?'Live from 2026 Monthly Budget in Google Sheets':'Calendar data from 2026_Budget_Calendar_Aug_Dec.xlsm · edited in Google Drive')+'</div></div>'}
 
 const CHECKING_KEY = 'nuckolls_daily_checking_sheet_cache_v2';
 const CHECKING_SHEET_ID = '1WjvYVqV7G5yH_-Ti6UJe5cf2a0E-Im1r8zxVDV4pC7k';
@@ -1681,6 +1681,40 @@ function checkingDataFromRows(rows) {
     .filter(b=>b.name && b.budget !== null && b.remaining !== null && !/alert guide/i.test(b.name));
   return {current, projected, transactions, budgets};
 }
+function updateDailyCheckingCalendarFromRows(rows, sheet) {
+  const match=String(sheet).match(/^([A-Za-z]+)(\d{2})$/);
+  if (!match) return;
+  const short=match[1].slice(0,3).toLowerCase(), year=2000+Number(match[2]);
+  const monthNames={jan:'January',feb:'February',mar:'March',apr:'April',may:'May',jun:'June',jul:'July',aug:'August',sep:'September',oct:'October',nov:'November',dec:'December'};
+  const monthName=monthNames[short];
+  if (!monthName) return;
+  let activeDay=null, snapshot=null, projected=null;
+  const entries=[];
+  rows.forEach((r,index)=>{
+    const dateMatch=String(r[0]||'').match(/(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\s+(\d{1,2})/i);
+    if (dateMatch) activeDay=Number(dateMatch[1]);
+    const description=String(r[3]||'').trim(), budget=checkingNumber(r[1]), actual=checkingNumber(r[2]);
+    if (/^in checking$/i.test(description) && budget!==null) snapshot={value:budget,day:activeDay,index};
+    if (/going in to/i.test(description) && budget!==null) projected=budget;
+    if (!activeDay || !description || budget===null || /in checking|going in to|from savings|safe to move/i.test(description)) return;
+    let amount=actual!==null?Math.abs(actual)*(budget<0?-1:budget>0?1:0):budget;
+    entries.push({day:activeDay,description,amount,index});
+  });
+  const budgetRows=rows.slice(0,12).map(r=>({name:String(r[5]||'').trim(),remaining:checkingNumber(r[7])})).filter(x=>x.name&&x.remaining!==null&&!/alert guide/i.test(x.name));
+  const flexible=budgetRows.reduce((sum,x)=>sum+x.remaining,0), daysInMonth=new Date(year,Object.keys(monthNames).indexOf(short)+1,0).getDate();
+  const byDay=new Map();
+  entries.forEach(entry=>{if(!byDay.has(entry.day))byDay.set(entry.day,[]);byDay.get(entry.day).push(entry)});
+  let running=snapshot?snapshot.value:null;
+  const days=[];
+  for(let day=1;day<=daysInMonth;day++){
+    const dayEntries=byDay.get(day)||[];
+    if(snapshot) dayEntries.filter(x=>x.index>snapshot.index).forEach(x=>{running+=x.amount});
+    days.push({day,items:dayEntries.map(x=>x.description),amount:dayEntries.reduce((sum,x)=>sum+x.amount,0),target:flexible?`Target: ${dailyCheckingMoney(flexible/daysInMonth)}`:'',balance:snapshot&&day>=snapshot.day?running:null});
+  }
+  DAILY_CHECKING_CALENDARS[monthName]={year,live:true,title:`${monthName.toUpperCase()} ${year} • DAILY BUDGET CALENDAR`,stats:[{label:`CHECKING SNAPSHOT${snapshot&&snapshot.day?' • '+monthName.slice(0,3).toUpperCase()+' '+snapshot.day:''}`,value:snapshot?snapshot.value:0},{label:'FLEXIBLE REMAINING',value:flexible},{label:'DAILY TARGET',value:flexible/daysInMonth},{label:`PROJECTED ${Object.keys(monthNames)[(Object.keys(monthNames).indexOf(short)+1)%12].toUpperCase()} 1`,value:projected!==null?projected:(running||0)}],days};
+  if (!DAILY_CHECKING_MONTHS.includes(monthName)) DAILY_CHECKING_MONTHS.push(monthName);
+  if (DAILY_CHECKING_MONTHS[dailyCheckingMonthIndex]===monthName) renderDailyCheckingCalendar();
+}
 async function syncDailyChecking(force) {
   if (checkingSyncing && !force) return;
   checkingSyncing=true;
@@ -1696,7 +1730,9 @@ async function syncDailyChecking(force) {
     if (first<0 || last<first) throw new Error('Unexpected sheet response');
     const payload=JSON.parse(text.slice(first,last+1));
     if (payload.status==='error' || !payload.table) throw new Error('Sheet tab unavailable');
-    checkingData=checkingDataFromRows(rowsFromGviz(payload.table));
+    const rows=rowsFromGviz(payload.table);
+    checkingData=checkingDataFromRows(rows);
+    updateDailyCheckingCalendarFromRows(rows,sheet);
     localStorage.setItem(CHECKING_KEY,JSON.stringify({sheet,updatedAt:new Date().toISOString(),data:checkingData}));
     renderChecking();
     if (status) status.textContent=`Live from ${sheet} · updated ${new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}`;
@@ -2295,3 +2331,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </body>
 <!-- deployment refresh 2026-08-26 -->
 </html>
+
